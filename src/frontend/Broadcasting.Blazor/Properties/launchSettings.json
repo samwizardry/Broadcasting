@@ -4,8 +4,9 @@
       "http": {
         "commandName": "Project",
         "dotnetRunMessages": true,
-        "launchBrowser": true,
-        "applicationUrl": "http://localhost:5140",
+        "launchBrowser": false,
+        "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
+        "applicationUrl": "http://localhost:5057",
         "environmentVariables": {
           "ASPNETCORE_ENVIRONMENT": "Development"
         }
@@ -13,8 +14,9 @@
       "https": {
         "commandName": "Project",
         "dotnetRunMessages": true,
-        "launchBrowser": true,
-        "applicationUrl": "https://localhost:7250;http://localhost:5140",
+        "launchBrowser": false,
+        "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
+        "applicationUrl": "https://localhost:7229;http://localhost:5057",
         "environmentVariables": {
           "ASPNETCORE_ENVIRONMENT": "Development"
         }

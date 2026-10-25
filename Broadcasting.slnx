@@ -1,6 +1,8 @@
 <Solution>
   <Folder Name="/src/" />
   <Folder Name="/src/backend/">
+    <File Path="src/backend/Directory.Build.props" />
+    <File Path="src/backend/Directory.Packages.props" />
     <Project Path="src/backend/Broadcasting.ServiceDefaults/Broadcasting.ServiceDefaults.csproj" />
     <Project Path="src/backend/Broadcasting.SharedKernel/Broadcasting.SharedKernel.csproj" />
     <Project Path="src/backend/Broadcasting.Web/Broadcasting.Web.csproj" />
@@ -11,8 +13,10 @@
     <Project Path="src/backend/modules/Broadcasting.Streaming/Broadcasting.Streaming.csproj" />
   </Folder>
   <Folder Name="/src/frontend/">
-    <Project Path="src/frontend/Broadcasting.Blazor.Client/Broadcasting.Blazor.Client.csproj" />
-    <Project Path="src/frontend/Broadcasting.Blazor/Broadcasting.Blazor.csproj" />
+    <File Path="src/frontend/Directory.Build.props" />
+    <File Path="src/frontend/Directory.Packages.props" />
+    <Project Path="src/frontend/Broadcasting.Blazor/Broadcasting.Blazor.csproj" Id="886b1066-cda0-4c82-9614-7f68e8022ede" />
+    <Project Path="src/frontend/Broadcasting.Blazor.Client/Broadcasting.Blazor.Client.csproj" Id="84b48aa6-bb72-4608-8013-6f51cc7e6896" />
   </Folder>
   <Folder Name="/src/shared/">
     <Project Path="src/shared/Broadcasting.Contracts/Broadcasting.Contracts.csproj" />
