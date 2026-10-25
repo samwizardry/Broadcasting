@@ -1,2 +1,20 @@
 <Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/backend/">
+    <Project Path="src/backend/Broadcasting.ServiceDefaults/Broadcasting.ServiceDefaults.csproj" />
+    <Project Path="src/backend/Broadcasting.SharedKernel/Broadcasting.SharedKernel.csproj" />
+    <Project Path="src/backend/Broadcasting.Web/Broadcasting.Web.csproj" />
+  </Folder>
+  <Folder Name="/src/backend/modules/">
+    <Project Path="src/backend/modules/Broadcasting.Chat/Broadcasting.Chat.csproj" />
+    <Project Path="src/backend/modules/Broadcasting.Identity/Broadcasting.Identity.csproj" />
+    <Project Path="src/backend/modules/Broadcasting.Streaming/Broadcasting.Streaming.csproj" />
+  </Folder>
+  <Folder Name="/src/frontend/">
+    <Project Path="src/frontend/Broadcasting.Blazor.Client/Broadcasting.Blazor.Client.csproj" />
+    <Project Path="src/frontend/Broadcasting.Blazor/Broadcasting.Blazor.csproj" />
+  </Folder>
+  <Folder Name="/src/shared/">
+    <Project Path="src/shared/Broadcasting.Contracts/Broadcasting.Contracts.csproj" />
+  </Folder>
 </Solution>
