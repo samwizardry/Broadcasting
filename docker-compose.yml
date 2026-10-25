@@ -1,0 +1,52 @@
+services:
+  mediamtx:
+    image: bluenviron/mediamtx:1
+    container_name: broadcasting-mediamtx
+    ports:
+      - 8554:8554
+      - 1935:1935
+      - 8888:8888
+      - 8889:8889
+      - 8892:8892
+      - 8890:8890/udp
+      - 8189:8189/udp
+      - 8892:8892/udp
+      - 8893:8893/udp
+    restart: always
+
+  postgres:
+    image: postgres:16.15-alpine3.24
+    container_name: broadcasting-postgres
+    ports:
+      - 35432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "sh -c 'pg_isready -U postgres -d postgres'" ]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    restart: always
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: broadcasting-pgadmin
+    ports:
+      - 30080:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=pgadmin@dev.local
+      - PGADMIN_DEFAULT_PASSWORD=pgadmin
+      - PGADMIN_CONFIG_ALLOW_SPECIAL_EMAIL_DOMAINS=["local"]
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    restart: always
+
+volumes:
+  postgres-data:
+  pgadmin-data:
