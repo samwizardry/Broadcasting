@@ -1,0 +1,341 @@
+﻿@page "/"
+
+<PageTitle>Broadcasting</PageTitle>
+
+
+<div class="browse-layout">
+
+    <!-- Featured Live Broadcast Hero Banner with Preview -->
+    <section class="featured-hero">
+        <div class="featured-hero__media" data-open-stream="samwizardry">
+            <span class="badge-live">LIVE NOW</span>
+            <span class="badge-viewers"><span class="viewer-dot"></span> 24,850 VIEWERS</span>
+
+            <div class="hero-preview-placeholder">
+                <div style="font-size: 20px; font-weight: 700; letter-spacing: 3px;">BROADCASTING ENGINE // FEATURED</div>
+                <div style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-cyan); margin-top: 6px;">
+                    CLICK TO TUNE IN // 1080P 60FPS WEBRTC
+                </div>
+            </div>
+
+            <div class="player-scanlines"></div>
+        </div>
+
+        <div class="featured-hero__info">
+            <div class="hero-meta-top">
+                <div class="hero-streamer-row">
+                    <div class="avatar-hud avatar-hud--live avatar-hud--md">SAM</div>
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-family: var(--font-hud); font-weight: 700; color: var(--accent-acid); font-size: 14px;">SamWizardry</span>
+                            <span class="cyber-tag cyber-tag--cyan" style="padding: 1px 6px; font-size: 9px; font-weight: 700;">VERIFIED</span>
+                        </div>
+                        <div style="font-size: 11px; color: var(--text-muted); font-family: var(--font-mono);">Broadcasting UI Kit Lead</div>
+                    </div>
+                </div>
+
+                <h1 class="hero-title">CYBERPUNK BROADCASTING SYSTEM ARCHITECTURE // MARATHON SPEC</h1>
+                <p class="hero-desc">
+                    Building next-generation low-latency broadcasting interfaces with high-density visual telemetry, chamfer cut geometry, and Blazor integration.
+                </p>
+            </div>
+
+            <div class="hero-actions">
+                <button class="btn-cyber btn-cyber-primary" data-open-stream="samwizardry">
+                    WATCH BROADCAST
+                </button>
+                <button class="btn-cyber btn-cyber-secondary">
+                    FOLLOW CHANNEL
+                </button>
+                <span class="cyber-tag cyber-tag--acid">AV1</span>
+                <span class="cyber-tag cyber-tag--cyan">1080P60</span>
+                <span class="cyber-tag">0.84s LATENCY</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Stream Search Bar -->
+    <div style="margin-bottom: 16px;">
+        <div class="cyber-search" id="browse-stream-search">
+            <div class="cyber-search__wrapper">
+                <div class="cyber-search__prefix">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <span>[SEARCH]</span>
+                </div>
+                <input type="text" class="cyber-search__input" placeholder="Search live channels, streamers, categories, or tags... [CTRL+K]" autocomplete="off">
+                <div class="cyber-search__actions">
+                    <button type="button" class="cyber-search__clear" title="Clear Query">✕</button>
+                    <span class="cyber-search__shortcut">CTRL+K</span>
+                </div>
+            </div>
+
+            <!-- Autocomplete Results Dropdown Panel -->
+            <div class="cyber-search__dropdown">
+                <div class="cyber-search__filters">
+                    <button type="button" class="search-filter-chip is-active" data-filter="all">ALL</button>
+                    <button type="button" class="search-filter-chip" data-filter="channel">CHANNELS</button>
+                    <button type="button" class="search-filter-chip" data-filter="category">CATEGORIES</button>
+                    <button type="button" class="search-filter-chip" data-filter="tag">TAGS</button>
+                </div>
+
+                <div class="cyber-search__results-header">
+                    <span>// REALTIME BROADCAST DISCOVERY INDEX</span>
+                    <span class="search-results-count">5 MATCHES</span>
+                </div>
+
+                <div class="cyber-search__list">
+                    <!-- Match 1 -->
+                    <a class="cyber-search__item" href="watch.html?channel=samwizardry" data-search-type="channel">
+                        <div class="item-meta">
+                            <div class="avatar-hud avatar-hud--live avatar-hud--sm">SAM</div>
+                            <div>
+                                <div class="item-name">SamWizardry</div>
+                                <div class="item-category">Cyberpunk Design Systems &amp; Streaming Architecture</div>
+                            </div>
+                        </div>
+                        <div class="item-right">
+                            <span class="badge-live">LIVE</span>
+                            <span class="cyber-tag cyber-tag--acid">1080P60</span>
+                        </div>
+                    </a>
+
+                    <!-- Match 2 -->
+                    <a class="cyber-search__item" href="watch.html?channel=marathon" data-search-type="channel">
+                        <div class="item-meta">
+                            <div class="avatar-hud avatar-hud--live avatar-hud--sm">MK</div>
+                            <div>
+                                <div class="item-name">MarathonRunner</div>
+                                <div class="item-category">Game Engine Architecture &amp; Vulkan Shaders</div>
+                            </div>
+                        </div>
+                        <div class="item-right">
+                            <span class="badge-live">LIVE</span>
+                            <span class="cyber-tag cyber-tag--acid">1440P60</span>
+                        </div>
+                    </a>
+
+                    <!-- Match 3 -->
+                    <a class="cyber-search__item" href="watch.html?channel=signal" data-search-type="category">
+                        <div class="item-meta">
+                            <div class="avatar-hud avatar-hud--live avatar-hud--sm">AI</div>
+                            <div>
+                                <div class="item-name">Audio DSP Engineering</div>
+                                <div class="item-category">Signal_09 // Synthesizers &amp; Sound Telemetry</div>
+                            </div>
+                        </div>
+                        <div class="item-right">
+                            <span class="badge-live">LIVE</span>
+                            <span class="cyber-tag cyber-tag--cyan">8.8K VIEWERS</span>
+                        </div>
+                    </a>
+
+                    <!-- Match 4 -->
+                    <a class="cyber-search__item" href="watch.html?channel=blazor" data-search-type="tag">
+                        <div class="item-meta">
+                            <div class="avatar-hud avatar-hud--live avatar-hud--sm">BL</div>
+                            <div>
+                                <div class="item-name">Blazor WebAssembly</div>
+                                <div class="item-category">BlazorForge // C# .NET 9 Frontend Architecture</div>
+                            </div>
+                        </div>
+                        <div class="item-right">
+                            <span class="badge-live">LIVE</span>
+                            <span class="cyber-tag">BLAZOR</span>
+                        </div>
+                    </a>
+
+                    <!-- Match 5 -->
+                    <a class="cyber-search__item" href="watch.html?channel=vortex" data-search-type="channel">
+                        <div class="item-meta">
+                            <div class="avatar-hud avatar-hud--live avatar-hud--sm">VX</div>
+                            <div>
+                                <div class="item-name">VortexNet</div>
+                                <div class="item-category">Distributed WebRTC Ingest &amp; Mesh Testing</div>
+                            </div>
+                        </div>
+                        <div class="item-right">
+                            <span class="badge-live">LIVE</span>
+                            <span class="cyber-tag cyber-tag--cyan">WEBRTC</span>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="cyber-search__empty" style="display: none;">
+                    [SYS.ERR: NO ACTIVE STREAMS MATCH QUERY]
+                </div>
+
+                <div class="cyber-search__footer">
+                    <span>PRESS ENTER TO SELECT</span>
+                    <span>ESC TO DISMISS</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Filter Bar -->
+    <div class="browse-categories-bar">
+        <button class="category-pill is-active">ALL STREAMS</button>
+        <button class="category-pill">CYBERPUNK UI/UX</button>
+        <button class="category-pill">GAME ENGINE DEV</button>
+        <button class="category-pill">AUDIO DSP & SYNTH</button>
+        <button class="category-pill">BLAZOR & SCSS</button>
+        <button class="category-pill">ESPORTS TOURNAMENTS</button>
+        <button class="category-pill">LOW-LATENCY WEBRTC</button>
+    </div>
+
+    <!-- Live Channels Stream Cards Grid (Previews & Meta) -->
+    <div>
+        <div class="row-between" style="margin-bottom: 16px;">
+            <h2 style="font-size: 14px; letter-spacing: 2px; color: var(--accent-acid);">
+                // LIVE BROADCAST CHANNELS WITH REALTIME PREVIEW
+            </h2>
+            <span class="cyber-tag cyber-tag--cyan">5 CHANNELS ACTIVE</span>
+        </div>
+
+        <div class="cyber-grid cyber-grid--3col">
+
+            <!-- Card 1: SamWizardry -->
+            <article class="stream-card" data-open-stream="samwizardry">
+                <div class="stream-thumbnail-wrapper">
+                    <div class="stream-thumbnail-placeholder">
+                        <span class="preview-callsign">SYS.HUD // 01</span>
+                    </div>
+                    <span class="badge-live">LIVE</span>
+                    <span class="badge-viewers">24,850 VIEWERS</span>
+                    <span class="badge-resolution cyber-tag cyber-tag--acid">1080P60</span>
+                    <div class="stream-thumbnail__scanlines"></div>
+                </div>
+                <div class="stream-card-body">
+                    <div class="avatar-hud avatar-hud--live">SAM</div>
+                    <div class="stream-card-meta">
+                        <h3 class="stream-title">CYBERPUNK BROADCASTING SYSTEM ARCHITECTURE</h3>
+                        <div class="stream-author-row">
+                            <span class="author-name">SamWizardry</span>
+                            <span class="cyber-tag cyber-tag--cyan" style="font-size: 9px; padding: 0 4px;">HOST</span>
+                        </div>
+                        <div class="stream-category">Cyberpunk Design Systems</div>
+                        <div class="tag-list">
+                            <span class="cyber-tag cyber-tag--acid">AV1</span>
+                            <span class="cyber-tag">Marathon Spec</span>
+                            <span class="cyber-tag">SCSS</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Card 2: MarathonRunner -->
+            <article class="stream-card" data-open-stream="marathon">
+                <div class="stream-thumbnail-wrapper">
+                    <div class="stream-thumbnail-placeholder">
+                        <span class="preview-callsign">SYS.HUD // 02</span>
+                    </div>
+                    <span class="badge-live">LIVE</span>
+                    <span class="badge-viewers">4,120 VIEWERS</span>
+                    <span class="badge-resolution cyber-tag cyber-tag--acid">1440P60</span>
+                    <div class="stream-thumbnail__scanlines"></div>
+                </div>
+                <div class="stream-card-body">
+                    <div class="avatar-hud avatar-hud--live">MK</div>
+                    <div class="stream-card-meta">
+                        <h3 class="stream-title">CYBERPUNK SHADER & POST-FX PIPELINE</h3>
+                        <div class="stream-author-row">
+                            <span class="author-name">MarathonRunner</span>
+                        </div>
+                        <div class="stream-category">Game Engine Architecture</div>
+                        <div class="tag-list">
+                            <span class="cyber-tag cyber-tag--acid">Vulkan</span>
+                            <span class="cyber-tag">GLSL</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Card 3: Signal_09 -->
+            <article class="stream-card" data-open-stream="signal">
+                <div class="stream-thumbnail-wrapper">
+                    <div class="stream-thumbnail-placeholder">
+                        <span class="preview-callsign">SYS.HUD // 03</span>
+                    </div>
+                    <span class="badge-live">LIVE</span>
+                    <span class="badge-viewers">8,890 VIEWERS</span>
+                    <span class="badge-resolution cyber-tag cyber-tag--acid">4K60 HDR</span>
+                    <div class="stream-thumbnail__scanlines"></div>
+                </div>
+                <div class="stream-card-body">
+                    <div class="avatar-hud avatar-hud--live">AI</div>
+                    <div class="stream-card-meta">
+                        <h3 class="stream-title">DSP SYNTHESIZERS & REALTIME AUDIO METERS</h3>
+                        <div class="stream-author-row">
+                            <span class="author-name">Signal_09</span>
+                        </div>
+                        <div class="stream-category">Audio DSP Engineering</div>
+                        <div class="tag-list">
+                            <span class="cyber-tag cyber-tag--cyan">WebAudio</span>
+                            <span class="cyber-tag">DSP</span>
+                            <span class="cyber-tag">Opus</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Card 4: BlazorForge -->
+            <article class="stream-card" data-open-stream="blazor">
+                <div class="stream-thumbnail-wrapper">
+                    <div class="stream-thumbnail-placeholder">
+                        <span class="preview-callsign">SYS.HUD // 04</span>
+                    </div>
+                    <span class="badge-live">LIVE</span>
+                    <span class="badge-viewers">1,940 VIEWERS</span>
+                    <span class="badge-resolution cyber-tag cyber-tag--cyan">1080P60</span>
+                    <div class="stream-thumbnail__scanlines"></div>
+                </div>
+                <div class="stream-card-body">
+                    <div class="avatar-hud avatar-hud--live">BL</div>
+                    <div class="stream-card-meta">
+                        <h3 class="stream-title">BLAZOR WEBASSEMBLY & SCSS SYSTEM SCALING</h3>
+                        <div class="stream-author-row">
+                            <span class="author-name">BlazorForge</span>
+                        </div>
+                        <div class="stream-category">Frontend Architecture</div>
+                        <div class="tag-list">
+                            <span class="cyber-tag cyber-tag--cyan">Blazor</span>
+                            <span class="cyber-tag">C# .NET 9</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Card 5: VortexNet -->
+            <article class="stream-card" data-open-stream="vortex">
+                <div class="stream-thumbnail-wrapper">
+                    <div class="stream-thumbnail-placeholder">
+                        <span class="preview-callsign">SYS.HUD // 05</span>
+                    </div>
+                    <span class="badge-live">LIVE</span>
+                    <span class="badge-viewers">3,410 VIEWERS</span>
+                    <span class="badge-resolution cyber-tag cyber-tag--cyan">1080P60</span>
+                    <div class="stream-thumbnail__scanlines"></div>
+                </div>
+                <div class="stream-card-body">
+                    <div class="avatar-hud avatar-hud--live">VX</div>
+                    <div class="stream-card-meta">
+                        <h3 class="stream-title">DISTRIBUTED WEBRTC MESH & INGEST TESTING</h3>
+                        <div class="stream-author-row">
+                            <span class="author-name">VortexNet</span>
+                        </div>
+                        <div class="stream-category">Network Engineering</div>
+                        <div class="tag-list">
+                            <span class="cyber-tag cyber-tag--cyan">WebRTC</span>
+                            <span class="cyber-tag">Mesh</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </div>
+
+</div>

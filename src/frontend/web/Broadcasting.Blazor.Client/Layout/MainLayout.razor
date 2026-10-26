@@ -1,0 +1,20 @@
+﻿@inherits LayoutComponentBase
+
+<div class="cyber-grid-canvas"></div>
+<div class="cyber-telemetry-watermark">[SYS.TELEMETRY: ACTIVE // PROTOCOL: WEBRTC]</div>
+
+<Topbar></Topbar>
+
+<div class="app-shell">
+    <Sidebar></Sidebar>
+
+    <main class="app-main-content">
+        @Body
+    </main>
+</div>
+
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>

@@ -15,10 +15,13 @@
   <Folder Name="/src/frontend/">
     <File Path="src/frontend/Directory.Build.props" />
     <File Path="src/frontend/Directory.Packages.props" />
-    <Project Path="src/frontend/Broadcasting.Blazor/Broadcasting.Blazor.csproj" Id="886b1066-cda0-4c82-9614-7f68e8022ede" />
-    <Project Path="src/frontend/Broadcasting.Blazor.Client/Broadcasting.Blazor.Client.csproj" Id="84b48aa6-bb72-4608-8013-6f51cc7e6896" />
   </Folder>
+  <Folder Name="/src/frontend/web/">
+      <Project Path="src/frontend/web/Broadcasting.Blazor/Broadcasting.Blazor.csproj" Id="0e8c8b41-6d30-499d-89a9-6d5421f12a2a" />
+      <Project Path="src/frontend/web/Broadcasting.Blazor.Client/Broadcasting.Blazor.Client.csproj" Id="2487c3d7-b3a8-4eac-8873-6e396907def2" />
+    </Folder>
   <Folder Name="/src/shared/">
     <Project Path="src/shared/Broadcasting.Contracts/Broadcasting.Contracts.csproj" />
   </Folder>
+  
 </Solution>
