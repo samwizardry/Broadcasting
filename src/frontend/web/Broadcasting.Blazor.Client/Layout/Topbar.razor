@@ -1,6 +1,7 @@
 ﻿@implements IDisposable
 
 @inject NavigationManager NavigationManager
+@inject ModalService ModalService
 
 <header class="showcase-header">
     <a href="" class="brand-mark-group" title="Broadcasting UI Kit Home">
@@ -19,25 +20,26 @@
         </NavLink>
     </nav>
 
-
     <!-- Header Actions -->
     <div style="display: flex; align-items: center; gap: 10px;">
 
         <AuthorizeView>
             <NotAuthorized>
-                <CyberButton Id="btn-header-login" Type="CyberButton.ButtonType.Ghost" Size="CyberButton.ButtonSize.Sm"
-                             data-modal-open="login-modal" title="Sign In to Broadcaster System">
+                <CyberButton Id="btn-header-login" Variant="ButtonVariant.Ghost" Size="Size.Sm"
+                             data-modal-open="login-modal" title="Sign In to Broadcaster System"
+                             OnClick="@(_ => ModalService.OpenModal(ModalService.LoginModalId))">
                     LOG IN
                 </CyberButton>
 
-                <CyberButton Id="btn-header-register" Type="CyberButton.ButtonType.Primary" Size="CyberButton.ButtonSize.Sm"
-                             data-modal-open="register-modal" title="Provision New Broadcaster Account">
+                <CyberButton Id="btn-header-register" Variant="ButtonVariant.Primary" Size="Size.Sm"
+                             data-modal-open="register-modal" title="Provision New Broadcaster Account"
+                             OnClick="@(_ => ModalService.OpenModal(ModalService.RegisterModalId))">
                     REGISTER
                 </CyberButton>
             </NotAuthorized>
         </AuthorizeView>
 
-        <div class="cyber-dropdown">
+        @* <div class="cyber-dropdown">
             <button class="btn-icon-hud" data-dropdown-toggle title="Broadcaster Profile">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
@@ -83,9 +85,17 @@
                     </span>
                 </a>
             </div>
-        </div>
+        </div> *@
     </div>
 </header>
+
+
+<AuthorizeView>
+    <NotAuthorized>
+        <CyberLoginModal />
+        <CyberRegisterModal />
+    </NotAuthorized>
+</AuthorizeView>
 
 @code {
     private string? currentUrl;

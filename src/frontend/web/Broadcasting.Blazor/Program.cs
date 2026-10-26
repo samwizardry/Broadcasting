@@ -1,3 +1,4 @@
+using Broadcasting.Blazor.Client.Services;
 using Broadcasting.Blazor.Components;
 using Broadcasting.Blazor.Components.Account;
 using Broadcasting.Blazor.Data;
@@ -40,6 +41,8 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+
+builder.Services.AddClientServices();
 
 var app = builder.Build();
 

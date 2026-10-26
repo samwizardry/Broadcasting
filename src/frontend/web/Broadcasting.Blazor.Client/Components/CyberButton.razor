@@ -1,71 +1,70 @@
 ﻿<button
     id="@Id"
-    class="btn-cyber btn-cyber-@(GetButtonType(Type)) @(GetButtonSize(Size)) @Class"
-    @onclick="@OnClick"
+    type="@HtmlType"
+    class="@ComputedCssClass()"
+    disabled="@Disabled"
+    @onclick="@HandleClick"
     @attributes="@AdditionalAttributes">
     @ChildContent
 </button>
 
 @code {
-    public enum ButtonType
-    {
-        Primary,
-        Secondary,
-        Danger,
-        Warning,
-        Ghost
-    }
-
-    public enum ButtonSize
-    {
-        Normal,
-        Sm,
-        Lg
-    }
-
     [Parameter]
     public string? Id { get; set; }
+
+    [Parameter]
+    public string HtmlType { get; set; } = "button";
 
     [Parameter]
     public string? Class { get; set; }
 
     [Parameter]
-    public ButtonType Type { get; set; } = ButtonType.Ghost;
+    public ButtonVariant Variant { get; set; } = ButtonVariant.Ghost;
 
     [Parameter]
-    public ButtonSize Size { get; set; } = ButtonSize.Normal;
+    public Size Size { get; set; } = Size.Normal;
 
     [Parameter]
     public bool Disabled { get; set; }
 
     [Parameter]
-    public EventCallback OnClick { get; set; }
+    public bool Loading{ get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
 
     [Parameter, EditorRequired]
-    public RenderFragment ChildContent { get; set; }
+    public RenderFragment? ChildContent { get; set; }
 
     [Parameter(CaptureUnmatchedValues = true)]
     public Dictionary<string, object>? AdditionalAttributes { get; set; }
 
-    private static string GetButtonType(ButtonType type)
-        => type switch
-        {
-            ButtonType.Primary => "primary",
-            ButtonType.Secondary => "secondary",
-            ButtonType.Danger => "danger",
-            ButtonType.Warning => "warning",
-            ButtonType.Ghost => "ghost",
-            _ => throw new ArgumentException($"Button type {type} is not supported.")
-        };
+    private string ComputedCssClass()
+    {
+        string variant = $"btn-cyber-{Variant.ToLowerString()}";
+        string size = "";
 
-    private static string GetButtonSize(ButtonSize size)
-        => size switch
+        if (Size != Size.Normal)
         {
-            ButtonSize.Normal => "",
-            ButtonSize.Sm => "btn-cyber-sm",
-            ButtonSize.Lg => "btn-cyber-lg",
-            _ => throw new ArgumentException($"Button size {size} is not supported.")
-        };
+            size = $"btn-cyber-{Size.ToLowerString()}";
+        }
 
-    
+        string loading = "";
+        if (Loading)
+        {
+            loading = "btn-cyber--loading";
+        }
+
+        return $"btn-cyber {variant} {size} {loading} {Class}";
+    }
+
+    private async Task HandleClick(MouseEventArgs args)
+    {
+        if (Disabled || Loading)
+        {
+            return;
+        }
+
+        await OnClick.InvokeAsync(args);
+    }
 }

@@ -1,7 +1,7 @@
 ﻿<h3>CyberAlert</h3>
 
-<div class="cyber-alert cyber-alert--@GetAlertType(Type)">
-    <span class="cyber-alert__badge">[@GetBadgeCode(Type)]</span>
+<div class="cyber-alert cyber-alert--@Variant.ToLowerString()">
+    <span class="cyber-alert__badge">[@Variant.GetBadgeCode()]</span>
     <div class="cyber-alert__content">
         <div class="alert-header">
             @if (!string.IsNullOrEmpty(Title))
@@ -21,16 +21,8 @@
 </div>
 
 @code {
-    public enum AlertType
-    {
-        Info,
-        Success,
-        Warning,
-        Danger
-    }
-
     [Parameter]
-    public AlertType Type { get; set; }
+    public AlertVariant Variant { get; set; }
 
     [Parameter]
     public string? Title { get; set; }
@@ -40,24 +32,4 @@
 
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
-
-    private static string GetAlertType(AlertType type)
-        => type switch
-        {
-            AlertType.Info => "info",
-            AlertType.Success => "success",
-            AlertType.Warning => "warning",
-            AlertType.Danger => "danger",
-            _ => throw new ArgumentException($"Alert type {type} is not supported.")
-        };
-
-    private static string GetBadgeCode(AlertType type)
-        => type switch
-        {
-            AlertType.Info => "SYS.INFO",
-            AlertType.Success => "VERIFIED",
-            AlertType.Warning => "WARN_08",
-            AlertType.Danger => "CRIT_ERR",
-            _ => throw new ArgumentException($"Alert type {type} is not supported.")
-        };
 }
