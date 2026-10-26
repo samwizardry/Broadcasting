@@ -1,0 +1,71 @@
+﻿<button
+    id="@Id"
+    class="btn-cyber btn-cyber-@(GetButtonType(Type)) @(GetButtonSize(Size)) @Class"
+    @onclick="@OnClick"
+    @attributes="@AdditionalAttributes">
+    @ChildContent
+</button>
+
+@code {
+    public enum ButtonType
+    {
+        Primary,
+        Secondary,
+        Danger,
+        Warning,
+        Ghost
+    }
+
+    public enum ButtonSize
+    {
+        Normal,
+        Sm,
+        Lg
+    }
+
+    [Parameter]
+    public string? Id { get; set; }
+
+    [Parameter]
+    public string? Class { get; set; }
+
+    [Parameter]
+    public ButtonType Type { get; set; } = ButtonType.Ghost;
+
+    [Parameter]
+    public ButtonSize Size { get; set; } = ButtonSize.Normal;
+
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    [Parameter]
+    public EventCallback OnClick { get; set; }
+
+    [Parameter, EditorRequired]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
+    private static string GetButtonType(ButtonType type)
+        => type switch
+        {
+            ButtonType.Primary => "primary",
+            ButtonType.Secondary => "secondary",
+            ButtonType.Danger => "danger",
+            ButtonType.Warning => "warning",
+            ButtonType.Ghost => "ghost",
+            _ => throw new ArgumentException($"Button type {type} is not supported.")
+        };
+
+    private static string GetButtonSize(ButtonSize size)
+        => size switch
+        {
+            ButtonSize.Normal => "",
+            ButtonSize.Sm => "btn-cyber-sm",
+            ButtonSize.Lg => "btn-cyber-lg",
+            _ => throw new ArgumentException($"Button size {size} is not supported.")
+        };
+
+    
+}

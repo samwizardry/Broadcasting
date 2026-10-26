@@ -6,36 +6,36 @@
     <a href="" class="brand-mark-group" title="Broadcasting UI Kit Home">
         <div class="brand-crosshair">+</div>
         <div>
-            <div class="brand-name">BROADCASTING <span style="color: var(--accent-acid);">// UI KIT</span></div>
-            <div class="brand-telemetry">[GRAPHIC REALISM // BROADCAST STUDIO]</div>
+            <div class="brand-name">BROADCASTING</div>
         </div>
     </a>
 
-    <!-- Master View Switcher Tabs -->
     <nav class="cyber-tabs" role="tablist">
-        <a href="index.html" class="cyber-tabs__item is-active" role="tab">
+        <NavLink class="cyber-tabs__item" href="" Match="NavLinkMatch.All" ActiveClass="is-active" role="tab">
             <span>01 // BROWSE CHANNELS</span>
-        </a>
-        <a href="watch.html" class="cyber-tabs__item" role="tab">
+        </NavLink>
+        <NavLink class="cyber-tabs__item" href="watch" ActiveClass="is-active" role="tab">
             <span>02 // WATCH STREAM</span>
-        </a>
-        <a href="workbench.html" class="cyber-tabs__item" role="tab">
-            <span>03 // COMPONENT WORKBENCH</span>
-        </a>
-        <a href="tokens.html" class="cyber-tabs__item" role="tab">
-            <span>04 // DESIGN TOKENS</span>
-        </a>
+        </NavLink>
     </nav>
+
 
     <!-- Header Actions -->
     <div style="display: flex; align-items: center; gap: 10px;">
-        <button id="btn-header-login" class="btn-cyber btn-cyber-ghost btn-cyber-sm" data-modal-open="login-modal" title="Sign In to Broadcaster System">
-            LOG IN
-        </button>
 
-        <button id="btn-header-register" class="btn-cyber btn-cyber-primary btn-cyber-sm" data-modal-open="register-modal" title="Provision New Broadcaster Account">
-            REGISTER
-        </button>
+        <AuthorizeView>
+            <NotAuthorized>
+                <CyberButton Id="btn-header-login" Type="CyberButton.ButtonType.Ghost" Size="CyberButton.ButtonSize.Sm"
+                             data-modal-open="login-modal" title="Sign In to Broadcaster System">
+                    LOG IN
+                </CyberButton>
+
+                <CyberButton Id="btn-header-register" Type="CyberButton.ButtonType.Primary" Size="CyberButton.ButtonSize.Sm"
+                             data-modal-open="register-modal" title="Provision New Broadcaster Account">
+                    REGISTER
+                </CyberButton>
+            </NotAuthorized>
+        </AuthorizeView>
 
         <div class="cyber-dropdown">
             <button class="btn-icon-hud" data-dropdown-toggle title="Broadcaster Profile">

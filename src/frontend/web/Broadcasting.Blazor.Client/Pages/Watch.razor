@@ -1,0 +1,290 @@
+﻿@page "/watch"
+
+<div class="watch-layout" id="watch-layout-main">
+
+    <!-- Center Stream Player & Telemetry Column -->
+    <div class="watch-layout__main">
+
+        <!-- Back to Browse Bar -->
+        <div class="watch-back-bar">
+            <a href="index.html" class="btn-back-to-browse" id="btn-back-to-browse">
+                ◀ BACK TO BROWSE CHANNELS
+            </a>
+            <div class="badge-telemetry">
+                <span class="telemetry-indicator telemetry-indicator--green"></span>
+                <span id="stream-viewers-display">24,850 VIEWERS</span>
+            </div>
+        </div>
+
+        <!-- Video Player Component -->
+        <article class="cyber-player" id="main-stream-player">
+            <div class="player-scanlines"></div>
+            <div class="player-overlay-crosshair"></div>
+
+            <!-- Top Telemetry HUD -->
+            <div class="player-hud-top">
+                <div class="hud-meta-left">
+                    <span class="badge-live">LIVE BROADCAST</span>
+                    <span class="hud-pill" id="stream-hud-pill">CH_SAMWIZARDRY // LIVE</span>
+                </div>
+                <div class="hud-meta-right">
+                    <span class="hud-pill" style="color: var(--accent-acid);">1080P // 60FPS</span>
+                    <span class="hud-pill">DROP: 0.00%</span>
+                    <span class="hud-pill">EU-CENTRAL-01</span>
+                </div>
+            </div>
+
+            <!-- Center Interactive Play Action -->
+            <div class="player-center-action" id="player-center-play">
+                <div class="play-btn-large">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                </div>
+                <span class="play-label">START BROADCAST FEED</span>
+            </div>
+
+            <div class="player-screen" id="player-active-screen">
+                <div style="font-family: var(--font-hud); font-size: 18px; letter-spacing: 3px; color: var(--accent-cyan); text-align: center;">
+                    BROADCASTING STREAM ONLINE
+                    <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); margin-top: 6px;">
+                        WEBRTC ULTRA LOW-LATENCY INGEST // AUDIO 48KHZ STEREO
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Playback Controls Bar -->
+            <div class="player-controls">
+                <div class="controls-timeline">
+                    <div class="timeline-buffered"></div>
+                    <div class="timeline-progress"></div>
+                </div>
+                <div class="controls-bar">
+                    <div class="controls-left">
+                        <button class="btn-player-control" id="player-bottom-play" title="Play / Pause">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                        </button>
+
+                        <span class="live-status-chip">
+                            <span class="live-dot"></span> LIVE
+                        </span>
+
+                        <button class="btn-player-control" title="Volume">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                            </svg>
+                        </button>
+
+                        <span class="time-readout">01:42:18 // LIVE</span>
+                    </div>
+
+                    <div class="controls-right">
+                        <span class="cyber-tag cyber-tag--acid">AV1</span>
+                        <span class="cyber-tag cyber-tag--cyan">1080P60</span>
+
+                        <button class="btn-player-control" title="Settings" data-modal-open="stream-settings-modal">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                            </svg>
+                        </button>
+
+                        <button class="btn-player-control" title="Fullscreen">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- Stream Metadata & Author Section -->
+        <div class="stream-info-container">
+            <div class="stream-header-row">
+                <div class="streamer-identity">
+                    <div class="avatar-hud avatar-hud--live avatar-hud--lg" id="stream-avatar-display">SAM</div>
+                    <div>
+                        <h1 class="stream-meta-title" id="stream-title-display">CYBERPUNK BROADCASTING SYSTEM ARCHITECTURE // MARATHON SPEC</h1>
+                        <div class="streamer-name-row">
+                            <span class="channel-author" id="stream-author-display">SamWizardry</span>
+                            <span class="cyber-tag cyber-tag--cyan" style="padding: 1px 6px; font-size: 9px; font-weight: 700;">VERIFIED</span>
+                            <span>•</span>
+                            <span id="stream-category-display">Cyberpunk Design Systems & Streaming Engines</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stream-actions">
+                    <button class="btn-cyber btn-cyber-primary">FOLLOW CHANNEL</button>
+                    <button class="btn-cyber btn-cyber-secondary" data-modal-open="stream-settings-modal">INGEST KEYS</button>
+                    <button class="btn-icon-hud" title="Share Stream">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                            <polyline points="16 6 12 2 8 6"></polyline>
+                            <line x1="12" y1="2" x2="12" y2="15"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stream Technical Specs Telemetry Bar -->
+            <div class="stream-specs-bar">
+                <div class="spec-item">
+                    <span class="spec-label">INGEST PROTOCOL:</span>
+                    <span class="spec-value text-acid">WebRTC (Ultra Low-Latency)</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">ENCODER CODEC:</span>
+                    <span class="spec-value text-cyan" id="stream-spec-codec">AV1 / OPUS</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">BITRATE:</span>
+                    <span class="spec-value" id="stream-spec-bitrate">8,450 KBPS</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">RTT LATENCY:</span>
+                    <span class="spec-value text-acid" id="stream-spec-latency">0.84 SEC</span>
+                </div>
+                <div class="spec-item">
+                    <span class="spec-label">SECURITY:</span>
+                    <span class="spec-value">E2E ENCRYPTED (AES-256)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-Time Stream & Network Telemetry Board -->
+        <div class="stream-health-widget" style="margin-top: 16px;">
+            <div class="stream-health-widget__header">
+                <span class="health-title">// NETWORK & BITRATE TELEMETRY</span>
+                <span class="cyber-tag cyber-tag--acid">STATUS: OPTIMAL</span>
+            </div>
+            <div class="bitrate-graph-container">
+                <div class="graph-grid-lines"></div>
+                <svg class="bitrate-svg-sparkline" viewBox="0 0 300 60" preserveAspectRatio="none">
+                    <polygon points="0,60 0,38 30,35 60,32 90,36 120,28 150,30 180,24 210,26 240,22 270,25 300,20 300,60" />
+                    <polyline points="0,38 30,35 60,32 90,36 120,28 150,30 180,24 210,26 240,22 270,25 300,20" />
+                </svg>
+            </div>
+            <div class="health-metrics-grid" style="grid-template-columns: repeat(6, 1fr);">
+                <div class="metric-cell">
+                    <span class="metric-name">FPS</span>
+                    <span class="metric-val metric-val--acid">60.0</span>
+                </div>
+                <div class="metric-cell">
+                    <span class="metric-name">BITRATE</span>
+                    <span class="metric-val metric-val--cyan">8,450 kbps</span>
+                </div>
+                <div class="metric-cell">
+                    <span class="metric-name">DROP RATE</span>
+                    <span class="metric-val">0.00%</span>
+                </div>
+                <div class="metric-cell">
+                    <span class="metric-name">RTT LATENCY</span>
+                    <span class="metric-val metric-val--acid">0.84 SEC</span>
+                </div>
+                <div class="metric-cell">
+                    <span class="metric-name">CODEC</span>
+                    <span class="metric-val">AV1 / OPUS</span>
+                </div>
+                <div class="metric-cell">
+                    <span class="metric-name">SECURITY</span>
+                    <span class="metric-val metric-val--cyan">TLS 1.3 / E2E</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Right Column: Collapsible Live Cyber Chat -->
+    <aside class="watch-layout__chat">
+
+        <button class="btn-chat-expand" id="btn-chat-expand" title="Expand Chat">
+            <span>◀ SHOW CHAT</span>
+        </button>
+
+        <div class="cyber-chat">
+            <!-- Chat Header -->
+            <div class="cyber-chat__header">
+                <div class="chat-title-group">
+                    <span class="chat-title">// BROADCAST CHAT</span>
+                    <span class="chat-status-pill">SLOW: 3S</span>
+                </div>
+                <div class="chat-header-actions">
+                    <button class="btn-player-control" id="btn-chat-collapse" title="Collapse Chat">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pinned Notice -->
+            <div class="cyber-chat__pinned">
+                <span class="pinned-tag">[PINNED]</span>
+                <span class="pinned-text">Broadcasting Live // WebRTC telemetry active.</span>
+            </div>
+
+            <!-- Live Message Stream -->
+            <div class="cyber-chat__messages" id="chat-messages-container">
+                <div class="chat-msg chat-msg--system">
+                    [SYS.01: BROADCAST INGEST INITIALIZED // 1080P60 8450KBPS]
+                </div>
+
+                <div class="chat-msg chat-msg--donation">
+                    <div class="msg-header">
+                        <span class="msg-time">21:04</span>
+                        <span class="msg-badge msg-badge--vip">VIP</span>
+                        <span class="msg-username text-cyan">NEXUS_VIP</span>
+                        <span class="donation-amount">★ SUPERTIP $50.00</span>
+                    </div>
+                    <div class="msg-content">This Marathon aesthetic is unmatched. The chamfer cuts and VU meters look gorgeous!</div>
+                </div>
+
+                <div class="chat-msg">
+                    <div class="msg-header">
+                        <span class="msg-time">21:05</span>
+                        <span class="msg-badge msg-badge--mod">MOD</span>
+                        <span class="msg-username" style="color: var(--accent-cyan);">CYBER_GUARD</span>
+                    </div>
+                    <div class="msg-content">WebRTC broadcast stream latency is 0.84 seconds. Rock solid!</div>
+                </div>
+
+                <div class="chat-msg">
+                    <div class="msg-header">
+                        <span class="msg-time">21:06</span>
+                        <span class="msg-badge msg-badge--host">HOST</span>
+                        <span class="msg-username text-acid">SAMWIZARDRY</span>
+                    </div>
+                    <div class="msg-content">BroadcastingUIKit is fully modular and Blazor-ready. Inspect the workbench tab for code snippets!</div>
+                </div>
+            </div>
+
+            <!-- Quick Reaction Bar (No Emojis - Tactical Hype Tags) -->
+            <div class="cyber-chat__reactions">
+                <button class="btn-reaction" title="Hype">[HYPE]</button>
+                <button class="btn-reaction" title="Good Game">[GG]</button>
+                <button class="btn-reaction" title="Win">[W]</button>
+                <button class="btn-reaction" title="Max Bitrate">[100%]</button>
+                <button class="btn-reaction" title="Glitch">[GLITCH]</button>
+            </div>
+
+            <!-- Chat Input Footer -->
+            <div class="cyber-chat__footer">
+                <div class="chat-input-row">
+                    <input type="text" id="chat-input-field" class="chat-text-input" placeholder="Transmit message to channel..." maxlength="250">
+                    <button id="chat-send-btn" class="btn-cyber btn-cyber-primary btn-cyber-sm">SEND</button>
+                </div>
+                <div class="chat-input-meta">
+                    <span>PRESS ENTER TO TRANSMIT</span>
+                    <span>0 / 250</span>
+                </div>
+            </div>
+        </div>
+
+    </aside>
+
+</div>
