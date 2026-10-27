@@ -1,19 +1,19 @@
 ﻿<button
     id="@Id"
-    type="@HtmlType"
+    type="@ButtonType.ToHtml()"
     class="@ComputedCssClass()"
     disabled="@Disabled"
     @onclick="@HandleClick"
     @attributes="@AdditionalAttributes">
     @ChildContent
 </button>
-
+@* <MudTextField @bind-Value="Password" Label="Password" Variant="Variant.Outlined" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePasswordVisibility" AdornmentAriaLabel="Show Password" /> *@
 @code {
     [Parameter]
     public string? Id { get; set; }
 
     [Parameter]
-    public string HtmlType { get; set; } = "button";
+    public ButtonType ButtonType { get; set; } = ButtonType.Button;
 
     [Parameter]
     public string? Class { get; set; }
@@ -58,13 +58,13 @@
         return $"btn-cyber {variant} {size} {loading} {Class}";
     }
 
-    private async Task HandleClick(MouseEventArgs args)
+    private async Task HandleClick(MouseEventArgs e)
     {
         if (Disabled || Loading)
         {
             return;
         }
 
-        await OnClick.InvokeAsync(args);
+        await OnClick.InvokeAsync(e);
     }
 }

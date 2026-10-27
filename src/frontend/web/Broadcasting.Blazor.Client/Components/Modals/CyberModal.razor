@@ -1,0 +1,42 @@
+﻿@implements IDisposable
+@inject ModalService ModalService
+
+@code {
+    protected bool _isOpen = false;
+    protected ElementReference _focusElem;
+
+    protected virtual string ModalId => throw new NotImplementedException();
+
+    public void Dispose()
+    {
+        ModalService.OnChange -= HandleStateChange;
+    }
+
+    protected override void OnInitialized()
+    {
+        ModalService.OnChange += HandleStateChange;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_isOpen)
+        {
+            await Task.Delay(80);
+            await _focusElem.FocusAsync();
+        }
+    }
+
+    protected void HandleStateChange()
+    {
+        _isOpen = ModalService.IsOpen(ModalId);
+        StateHasChanged();
+    }
+
+    protected void HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (string.Equals(e.Key, "escape", StringComparison.OrdinalIgnoreCase))
+        {
+            ModalService.CloseAll();
+        }
+    }
+}

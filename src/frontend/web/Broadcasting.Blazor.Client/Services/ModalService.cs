@@ -2,37 +2,30 @@
 
 public class ModalService
 {
+    private string _currentModal = "";
+
     public const string LoginModalId = "login-modal";
     public const string RegisterModalId = "register-modal";
 
     public event Action? OnChange;
 
-    private readonly Dictionary<string, bool> _modals = new()
-    {
-        { LoginModalId, false },
-        { RegisterModalId, false }
-    };
-
-    public bool IsOpen(string modalId) => _modals[modalId];
+    public bool IsOpen(string modalId) => modalId == _currentModal;
 
     public void OpenModal(string modalId)
     {
-        foreach (var id in _modals.Keys)
-        {
-            _modals[id] = false;
-        }
+        if (_currentModal == modalId)
+            return;
 
-        _modals[modalId] = true;
+        _currentModal = modalId;
         OnChange?.Invoke();
     }
 
     public void CloseAll()
     {
-        foreach (var modalId in _modals.Keys)
-        {
-            _modals[modalId] = false;
-        }
+        if (string.IsNullOrEmpty(_currentModal))
+            return;
 
+        _currentModal = "";
         OnChange?.Invoke();
     }
 }

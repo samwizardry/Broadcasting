@@ -1,0 +1,88 @@
+﻿@inherits CyberModal
+@inject ModalService ModalService
+
+<div class="cyber-modal-backdrop @(_isOpen ? "is-open" : "")" id="@ModalService.LoginModalId"
+     tabindex="-1"
+     @onclick="@ModalService.CloseAll"
+     @onkeydown="@HandleKeyDown">
+
+    <div class="cyber-modal" role="dialog" aria-modal="true" aria-labelledby="modal-login-title" @onclick:stopPropagation>
+
+        <div class="cyber-modal__header">
+            <h2 class="modal-title" id="modal-login-title">OPERATOR ACCESS // AUTHENTICATION</h2>
+            <button class="btn-icon-hud btn-icon-hud--sm" data-modal-close title="Close Window" @onclick="ModalService.CloseAll">
+                ✕
+            </button>
+        </div>
+
+        <div class="cyber-modal__body">
+            <div class="cyber-telemetry-banner">
+                <span class="banner-badge">[SYS.AUTH_01]</span>
+                <span>AUTHORIZATION PROTOCOL: ENCRYPTED TLS 1.3 / CALLSIGN VERIFY</span>
+            </div>
+
+            <form id="form-login" autocomplete="off" @onsubmit:preventDefault>
+                <div class="cyber-field">
+                    <label class="cyber-field__label" for="login-username">
+                        <span>CALLSIGN / OPERATOR ID</span>
+                        <span class="label-code">[USER.ID]</span>
+                    </label>
+                    <div class="cyber-input-group">
+                        <span class="input-prefix-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </span>
+                        <input type="text" id="login-username" class="cyber-input" placeholder="Enter callsign or operator ID" required @ref="_focusElem">
+                    </div>
+                </div>
+
+                <div class="cyber-field" style="margin-top: 14px;">
+                    <label class="cyber-field__label" for="login-password">
+                        <span>OPERATOR SECRET KEY</span>
+                        <span class="label-code">[PASS.HASH]</span>
+                    </label>
+                    <div class="cyber-input-group cyber-input-group--has-suffix">
+                        <span class="input-prefix-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                        </span>
+                        <input type="password" id="login-password" class="cyber-input" placeholder="Enter secret key" required>
+                        <button type="button" class="btn-cyber btn-cyber-secondary btn-cyber-sm input-suffix-action" data-password-toggle="login-password">
+                            SHOW
+                        </button>
+                    </div>
+                </div>
+
+                <div class="cyber-modal__options">
+                    <label class="cyber-switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                        <span class="switch-label">PERSIST BROADCAST SESSION</span>
+                    </label>
+                    <a href="#restore" class="options-link" onclick="event.preventDefault();">[RECOVER ACCESS KEYS]</a>
+                </div>
+
+                <div class="cyber-modal__footer" style="padding: 16px 0 0; background: transparent; border-top: 1px dashed var(--border-dim); margin-top: 16px;">
+                    <button type="button" class="btn-cyber btn-cyber-ghost" data-modal-close @onclick="ModalService.CloseAll">CANCEL</button>
+                    <button type="submit" class="btn-cyber btn-cyber-primary" id="btn-submit-login">
+                        AUTHENTICATE & CONNECT
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="cyber-modal__switch">
+            <span>NEED CREDENTIALS?</span>
+            <button type="button" class="switch-link" data-modal-open="register-modal" @onclick="@(_ => ModalService.OpenModal(ModalService.RegisterModalId))">REGISTER CALLSIGN</button>
+        </div>
+
+    </div>
+</div>
+
+@code {
+    protected override string ModalId => ModalService.LoginModalId;
+}

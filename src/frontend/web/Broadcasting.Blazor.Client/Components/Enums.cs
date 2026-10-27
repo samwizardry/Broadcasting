@@ -16,6 +16,13 @@ public enum ButtonVariant
     Ghost
 }
 
+public enum ButtonType
+{
+    Button,
+    Submit,
+    Reset
+}
+
 public enum AlertVariant
 {
     Info,
@@ -46,23 +53,34 @@ public static class EnumExtensions
             _ => throw new ArgumentException($"Button variant {variant} is not supported.")
         };
 
-    public static string ToLowerString(this AlertVariant type)
+    public static string ToHtml(this ButtonType type)
         => type switch
+        {
+            ButtonType.Button => "button",
+            ButtonType.Submit => "submit",
+            ButtonType.Reset => "reset",
+            _ => throw new ArgumentException($"Button type {type} is not supported.")
+        };
+
+    public static string ToLowerString(this AlertVariant variant)
+        => variant switch
         {
             AlertVariant.Info => "info",
             AlertVariant.Success => "success",
             AlertVariant.Warning => "warning",
             AlertVariant.Danger => "danger",
-            _ => throw new ArgumentException($"Alert type {type} is not supported.")
+            _ => throw new ArgumentException($"Alert variant {variant} is not supported.")
         };
 
-    public static string GetBadgeCode(this AlertVariant type)
-        => type switch
+    public static string GetBadgeCode(this AlertVariant variant)
+        => variant switch
         {
             AlertVariant.Info => "SYS.INFO",
             AlertVariant.Success => "VERIFIED",
             AlertVariant.Warning => "WARN_08",
             AlertVariant.Danger => "CRIT_ERR",
-            _ => throw new ArgumentException($"Alert type {type} is not supported.")
+            _ => throw new ArgumentException($"Alert variant {variant} is not supported.")
         };
+
+
 }

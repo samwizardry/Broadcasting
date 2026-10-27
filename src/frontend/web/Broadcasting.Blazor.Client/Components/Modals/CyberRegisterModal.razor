@@ -1,0 +1,106 @@
+﻿@inherits CyberModal
+@inject ModalService ModalService
+
+<div class="cyber-modal-backdrop @(_isOpen ? " is-open" : "")" id="@ModalService.RegisterModalId"
+     tabindex="-1"
+     @onclick="@ModalService.CloseAll"
+     @onkeydown="@HandleKeyDown">
+
+    <div class="cyber-modal" role="dialog" aria-modal="true" aria-labelledby="modal-register-title" @onclick:stopPropagation>
+
+        <div class="cyber-modal__header">
+            <h2 class="modal-title" id="modal-register-title">NEW BROADCASTER PROFILE // REGISTRATION</h2>
+            <button class="btn-icon-hud btn-icon-hud--sm" data-modal-close title="Close Window" @onclick="@ModalService.CloseAll">
+                ✕
+            </button>
+        </div>
+
+        <div class="cyber-modal__body">
+            <div class="cyber-telemetry-banner cyber-telemetry-banner--acid">
+                <span class="banner-badge">[REG.NEW]</span>
+                <span>PROVISION NEW BROADCAST OPERATOR // MARATHON SPEC</span>
+            </div>
+
+            <form id="form-register" autocomplete="off" @onsubmit:preventDefault>
+                <div class="cyber-field">
+                    <label class="cyber-field__label" for="register-username">
+                        <span>ASSIGN CALLSIGN / OPERATOR ID</span>
+                        <span class="label-code">[CALLSIGN.ID]</span>
+                    </label>
+                    <div class="cyber-input-group">
+                        <span class="input-prefix-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </span>
+                        <input type="text" id="register-username" class="cyber-input" placeholder="Enter unique operator callsign" required @ref="_focusElem">
+                    </div>
+                </div>
+
+                <div class="cyber-field" style="margin-top: 14px;">
+                    <label class="cyber-field__label" for="register-password">
+                        <span>PRIMARY SECRET KEY</span>
+                        <span class="label-code">[KEY.MIN_6]</span>
+                    </label>
+                    <div class="cyber-input-group cyber-input-group--has-suffix">
+                        <span class="input-prefix-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                        </span>
+                        <input type="password" id="register-password" class="cyber-input" placeholder="Minimum 6 characters" required>
+                        <button type="button" class="btn-cyber btn-cyber-secondary btn-cyber-sm input-suffix-action" data-password-toggle="register-password">
+                            SHOW
+                        </button>
+                    </div>
+                </div>
+
+                <div class="cyber-field" style="margin-top: 14px;">
+                    <label class="cyber-field__label" for="register-confirm">
+                        <span>CONFIRM SECRET KEY</span>
+                        <span class="label-code">[KEY.VERIFY]</span>
+                    </label>
+                    <div class="cyber-input-group cyber-input-group--has-suffix">
+                        <span class="input-prefix-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                        </span>
+                        <input type="password" id="register-confirm" class="cyber-input" placeholder="Confirm secret key" required>
+                        <button type="button" class="btn-cyber btn-cyber-secondary btn-cyber-sm input-suffix-action" data-password-toggle="register-confirm">
+                            SHOW
+                        </button>
+                    </div>
+                </div>
+
+                <div class="cyber-modal__options">
+                    <label class="cyber-switch">
+                        <input type="checkbox" checked required>
+                        <span class="slider"></span>
+                        <span class="switch-label">AGREE TO BROADCAST PROTOCOL & TERMS [TERMS]</span>
+                    </label>
+                </div>
+
+                <div class="cyber-modal__footer" style="padding: 16px 0 0; background: transparent; border-top: 1px dashed var(--border-dim); margin-top: 16px;">
+                    <button type="button" class="btn-cyber btn-cyber-ghost" data-modal-close @onclick="@ModalService.CloseAll">CANCEL</button>
+                    <button type="submit" class="btn-cyber btn-cyber-primary" id="btn-submit-register">
+                        PROVISION ACCOUNT [CREATE.ID]
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="cyber-modal__switch">
+            <span>ALREADY REGISTERED?</span>
+            <button type="button" class="switch-link" data-modal-open="login-modal" @onclick="@(_ => ModalService.OpenModal(ModalService.LoginModalId))">LOG IN TO SYSTEM</button>
+        </div>
+
+    </div>
+</div>
+
+
+@code {
+    protected override string ModalId => ModalService.RegisterModalId;
+}
