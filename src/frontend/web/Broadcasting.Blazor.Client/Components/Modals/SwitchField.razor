@@ -1,0 +1,44 @@
+﻿@using System.Diagnostics.CodeAnalysis
+@inherits InputBase<bool>
+
+<div class="cyber-modal__options">
+    <label class="cyber-switch" for="@Id">
+        <input type="checkbox" id="@Id" checked="@Checked" required="@Required" @oninput="HandleInput">
+        <span class="slider"></span>
+        <span class="switch-label">@Label</span>
+    </label>
+    @if (ChildContent is not null)
+    {
+        @ChildContent
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired] public string Id { get; set; }
+    [Parameter, EditorRequired] public string Label { get; set; }
+    [Parameter] public bool Checked { get; set; }
+    [Parameter] public bool Required { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    protected override bool TryParseValueFromString(
+        string? value,
+        [MaybeNullWhen(false)] out bool result,
+        [NotNullWhen(false)] out string? validationErrorMessage)
+    {
+        result = false;
+
+        if (bool.TryParse(value, out result))
+        {
+            validationErrorMessage = null;
+            return true;
+        }
+
+        validationErrorMessage = $"Failed to parse value '{value}'";
+        return false;
+    }
+
+    private void HandleInput(ChangeEventArgs e)
+    {
+        CurrentValueAsString = e.Value?.ToString();
+    }
+}

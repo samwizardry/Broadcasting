@@ -2,14 +2,19 @@
 @inject ModalService ModalService
 
 @code {
-    protected bool _isOpen = false;
-    protected ElementReference _focusElem;
+    protected bool _isOpen;
+    private bool _shouldFocus;
 
     protected virtual string ModalId => throw new NotImplementedException();
 
     public void Dispose()
     {
         ModalService.OnChange -= HandleStateChange;
+    }
+
+    protected virtual ValueTask FocusAsync()
+    {
+        return ValueTask.CompletedTask;
     }
 
     protected override void OnInitialized()
@@ -19,17 +24,23 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (_isOpen)
+        if (_shouldFocus)
         {
             await Task.Delay(80);
-            await _focusElem.FocusAsync();
+            await FocusAsync();
+            _shouldFocus = false;
         }
     }
 
     protected void HandleStateChange()
     {
-        _isOpen = ModalService.IsOpen(ModalId);
-        StateHasChanged();
+        bool isOpen = ModalService.IsOpen(ModalId);
+        if (_isOpen != isOpen)
+        {
+            _isOpen = isOpen;
+            _shouldFocus = isOpen;
+            StateHasChanged();
+        }
     }
 
     protected void HandleKeyDown(KeyboardEventArgs e)

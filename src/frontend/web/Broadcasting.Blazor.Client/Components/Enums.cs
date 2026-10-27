@@ -1,10 +1,7 @@
-﻿using System.Drawing;
-
-namespace Broadcasting.Blazor.Client.Components;
+﻿namespace Broadcasting.Blazor.Client.Components;
 
 public enum Size
 {
-    None, // Как md
     Sm,
     Md,
     Lg,
@@ -22,9 +19,9 @@ public enum CyberAccent
 
 public enum SurfaceTier
 {
-    Deep, // подложка страницы
-    Surface, // стандартный блок/карточка
-    Elevated //модалки, поповеры, меню
+    Deep,
+    Surface,
+    Elevated
 }
 
 // Buttons
@@ -53,24 +50,6 @@ public enum AlertVariant
     Success,
     Warning,
     Danger
-}
-
-// Forms
-
-public enum InputType
-{
-    Text,
-    Password
-}
-
-public enum FieldState
-{
-    Normal,
-    Success,
-    Danger,
-    Error,
-    Disabled,
-    Readonly
 }
 
 public static class EnumExtensions
@@ -132,34 +111,5 @@ public static class EnumExtensions
         AlertVariant.Warning => "WARN_08",
         AlertVariant.Danger => "CRIT_ERR",
         _ => throw new ArgumentException($"Alert variant {variant} is not supported.")
-    };
-
-    // Forms
-
-    public static string ToLowerCase(this InputType type) => type switch
-    {
-        InputType.Text => "text",
-        InputType.Password => "password",
-        _ => throw new ArgumentException($"Input type {type} is not supported.")
-    };
-
-    public static string ToLowerCase(this FieldState state) => state switch
-    {
-        FieldState.Success => "success",
-        FieldState.Danger => "danger",
-        FieldState.Error => "error",
-        FieldState.Disabled => "disabled",
-        FieldState.Readonly => "readonly",
-        _ => throw new ArgumentException($"State {state} is not supported.")
-    };
-
-    public static string ToCode(this FieldState state) => state switch
-    {
-        FieldState.Success => "VERIFIED",
-        FieldState.Danger => "WARN_08",
-        FieldState.Error => "CRIT_ERR",
-        FieldState.Disabled => throw new NotImplementedException(),
-        FieldState.Readonly => throw new NotImplementedException(),
-        _ => throw new ArgumentException($"State {state} is not supported.")
     };
 }

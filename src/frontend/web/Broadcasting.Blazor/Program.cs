@@ -3,6 +3,8 @@ using Broadcasting.Blazor.Components;
 using Broadcasting.Blazor.Components.Account;
 using Broadcasting.Blazor.Data;
 
+using FastEndpoints;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,7 +44,9 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
-builder.Services.AddClientServices();
+builder.Services.AddFastEndpoints();
+
+builder.Services.AddClientServices("https://localhost:7135");
 
 var app = builder.Build();
 
@@ -63,12 +67,16 @@ app.UseHttpsRedirection();
 
 app.UseAntiforgery();
 
+app.MapFastEndpoints();
+
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(Broadcasting.Blazor.Client._Imports).Assembly);
 
+
 // Add additional endpoints required by the Identity /Account Razor components.
+// TODO: delete
 app.MapAdditionalIdentityEndpoints();
 
 app.Run();

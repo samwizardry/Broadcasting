@@ -1,0 +1,13 @@
+@Broadcasting.Blazor.Host=https://localhost:7135
+
+# CREATE User
+POST {{Broadcasting.Blazor.Host}}/auth/login
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "sam",
+  "password": "Pass@word1"
+}
+
+###
