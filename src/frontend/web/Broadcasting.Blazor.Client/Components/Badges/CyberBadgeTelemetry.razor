@@ -1,0 +1,12 @@
+﻿<span class="badge-telemetry">
+    <span class="telemetry-indicator telemetry-indicator--@Accent.ToLowerString()"></span>
+    @ChildContent
+</span>
+
+@code {
+    [Parameter]
+    public CyberAccent Accent { get; set; }
+
+    [Parameter, EditorRequired]
+    public RenderFragment ChildContent { get; set; }
+}

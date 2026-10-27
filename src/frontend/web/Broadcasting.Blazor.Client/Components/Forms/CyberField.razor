@@ -1,0 +1,35 @@
+﻿<div class="cyber-field @(State != FieldState.Normal ? $"cyber-field--{State.ToLowerCase()}" : "")">
+    <label class="cyber-field__label" for="@Id">
+        <span>@Label</span>
+        <span class="label-code">[@LabelCode]</span>
+    </label>
+    <CascadingValue Value="@State" Name="State">
+        <CascadingValue Value="@Id" Name="Id">
+            @ChildContent
+        </CascadingValue>
+    </CascadingValue>
+    @if (!string.IsNullOrEmpty(Hint))
+    {
+        <span class="cyber-field__hint">@Hint</span>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public FieldState State { get; set; } = FieldState.Normal;
+
+    [Parameter, EditorRequired]
+    public string Id { get; set; }
+
+    [Parameter, EditorRequired]
+    public string Label { get; set; }
+
+    [Parameter]
+    public string? LabelCode { get; set; }
+
+    [Parameter]
+    public string? Hint { get; set; }
+
+    [Parameter, EditorRequired]
+    public RenderFragment? ChildContent { get; set; }
+}

@@ -1,0 +1,31 @@
+﻿<div class="cyber-input-group @(!(string.IsNullOrEmpty(Prefix) && string.IsNullOrEmpty(Suffix)) ? "cyber-input-group--affix" : "")">
+    @if (!string.IsNullOrEmpty(Prefix))
+    {
+        <span class="cyber-input-affix cyber-input-affix--prefix">@Prefix</span>
+    }
+    @if (PrefixIcon is not null)
+    {
+        <span class="input-prefix-icon">
+            @PrefixIcon
+        </span>
+    }
+    @ChildContent
+    @if (!string.IsNullOrEmpty(Suffix))
+    {
+        <span class="cyber-input-affix cyber-input-affix--suffix">@Suffix</span>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string? Prefix { get; set; }
+
+    [Parameter]
+    public string? Suffix { get; set; }
+
+    [Parameter]
+    public RenderFragment? PrefixIcon { get; set; }
+
+    [Parameter, EditorRequired]
+    public RenderFragment ChildContent { get; set; }
+}

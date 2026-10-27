@@ -1,7 +1,5 @@
-﻿<h3>CyberAlert</h3>
-
-<div class="cyber-alert cyber-alert--@Variant.ToLowerString()">
-    <span class="cyber-alert__badge">[@Variant.GetBadgeCode()]</span>
+﻿<div class="cyber-alert cyber-alert--@Variant.ToLowerString()">
+    <span class="cyber-alert__badge">[@(BadgeCode ?? Variant.ToCode())]</span>
     <div class="cyber-alert__content">
         <div class="alert-header">
             @if (!string.IsNullOrEmpty(Title))
@@ -22,7 +20,10 @@
 
 @code {
     [Parameter]
-    public AlertVariant Variant { get; set; }
+    public AlertVariant Variant { get; set; } = AlertVariant.Info;
+
+    [Parameter]
+    public string? BadgeCode { get; set; }
 
     [Parameter]
     public string? Title { get; set; }

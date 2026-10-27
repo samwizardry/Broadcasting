@@ -22,21 +22,14 @@
             </div>
 
             <form id="form-login" autocomplete="off" @onsubmit:preventDefault>
-                <div class="cyber-field">
-                    <label class="cyber-field__label" for="login-username">
-                        <span>CALLSIGN / OPERATOR ID</span>
-                        <span class="label-code">[USER.ID]</span>
-                    </label>
-                    <div class="cyber-input-group">
-                        <span class="input-prefix-icon">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="12" cy="7" r="4"></circle>
-                            </svg>
-                        </span>
-                        <input type="text" id="login-username" class="cyber-input" placeholder="Enter callsign or operator ID" required @ref="_focusElem">
-                    </div>
-                </div>
+                <CyberField Label="CALLSIGN / OPERATOR ID" LabelCode="USER.ID" Id="login-username">
+                    <CyberInputGroup>
+                        <PrefixIcon><Person /></PrefixIcon>
+                        <ChildContent>
+                            <CyberInputText @bind-Value="@model.Username" Placeholder="Enter callsign or operator ID" Reference="_focusElem" />
+                        </ChildContent>
+                    </CyberInputGroup>
+                </CyberField>
 
                 <div class="cyber-field" style="margin-top: 14px;">
                     <label class="cyber-field__label" for="login-password">
@@ -84,5 +77,14 @@
 </div>
 
 @code {
+    private class LoginModel
+    {
+        public string? Username { get; set; }
+
+        public string? Password { get; set; }
+    }
+
+    private LoginModel model = new();
+
     protected override string ModalId => ModalService.LoginModalId;
 }

@@ -1,13 +1,13 @@
 ﻿<button
     id="@Id"
-    type="@ButtonType.ToHtml()"
+    type="@ButtonType.ToLowerString()"
     class="@ComputedCssClass()"
     disabled="@Disabled"
     @onclick="@HandleClick"
     @attributes="@AdditionalAttributes">
     @ChildContent
 </button>
-@* <MudTextField @bind-Value="Password" Label="Password" Variant="Variant.Outlined" InputType="@PasswordInput" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="TogglePasswordVisibility" AdornmentAriaLabel="Show Password" /> *@
+
 @code {
     [Parameter]
     public string? Id { get; set; }
@@ -22,7 +22,7 @@
     public ButtonVariant Variant { get; set; } = ButtonVariant.Ghost;
 
     [Parameter]
-    public Size Size { get; set; } = Size.Normal;
+    public Size Size { get; set; } = Size.Md;
 
     [Parameter]
     public bool Disabled { get; set; }
@@ -42,12 +42,7 @@
     private string ComputedCssClass()
     {
         string variant = $"btn-cyber-{Variant.ToLowerString()}";
-        string size = "";
-
-        if (Size != Size.Normal)
-        {
-            size = $"btn-cyber-{Size.ToLowerString()}";
-        }
+        string size = $"btn-cyber-{Size.ToLowerString()}";
 
         string loading = "";
         if (Loading)
