@@ -1,6 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FastEndpoints" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Broadcasting.ServiceDefaults\Broadcasting.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\..\Broadcasting.SharedKernel\Broadcasting.SharedKernel.csproj" />
+  </ItemGroup>
 
 </Project>
