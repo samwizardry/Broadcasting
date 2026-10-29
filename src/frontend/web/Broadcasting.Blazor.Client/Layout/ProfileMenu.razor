@@ -1,0 +1,49 @@
+﻿<div class="cyber-dropdown">
+    <button class="btn-icon-hud" data-dropdown-toggle title="Broadcaster Profile">
+        <PersonIcon Width="18" Height="18" />
+    </button>
+    <div class="cyber-dropdown__menu">
+        <AuthorizeView>
+            <Authorized>
+                <div class="cyber-dropdown__header">
+                    <span>// PROFILE: SAM</span>
+                    <span>HOST.01</span>
+                </div>
+                <div class="cyber-dropdown__divider"></div>
+
+                <a href="/auth/logout" class="cyber-dropdown__item" style="color: var(--accent-alert);" @onclick="HandleLogout">
+                    <span class="item-left">
+                        <span class="item-tag" style="color: var(--accent-alert); border-color: rgba(255, 51, 75, 0.3); background: var(--accent-alert-dim);">[OFF]</span>
+                        <span>Disconnect Session</span>
+                    </span>
+                </a>
+            </Authorized>
+            <NotAuthorized>
+                <div class="cyber-dropdown__header">
+                    <span>// PROFILE: ANONYMOUS</span>
+                    <span>HOST.01</span>
+                </div>
+                <a href="#login" class="cyber-dropdown__item" data-modal-open="login-modal">
+                    <span class="item-left">
+                        <span class="item-tag" style="color: var(--accent-cyan); border-color: rgba(0, 245, 255, 0.3); background: var(--accent-cyan-dim);">[AUTH]</span>
+                        <span>Operator Sign In</span>
+                    </span>
+                </a>
+
+                <a href="#register" class="cyber-dropdown__item" data-modal-open="register-modal">
+                    <span class="item-left">
+                        <span class="item-tag" style="color: var(--accent-acid); border-color: rgba(216, 255, 0, 0.3); background: var(--accent-acid-dim);">[REG]</span>
+                        <span>Register New Profile</span>
+                    </span>
+                </a>
+            </NotAuthorized>
+        </AuthorizeView>
+    </div>
+</div>
+
+@code {
+    private void HandleLogout()
+    {
+        throw new NotImplementedException();
+    }
+}

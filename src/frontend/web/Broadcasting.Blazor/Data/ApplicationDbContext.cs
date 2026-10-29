@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Broadcasting.Blazor.Data;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options)
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    : IdentityDbContext<ApplicationUser, ApplicationRole, string>(options)
 {
 }

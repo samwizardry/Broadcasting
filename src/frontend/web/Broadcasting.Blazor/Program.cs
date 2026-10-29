@@ -37,7 +37,15 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddIdentityCore<ApplicationUser>(options =>
     {
         options.Stores.SchemaVersion = IdentitySchemaVersions.Version3;
+
+        //options.Password.RequireDigit = false;
+        //options.Password.RequiredLength = 6;
+        //options.Password.RequiredUniqueChars = 1;
+        //options.Password.RequireLowercase = false;
+        //options.Password.RequireNonAlphanumeric = false;
+        //options.Password.RequireUppercase = false;
     })
+    .AddRoles<ApplicationRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager()
     .AddDefaultTokenProviders();
@@ -74,6 +82,10 @@ app.MapRazorComponents<App>()
 
 // Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
-app.MapFastEndpoints();
+
+app.UseFastEndpoints(options =>
+{
+    options.Errors.UseProblemDetails();
+});
 
 app.Run();

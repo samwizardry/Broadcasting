@@ -1,6 +1,5 @@
-﻿using System.Net.Http.Json;
-
-using Broadcasting.Contracts.Blazor.Auth;
+﻿using Broadcasting.Contracts.Blazor.Auth;
+using Broadcasting.Contracts.Responses;
 
 namespace Broadcasting.Blazor.Client.HttpClients;
 
@@ -13,16 +12,18 @@ public class AuthClient
         _client = client;
     }
 
-    public async Task LoginAsync(LoginRequest request, CancellationToken cancellationToken = default)
+    public async Task<ApiResponse> LoginAsync(LoginRequest request, CancellationToken ct = default)
     {
-        var response = await _client.PostAsJsonAsync("/auth/login", request, cancellationToken);
-        response.EnsureSuccessStatusCode();
+        return await _client.PostAsync<LoginRequest, Unit>("/auth/login", request, ct);
     }
 
-    public async Task<AuthResponse> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken = default)
+    public async Task<ApiResponse> RegisterAsync(RegisterRequest request, CancellationToken ct = default)
     {
-        var response = await _client.PostAsJsonAsync("/auth/register", request, cancellationToken);
-        response.EnsureSuccessStatusCode();
-        return (await response.Content.ReadFromJsonAsync<AuthResponse>(cancellationToken))!;
+        return await _client.PostAsync<RegisterRequest, Unit>("/auth/register", request, ct);
+    }
+
+    internal async Task<ApiResponse> LogoutAsync(CancellationToken ct = default)
+    {
+        return await _client.PostAsync<Unit>("/auth/logout", ct);
     }
 }

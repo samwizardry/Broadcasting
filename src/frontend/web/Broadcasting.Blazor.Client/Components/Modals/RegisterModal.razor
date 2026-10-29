@@ -1,13 +1,15 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @using Broadcasting.Blazor.Client.HttpClients
 @using Broadcasting.Contracts.Blazor.Auth
+@using Broadcasting.Contracts.Responses
+
 @inherits CyberModal
+
 @inject ModalService ModalService
 @inject AuthClient AuthClient
-@inject ILogger<RegisterModal> Logger
 @inject NavigationManager Navigation
 
-<div class="cyber-modal-backdrop @(_isOpen ? " is-open" : "")" id="@ModalService.RegisterModalId"
+<div class="cyber-modal-backdrop @(_isOpen ? "is-open" : "")" id="@ModalService.RegisterModalId"
      tabindex="-1"
      @onclick="ModalService.CloseAll"
      @onkeydown="HandleKeyDown">
@@ -16,25 +18,24 @@
 
         <div class="cyber-modal__header">
             <h2 class="modal-title" id="modal-register-title">NEW BROADCASTER PROFILE // REGISTRATION</h2>
-            <button class="btn-icon-hud btn-icon-hud--sm" data-modal-close title="Close Window" @onclick="ModalService.CloseAll">
-                ✕
-            </button>
+
+            @* <CyberButton data-modal-close title="Close Window" OnClick="ModalService.CloseAll">✕</CyberButton> *@
+            <button class="btn-icon-hud btn-icon-hud--sm" data-modal-close title="Close Window" @onclick="ModalService.CloseAll">✕</button>
         </div>
 
         <div class="cyber-modal__body">
             @if (_authError)
             {
-                <CyberTelemetryBanner Badge="@_telemetryBadge" Variant="danger">
+                <TelemetryBanner Badge="@_telemetryBadge" Variant="danger" style="white-space: pre-line;">
                     @_telemetryMessage
-                </CyberTelemetryBanner>
+                </TelemetryBanner>
             }
             else
             {
-                <CyberTelemetryBanner Badge="[REG.NEW]">
+                <TelemetryBanner Badge="[REG.NEW]">
                     PROVISION NEW BROADCAST OPERATOR // MARATHON SPEC
-                </CyberTelemetryBanner>
+                </TelemetryBanner>
             }
-
             <EditForm Model="_input" OnValidSubmit="HandleSubmit" id="form-register" autocomplete="off" novalidate>
                 <DataAnnotationsValidator />
                 <UsernameField Id="register-username"
@@ -50,7 +51,7 @@
                                Placeholder="Minimum 6 characters"
                                @bind-Value="_input.Password"
                                style="margin-top: 14px;">
-                    <Icon><Lock /></Icon>
+                    <Icon><LockIcon /></Icon>
                 </PasswordField>
 
                 <PasswordField Id="register-confirm"
@@ -59,13 +60,12 @@
                                Placeholder="Confirm secret key"
                                @bind-Value="_input.ConfirmPassword"
                                style="margin-top: 14px;">
-                    <Icon><Shield /></Icon>
+                    <Icon><ShieldIcon /></Icon>
                 </PasswordField>
 
                 <SwitchField Id="register-accept-terms"
                              Label="AGREE TO BROADCAST PROTOCOL & TERMS [TERMS]"
                              @bind-Value="_input.AcceptTerms" />
-
                 <div class="cyber-modal__footer" style="padding: 16px 0 0; background: transparent; border-top: 1px dashed var(--border-dim); margin-top: 16px;">
                     <CyberButton data-modal-close OnClick="ModalService.CloseAll">CANCEL</CyberButton>
                     <CyberButton Id="btn-submit-register"
@@ -78,6 +78,7 @@
 
         <div class="cyber-modal__switch">
             <span>ALREADY REGISTERED?</span>
+            @* <CyberButton data-modal-open="login-modal" OnClick="_ => ModalService.OpenModal(ModalService.LoginModalId)">LOG IN TO SYSTEM</CyberButton> *@
             <button type="button" class="switch-link" data-modal-open="login-modal" @onclick="_ => ModalService.OpenModal(ModalService.LoginModalId)">LOG IN TO SYSTEM</button>
         </div>
     </div>
@@ -94,17 +95,14 @@
     // Telemetry banner
     private bool _authError = false;
     private string? _telemetryBadge;
-    private RenderFragment? _telemetryMessage;
+    private string? _telemetryMessage;
 
     [SupplyParameterFromQuery]
     private string? ReturnUrl { get; set; }
 
     protected override string ModalId => ModalService.RegisterModalId;
 
-    protected override async ValueTask FocusAsync()
-    {
-        await _usernameField.FocusAsync();
-    }
+    protected override async ValueTask FocusAsync() => await _usernameField.FocusAsync();
 
     private async Task HandleSubmit()
     {
@@ -112,30 +110,29 @@
 
         try
         {
-            var response = await AuthClient.RegisterAsync(new RegisterRequest(_input.Username, _input.Password, _input.AcceptTerms));
+            var response = await AuthClient.RegisterAsync(
+                new RegisterRequest(_input.Username, _input.Password, _input.AcceptTerms),
+                CancellationToken);
+
             if (response.Succeeded)
             {
                 _authError = false;
                 ModalService.CloseAll();
-                Navigation.Refresh(forceReload: true);
+
+                // TODO: alert
             }
             else
             {
                 _authError = true;
                 _telemetryBadge = "[REG.CRIT_ERR]";
-                foreach (var error in response.Errors)
-                {
-                    Logger.LogError("Error {Code}: {Msg}", error.Code, error.Description);
-                }
-
-                _telemetryMessage = @<text>@string.Join('\n', response.Errors.Select(x => x.Description))</text>;
+                _telemetryMessage = response.GetErrorMessage('\n');
             }
         }
         catch (Exception ex)
         {
             _authError = true;
             _telemetryBadge = "[REG.CON_ERR]";
-            _telemetryMessage = @<text>@ex.Message</text>;
+            _telemetryMessage = ex.Message;
         }
         finally
         {

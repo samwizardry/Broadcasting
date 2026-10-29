@@ -2,24 +2,42 @@
 using Broadcasting.Contracts.Blazor.Auth;
 
 using FastEndpoints;
-using FastEndpoints.Security;
+
+using FluentValidation;
 
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
 
 namespace Broadcasting.Blazor.AuthEndpoints;
 
-public class Login : Endpoint<LoginRequest, AuthResponse>
+public class LoginRequestValidator : Validator<LoginRequest>
+{
+    public LoginRequestValidator()
+    {
+        RuleFor(x => x.Username)
+            .NotEmpty()
+            .WithMessage("Callsign / Operator ID is required")
+            .Length(3, 30)
+            .WithMessage("Callsign must be 3-30 characters");
+
+        RuleFor(x => x.Password)
+            .NotEmpty()
+            .WithMessage("Secret key is required")
+            .Length(6, 100)
+            .WithMessage("Key must be at least 6 characters");
+    }
+}
+
+public class Login : Endpoint<LoginRequest>
 {
     private readonly SignInManager<ApplicationUser> _signInManager;
-    //private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly ILogger<Login> _logger;
 
-    public Login(SignInManager<ApplicationUser> signInManager)
-        //RoleManager<IdentityRole> roleManager)
+    public Login(SignInManager<ApplicationUser> signInManager,
+        ILogger<Login> logger)
     {
         _signInManager = signInManager;
-        //_roleManager = roleManager;
+        _logger = logger;
     }
 
     public override void Configure()
@@ -28,106 +46,35 @@ public class Login : Endpoint<LoginRequest, AuthResponse>
         AllowAnonymous();
     }
 
-    //public async Task LoginUser()
-    //{
-    //    if (!string.IsNullOrEmpty(Input.Passkey?.Error))
-    //    {
-    //        errorMessage = $"Error: {Input.Passkey.Error}";
-    //        return;
-    //    }
-
-    //    SignInResult result;
-    //    if (!string.IsNullOrEmpty(Input.Passkey?.CredentialJson))
-    //    {
-    //        // When performing passkey sign-in, don't perform form validation.
-    //        result = await SignInManager.PasskeySignInAsync(Input.Passkey.CredentialJson);
-    //    }
-    //    else
-    //    {
-    //        // If doing a password sign-in, validate the form.
-    //        if (!editContext.Validate())
-    //        {
-    //            return;
-    //        }
-
-    //        // This doesn't count login failures towards account lockout
-    //        // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-    //        result = await SignInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-    //    }
-
-    //    if (result.Succeeded)
-    //    {
-    //        Logger.LogInformation("User logged in.");
-    //        RedirectManager.RedirectTo(ReturnUrl);
-    //    }
-    //    else if (result.RequiresTwoFactor)
-    //    {
-    //        RedirectManager.RedirectTo(
-    //            "Account/LoginWith2fa",
-    //            new() { ["returnUrl"] = ReturnUrl, ["rememberMe"] = Input.RememberMe });
-    //    }
-    //    else if (result.IsLockedOut)
-    //    {
-    //        Logger.LogWarning("User account locked out.");
-    //        RedirectManager.RedirectTo("Account/Lockout");
-    //    }
-    //    else
-    //    {
-    //        errorMessage = "Error: Invalid login attempt.";
-    //    }
-    //}
-
     public override async Task HandleAsync(LoginRequest req, CancellationToken ct)
     {
         // Clear the existing external cookie to ensure a clean login process
-        //await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+        await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
+        var result = await _signInManager.PasswordSignInAsync(req.Username, req.Password, req.PersistSession, lockoutOnFailure: false);
 
-
-        var user = await _signInManager.UserManager.FindByNameAsync(req.Username);
-
-        if (user is null)
+        if (result.Succeeded)
         {
-            await Send.UnauthorizedAsync(ct);
+            _logger.LogInformation("User logged in.");
+            await Send.NoContentAsync();
             return;
         }
 
-        if (!await _signInManager.CanSignInAsync(user))
+        if (result.IsLockedOut)
         {
-            await Send.UnauthorizedAsync(ct);
-            return;
+            _logger.LogWarning("User account locked out.");
+            AddError("This account has been locked out, please try again later.", "LockedOut");
+        }
+        else if (result.IsNotAllowed)
+        {
+            _logger.LogWarning("User is not allowed to log in.");
+            AddError("Sign in not allowed.", "NotAllowed");
+        }
+        else
+        {
+            AddError("Invalid callsign or secret key.", "InvalidCredentials");
         }
 
-        var signInResult = await _signInManager.CheckPasswordSignInAsync(user, req.Password, true);
-
-        if (!signInResult.Succeeded)
-        {
-            await Send.UnauthorizedAsync(ct);
-            return;
-        }
-
-        var principal = await _signInManager.CreateUserPrincipalAsync(user);
-        //var userRoles = await _signInManager.UserManager.GetRolesAsync(user);
-
-        await CookieAuth.SignInAsync(u =>
-        {
-            foreach (var claim in principal.Claims)
-            {
-                u.Claims.Add(claim);
-            }
-
-            //foreach (var role in userRoles)
-            //{
-            //    u.Roles.Add(role);
-            //}
-
-            u.Roles.Add("TestRole");
-            u.Permissions.Add("TestPermission");
-        },
-        p =>
-        {
-            p.AllowRefresh = true;
-            p.IsPersistent = req.PersistSession;
-        });
+        await Send.ErrorsAsync();
     }
 }

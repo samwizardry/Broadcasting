@@ -2,13 +2,18 @@
 @inject ModalService ModalService
 
 @code {
-    protected bool _isOpen;
     private bool _shouldFocus;
+    private CancellationTokenSource _cts = new();
 
+    protected bool _isOpen;
+
+    protected CancellationToken CancellationToken => _cts.Token;
     protected virtual string ModalId => throw new NotImplementedException();
 
     public void Dispose()
     {
+        _cts.Cancel();
+        _cts.Dispose();
         ModalService.OnChange -= HandleStateChange;
     }
 

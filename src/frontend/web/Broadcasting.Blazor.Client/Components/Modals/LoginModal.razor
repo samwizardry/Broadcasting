@@ -1,7 +1,13 @@
-﻿@using Broadcasting.Blazor.Client.HttpClients
+﻿@using System.ComponentModel.DataAnnotations
+@using Broadcasting.Blazor.Client.HttpClients
+@using Broadcasting.Contracts.Blazor.Auth
+@using Broadcasting.Contracts.Responses
+
 @inherits CyberModal
+
 @inject ModalService ModalService
 @inject AuthClient AuthClient
+@inject NavigationManager Navigation
 
 <div class="cyber-modal-backdrop @(_isOpen ? "is-open" : "")" id="@ModalService.LoginModalId"
      tabindex="-1"
@@ -9,50 +15,55 @@
      @onkeydown="HandleKeyDown">
 
     <div class="cyber-modal" role="dialog" aria-modal="true" aria-labelledby="modal-login-title" @onclick:stopPropagation>
-
         <div class="cyber-modal__header">
             <h2 class="modal-title" id="modal-login-title">OPERATOR ACCESS // AUTHENTICATION</h2>
-            <button class="btn-icon-hud btn-icon-hud--sm" data-modal-close title="Close Window" @onclick="ModalService.CloseAll">
-                ✕
-            </button>
+            <button class="btn-icon-hud btn-icon-hud--sm" data-modal-close title="Close Window" @onclick="ModalService.CloseAll">✕</button>
         </div>
 
         <div class="cyber-modal__body">
-            <div class="cyber-telemetry-banner">
-                <span class="banner-badge">[SYS.AUTH_01]</span>
-                <span>AUTHORIZATION PROTOCOL: ENCRYPTED TLS 1.3 / CALLSIGN VERIFY</span>
-            </div>
-
-            <form id="form-login" autocomplete="off" novalidate @onsubmit="HandleSubmit">
+            @if (_authError)
+            {
+                <TelemetryBanner Badge="@_telemetryBadge" Variant="danger" style="white-space: pre-line;">
+                    @_telemetryMessage
+                </TelemetryBanner>
+            }
+            else
+            {
+                <TelemetryBanner Badge="[SYS.AUTH_01]">
+                    AUTHORIZATION PROTOCOL: ENCRYPTED TLS 1.3 / CALLSIGN VERIFY
+                </TelemetryBanner>
+            }
+            <EditForm Model="_input" OnValidSubmit="HandleSubmit" id="form-login" novalidate>
+                <DataAnnotationsValidator />
                 <UsernameField Id="login-username"
                                Label="CALLSIGN / OPERATOR ID"
                                LabelCode="[USER.ID]"
                                Placeholder="Enter callsign or operator ID"
-                               @bind-Value="_model.Username"
+                               @bind-Value="_input.Username"
                                @ref="_usernameField" />
 
                 <PasswordField Id="login-password"
                                Label="OPERATOR SECRET KEY"
                                LabelCode="[PASS.HASH]"
                                Placeholder="Enter secret key"
-                               @bind-Value="_model.Password"
+                               @bind-Value="_input.Password"
                                style="margin-top: 14px;">
-                    <Icon><Lock /></Icon>
+                    <Icon><LockIcon /></Icon>
                 </PasswordField>
 
                 <SwitchField Id="login-persist-session"
                              Label="PERSIST BROADCAST SESSION"
-                             @bind-Value="_model.PersistSession">
+                             @bind-Value="_input.PersistSession">
                     <a href="#restore" class="options-link" onclick="event.preventDefault();">[RECOVER ACCESS KEYS]</a>
                 </SwitchField>
-
                 <div class="cyber-modal__footer" style="padding: 16px 0 0; background: transparent; border-top: 1px dashed var(--border-dim); margin-top: 16px;">
-                    <button type="button" class="btn-cyber btn-cyber-ghost" data-modal-close @onclick="ModalService.CloseAll">CANCEL</button>
-                    <button type="submit" class="btn-cyber btn-cyber-primary" id="btn-submit-login">
-                        AUTHENTICATE & CONNECT
-                    </button>
+                    <CyberButton data-modal-close OnClick="ModalService.CloseAll">CANCEL</CyberButton>
+                    <CyberButton Id="btn-submit-login"
+                                 Variant="ButtonVariant.Primary"
+                                 ButtonType="ButtonType.Submit"
+                                 Loading="_isLoading">AUTHENTICATE & CONNECT</CyberButton>
                 </div>
-            </form>
+            </EditForm>
         </div>
 
         <div class="cyber-modal__switch">
@@ -64,31 +75,75 @@
 </div>
 
 @code {
-    public class LoginModel
-    {
-        public string Username { get; set; } = "";
+    // Form
+    private InputModel _input = new();
+    // Focus
+    private UsernameField _usernameField = null!;
+    // Submit button
+    private bool _isLoading = false;
+    // Telemetry banner
+    private bool _authError = false;
+    private string? _telemetryBadge;
+    private string? _telemetryMessage;
 
-        public string Password { get; set; } = "";
-
-        public bool PersistSession { get; set; } = true;
-    }
-
-    private UsernameField? _usernameField;
-
-    private LoginModel _model = new();
+    [SupplyParameterFromQuery]
+    private string? ReturnUrl { get; set; }
 
     protected override string ModalId => ModalService.LoginModalId;
 
     protected override async ValueTask FocusAsync()
     {
-        if (_usernameField is not null)
-        {
-            await _usernameField.FocusAsync();
-        }
+        await _usernameField.FocusAsync();
     }
 
     private async Task HandleSubmit()
     {
-        await AuthClient.LoginAsync(new Contracts.Blazor.Auth.LoginRequest("SAM", "P@ssw0rd", true));
+        _isLoading = true;
+
+        try
+        {
+            var response = await AuthClient.LoginAsync(
+                new LoginRequest(_input.Username, _input.Password, _input.PersistSession),
+                CancellationToken);
+
+            if (response.Succeeded)
+            {
+                _authError = false;
+                ModalService.CloseAll();
+                Navigation.Refresh(forceReload: true);
+            }
+            else
+            {
+                _authError = true;
+                _telemetryBadge = "[AUTH.CRIT_ERR]";
+                _telemetryMessage = response.GetErrorMessage('\n');
+            }
+        }
+        catch (Exception ex)
+        {
+            _authError = true;
+            _telemetryBadge = "[AUTH.CON_ERR]";
+            _telemetryMessage = ex.Message;
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    private sealed class InputModel
+    {
+        [Required(ErrorMessage = "Callsign / Operator ID is required")]
+        [Display(Name = "Username")]
+        [StringLength(30, MinimumLength = 3, ErrorMessage = "Callsign must be 3-30 characters")]
+        public string Username { get; set; } = "";
+
+        [Required(ErrorMessage = "Secret key is required")]
+        [Display(Name = "Password")]
+        [DataType(DataType.Password)]
+        [StringLength(100, MinimumLength = 6, ErrorMessage = "Key must be at least 6 characters")]
+        public string Password { get; set; } = "";
+
+        public bool PersistSession { get; set; } = false;
     }
 }

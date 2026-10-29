@@ -1,4 +1,5 @@
-﻿<div class="cyber-telemetry-banner @(string.IsNullOrEmpty(Variant) ? "" : $"cyber-telemetry-banner--{Variant}")">
+﻿<div class="cyber-telemetry-banner @(string.IsNullOrEmpty(Variant) ? "" : $"cyber-telemetry-banner--{Variant}")"
+     @attributes="AdditionalAttributes">
     <span class="banner-badge">@Badge</span>
     <span>@ChildContent</span>
 </div>
@@ -12,4 +13,7 @@
 
     [Parameter]
     public string? Variant { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
 }
