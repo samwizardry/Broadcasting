@@ -3,7 +3,7 @@
 
 <div class="cyber-modal__options">
     <label class="cyber-switch" for="@Id">
-        <input type="checkbox" id="@Id" checked="@Checked" required="@Required" @oninput="HandleInput">
+        <input type="checkbox" id="@Id" checked="@CurrentValue" @onchange="HandleChange">
         <span class="slider"></span>
         <span class="switch-label">@Label</span>
     </label>
@@ -13,32 +13,37 @@
     }
 </div>
 
+@if (HasError)
+{
+    <div class="cyber-field__message cyber-field__message--error" style="margin-top: 6px;">
+        <span class="msg-tag">[CRIT_ERR]</span>
+        <span>@ErrorMessage</span>
+    </div>
+}
+
 @code {
     [Parameter, EditorRequired] public string Id { get; set; }
     [Parameter, EditorRequired] public string Label { get; set; }
-    [Parameter] public bool Checked { get; set; }
-    [Parameter] public bool Required { get; set; }
     [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    private bool HasError => EditContext is not null && EditContext.GetValidationMessages(FieldIdentifier).Any();
+    private string? ErrorMessage => EditContext?.GetValidationMessages(FieldIdentifier).FirstOrDefault();
 
     protected override bool TryParseValueFromString(
         string? value,
         [MaybeNullWhen(false)] out bool result,
         [NotNullWhen(false)] out string? validationErrorMessage)
     {
-        result = false;
-
-        if (bool.TryParse(value, out result))
-        {
-            validationErrorMessage = null;
-            return true;
-        }
-
-        validationErrorMessage = $"Failed to parse value '{value}'";
-        return false;
+        result = bool.TryParse(value, out var parsed) && parsed;
+        validationErrorMessage = null;
+        return true;
     }
 
-    private void HandleInput(ChangeEventArgs e)
+    private void HandleChange(ChangeEventArgs e)
     {
-        CurrentValueAsString = e.Value?.ToString();
+        if (e.Value is bool v)
+        {
+            CurrentValue = v;
+        }
     }
 }

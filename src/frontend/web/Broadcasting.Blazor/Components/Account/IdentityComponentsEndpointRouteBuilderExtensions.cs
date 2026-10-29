@@ -3,7 +3,7 @@ using System.Text.Json;
 
 using Broadcasting.Blazor.Components.Account.Pages;
 using Broadcasting.Blazor.Components.Account.Pages.Manage;
-using Broadcasting.Blazor.Data;
+using Broadcasting.Blazor.Domain.Identity;
 
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;

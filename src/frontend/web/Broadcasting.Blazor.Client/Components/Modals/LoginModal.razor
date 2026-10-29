@@ -1,7 +1,7 @@
 ﻿@using Broadcasting.Blazor.Client.HttpClients
 @inherits CyberModal
 @inject ModalService ModalService
-@inject AuthHttpClient AuthClient
+@inject AuthClient AuthClient
 
 <div class="cyber-modal-backdrop @(_isOpen ? "is-open" : "")" id="@ModalService.LoginModalId"
      tabindex="-1"
@@ -23,7 +23,7 @@
                 <span>AUTHORIZATION PROTOCOL: ENCRYPTED TLS 1.3 / CALLSIGN VERIFY</span>
             </div>
 
-            <form id="form-login" autocomplete="off" @onsubmit:preventDefault>
+            <form id="form-login" autocomplete="off" novalidate @onsubmit="HandleSubmit">
                 <UsernameField Id="login-username"
                                Label="CALLSIGN / OPERATOR ID"
                                LabelCode="[USER.ID]"
@@ -42,15 +42,13 @@
 
                 <SwitchField Id="login-persist-session"
                              Label="PERSIST BROADCAST SESSION"
-                             Checked="true"
-                             Required="false"
                              @bind-Value="_model.PersistSession">
                     <a href="#restore" class="options-link" onclick="event.preventDefault();">[RECOVER ACCESS KEYS]</a>
                 </SwitchField>
 
                 <div class="cyber-modal__footer" style="padding: 16px 0 0; background: transparent; border-top: 1px dashed var(--border-dim); margin-top: 16px;">
                     <button type="button" class="btn-cyber btn-cyber-ghost" data-modal-close @onclick="ModalService.CloseAll">CANCEL</button>
-                    <button type="submit" class="btn-cyber btn-cyber-primary" id="btn-submit-login" @onclick="LoginAsync">
+                    <button type="submit" class="btn-cyber btn-cyber-primary" id="btn-submit-login">
                         AUTHENTICATE & CONNECT
                     </button>
                 </div>
@@ -68,11 +66,11 @@
 @code {
     public class LoginModel
     {
-        public string? Username { get; set; }
+        public string Username { get; set; } = "";
 
-        public string? Password { get; set; }
+        public string Password { get; set; } = "";
 
-        public bool PersistSession { get; set; }
+        public bool PersistSession { get; set; } = true;
     }
 
     private UsernameField? _usernameField;
@@ -89,7 +87,7 @@
         }
     }
 
-    private async Task LoginAsync()
+    private async Task HandleSubmit()
     {
         await AuthClient.LoginAsync(new Contracts.Blazor.Auth.LoginRequest("SAM", "P@ssw0rd", true));
     }

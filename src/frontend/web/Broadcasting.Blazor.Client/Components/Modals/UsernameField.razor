@@ -1,19 +1,27 @@
 ﻿@using System.Diagnostics.CodeAnalysis
 @inherits InputBase<string>
 
-<div class="cyber-field" @attributes="AdditionalAttributes">
+<div class="cyber-field @(HasError ? "cyber-field--error" : "")" @attributes="AdditionalAttributes">
     <label class="cyber-field__label" for="@Id">
         <span>@Label</span>
-        <span class="label-code">@LabelCode</span>
+        <span class="label-code">@(HasError ? "[ERR_INVALID]" : LabelCode)</span>
     </label>
     <div class="cyber-input-group">
         <span class="input-prefix-icon">
             <Person />
         </span>
         <input type="text" id="@Id" class="cyber-input" placeholder="@Placeholder" required
-               @oninput="HandleInput"
+               value="@CurrentValue"
+               @onchange="HandleChange"
                @ref="_focusElement">
     </div>
+    @if (HasError)
+    {
+        <div class="cyber-field__message cyber-field__message--error">
+            <span class="msg-tag">[CRIT_ERR]</span>
+            <span>@ErrorMessage</span>
+        </div>
+    }
 </div>
 
 @code {
@@ -24,10 +32,10 @@
     [Parameter, EditorRequired] public string LabelCode { get; set; }
     [Parameter, EditorRequired] public string Placeholder { get; set; }
 
-    public async ValueTask FocusAsync()
-    {
-        await _focusElement.FocusAsync();
-    }
+    private bool HasError => EditContext is not null && EditContext.GetValidationMessages(FieldIdentifier).Any();
+    private string? ErrorMessage => EditContext?.GetValidationMessages(FieldIdentifier).FirstOrDefault();
+
+    public async ValueTask FocusAsync() => await _focusElement.FocusAsync();
 
     protected override bool TryParseValueFromString(
         string? value,
@@ -39,7 +47,7 @@
         return true;
     }
 
-    private void HandleInput(ChangeEventArgs e)
+    private void HandleChange(ChangeEventArgs e)
     {
         CurrentValueAsString = e.Value?.ToString();
     }

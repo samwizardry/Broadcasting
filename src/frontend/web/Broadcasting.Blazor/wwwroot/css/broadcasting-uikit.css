@@ -604,6 +604,10 @@ code {
 }
 
 .btn-cyber {
+  --btn-spinner-head: var(--accent-acid);
+  --btn-spinner-track: rgba(255, 255, 255, 0.2);
+  --btn-spinner-size: 16px;
+  --btn-spinner-width: 2px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -640,6 +644,8 @@ code {
   background: var(--accent-acid);
   color: var(--text-inverse);
   border-color: var(--accent-acid);
+  --btn-spinner-head: var(--text-inverse);
+  --btn-spinner-track: rgba(8, 9, 11, 0.22);
 }
 .btn-cyber-primary:hover, .btn-cyber--primary:hover {
   background: var(--accent-acid-hover);
@@ -653,6 +659,8 @@ code {
   background: var(--bg-surface-elevated);
   color: var(--text-primary);
   border-color: var(--border-bright);
+  --btn-spinner-head: var(--accent-cyan);
+  --btn-spinner-track: rgba(0, 245, 255, 0.2);
 }
 .btn-cyber-secondary:hover, .btn-cyber--secondary:hover {
   background: var(--bg-surface-hover);
@@ -668,6 +676,8 @@ code {
   background: var(--accent-alert);
   color: #FFFFFF;
   border-color: var(--accent-alert);
+  --btn-spinner-head: #FFFFFF;
+  --btn-spinner-track: rgba(255, 255, 255, 0.25);
 }
 .btn-cyber-danger:hover, .btn-cyber--danger:hover {
   filter: brightness(1.15);
@@ -678,6 +688,8 @@ code {
   background: var(--accent-warning);
   color: var(--text-inverse);
   border-color: var(--accent-warning);
+  --btn-spinner-head: var(--text-inverse);
+  --btn-spinner-track: rgba(8, 9, 11, 0.22);
 }
 .btn-cyber-warning:hover, .btn-cyber--warning:hover {
   filter: brightness(1.15);
@@ -688,6 +700,8 @@ code {
   background: transparent;
   color: var(--text-secondary);
   border-color: var(--border-dim);
+  --btn-spinner-head: var(--accent-acid);
+  --btn-spinner-track: rgba(255, 255, 255, 0.18);
 }
 .btn-cyber-ghost:hover, .btn-cyber--ghost:hover {
   color: var(--accent-acid);
@@ -699,29 +713,41 @@ code {
   font-size: 11px;
   letter-spacing: 1.2px;
   clip-path: var(--cut-corner-xs);
+  --btn-spinner-size: 14px;
 }
 .btn-cyber-lg, .btn-cyber--lg {
   padding: 14px 28px;
   font-size: 14px;
   letter-spacing: 2px;
   clip-path: var(--cut-corner-md);
+  --btn-spinner-size: 20px;
+  --btn-spinner-width: 2.5px;
 }
-.btn-cyber--loading {
+.btn-cyber--loading, .btn-cyber.is-loading {
   color: transparent !important;
+  text-shadow: none !important;
   pointer-events: none;
+  cursor: wait;
 }
-.btn-cyber--loading::after {
+.btn-cyber--loading > *, .btn-cyber.is-loading > * {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+.btn-cyber--loading::after, .btn-cyber.is-loading::after {
   content: "";
   position: absolute;
-  width: 16px;
-  height: 16px;
+  width: var(--btn-spinner-size, 16px);
+  height: var(--btn-spinner-size, 16px);
   top: 50%;
   left: 50%;
-  margin: -8px 0 0 -8px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: currentColor;
+  margin: calc(var(--btn-spinner-size, 16px) * -0.5) 0 0 calc(var(--btn-spinner-size, 16px) * -0.5);
+  border: var(--btn-spinner-width, 2px) solid var(--btn-spinner-track, rgba(255, 255, 255, 0.2));
+  border-top-color: var(--btn-spinner-head, var(--accent-acid));
   border-radius: 50%;
   animation: cyber-spin 0.6s linear infinite;
+  box-sizing: border-box;
+  pointer-events: none;
+  transition: none;
 }
 
 .btn-icon-hud {
@@ -774,6 +800,31 @@ code {
   padding: 1px 5px;
   border-radius: 2px;
   border: 1px solid var(--bg-deep);
+}
+.btn-icon-hud--loading, .btn-icon-hud.is-loading {
+  color: transparent !important;
+  pointer-events: none;
+  cursor: wait;
+}
+.btn-icon-hud--loading > *, .btn-icon-hud.is-loading > * {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+.btn-icon-hud--loading::after, .btn-icon-hud.is-loading::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin: -8px 0 0 -8px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-top-color: var(--accent-acid);
+  border-radius: 50%;
+  animation: cyber-spin 0.6s linear infinite;
+  box-sizing: border-box;
+  pointer-events: none;
+  transition: none;
 }
 
 .btn-group-cyber {
@@ -3028,7 +3079,39 @@ input[type=radio]:focus-visible + .cyber-radio-tile__content {
 .cyber-telemetry-banner--acid .banner-badge {
   color: var(--accent-acid);
 }
+.cyber-telemetry-banner--danger {
+  background: rgba(255, 51, 75, 0.08);
+  border-left-color: var(--accent-alert);
+  color: var(--text-primary);
+}
+.cyber-telemetry-banner--danger .banner-badge {
+  color: var(--accent-alert);
+  text-shadow: 0 0 8px rgba(255, 51, 75, 0.4);
+}
+.cyber-telemetry-banner--warning {
+  background: rgba(255, 132, 0, 0.08);
+  border-left-color: var(--accent-warning);
+  color: var(--text-primary);
+}
+.cyber-telemetry-banner--warning .banner-badge {
+  color: var(--accent-warning);
+  text-shadow: 0 0 8px rgba(255, 132, 0, 0.4);
+}
+.cyber-telemetry-banner.is-shaking {
+  animation: hud-telemetry-shake 0.35s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
 
+@keyframes hud-telemetry-shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  20%, 60% {
+    transform: translateX(-4px);
+  }
+  40%, 80% {
+    transform: translateX(4px);
+  }
+}
 .cyber-dropdown {
   position: relative;
   display: inline-block;

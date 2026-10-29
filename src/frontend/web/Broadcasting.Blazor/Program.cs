@@ -2,6 +2,7 @@ using Broadcasting.Blazor.Client.Services;
 using Broadcasting.Blazor.Components;
 using Broadcasting.Blazor.Components.Account;
 using Broadcasting.Blazor.Data;
+using Broadcasting.Blazor.Domain.Identity;
 
 using FastEndpoints;
 
@@ -35,7 +36,6 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentityCore<ApplicationUser>(options =>
     {
-        options.SignIn.RequireConfirmedAccount = true;
         options.Stores.SchemaVersion = IdentitySchemaVersions.Version3;
     })
     .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -67,16 +67,13 @@ app.UseHttpsRedirection();
 
 app.UseAntiforgery();
 
-app.MapFastEndpoints();
-
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(Broadcasting.Blazor.Client._Imports).Assembly);
 
-
 // Add additional endpoints required by the Identity /Account Razor components.
-// TODO: delete
 app.MapAdditionalIdentityEndpoints();
+app.MapFastEndpoints();
 
 app.Run();

@@ -1,4 +1,4 @@
-using Broadcasting.Blazor.Data;
+using Broadcasting.Blazor.Domain.Identity;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;

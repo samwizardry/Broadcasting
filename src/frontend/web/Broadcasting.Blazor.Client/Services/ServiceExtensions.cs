@@ -8,7 +8,7 @@ public static class ServiceExtensions
     {
         services.AddScoped<ModalService>();
 
-        services.AddHttpClient<AuthHttpClient>(httpClient =>
+        services.AddHttpClient<AuthClient>(httpClient =>
         {
             httpClient.BaseAddress = new Uri(baseAddress);
         });
