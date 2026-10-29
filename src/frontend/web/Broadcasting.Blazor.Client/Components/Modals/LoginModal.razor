@@ -23,7 +23,7 @@
         <div class="cyber-modal__body">
             @if (_authError)
             {
-                <TelemetryBanner Badge="@_telemetryBadge" Variant="danger" style="white-space: pre-line;">
+                <TelemetryBanner Class="is-shaking" Badge="@_telemetryBadge" Variant="danger" style="white-space: pre-line;">
                     @_telemetryMessage
                 </TelemetryBanner>
             }
@@ -94,6 +94,12 @@
     protected override async ValueTask FocusAsync()
     {
         await _usernameField.FocusAsync();
+    }
+
+    protected override void Reset()
+    {
+        _input = new();
+        _authError = false;
     }
 
     private async Task HandleSubmit()

@@ -22,6 +22,8 @@
         return ValueTask.CompletedTask;
     }
 
+    protected virtual void Reset() { }
+
     protected override void OnInitialized()
     {
         ModalService.OnChange += HandleStateChange;
@@ -40,6 +42,11 @@
     protected void HandleStateChange()
     {
         bool isOpen = ModalService.IsOpen(ModalId);
+        if (isOpen)
+        {
+            Reset();
+        }
+
         if (_isOpen != isOpen)
         {
             _isOpen = isOpen;

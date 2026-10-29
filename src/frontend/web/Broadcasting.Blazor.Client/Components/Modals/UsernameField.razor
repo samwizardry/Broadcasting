@@ -10,8 +10,10 @@
         <span class="input-prefix-icon">
             <PersonIcon />
         </span>
-        <input type="text" id="@Id" class="cyber-input" placeholder="@Placeholder" required
+        <input type="text" id="@Id" class="cyber-input" placeholder="@Placeholder"
+               required
                value="@CurrentValue"
+               autocomplete="@Autocomplete"
                @onchange="HandleChange"
                @ref="_focusElement">
     </div>
@@ -31,6 +33,7 @@
     [Parameter, EditorRequired] public string Label { get; set; }
     [Parameter, EditorRequired] public string LabelCode { get; set; }
     [Parameter, EditorRequired] public string Placeholder { get; set; }
+    [Parameter] public string Autocomplete { get; set; } = "current-password";
 
     private bool HasError => EditContext is not null && EditContext.GetValidationMessages(FieldIdentifier).Any();
     private string? ErrorMessage => EditContext?.GetValidationMessages(FieldIdentifier).FirstOrDefault();

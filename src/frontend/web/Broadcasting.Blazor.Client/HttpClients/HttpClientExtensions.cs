@@ -65,11 +65,11 @@ public static class HttpClientExtensions
             problem = new ProblemDetails
             {
                 Status = (int)response.StatusCode,
-                Title = response.ReasonPhrase,
+                Title = response.ReasonPhrase ?? ProblemDetails.DefaultTitleValue,
                 Detail = await response.Content.ReadAsStringAsync(ct)
             };
         }
 
-        return ApiResponse<TResponse>.Failure(problem);
+        return ApiResponse<TResponse>.Failure(problem, response.StatusCode);
     }
 }

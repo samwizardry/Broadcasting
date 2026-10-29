@@ -85,7 +85,10 @@ app.MapAdditionalIdentityEndpoints();
 
 app.UseFastEndpoints(options =>
 {
-    options.Errors.UseProblemDetails();
+    options.Errors.UseProblemDetails(cfg =>
+    {
+        cfg.AllowDuplicateErrors = true;
+    });
 });
 
 app.Run();

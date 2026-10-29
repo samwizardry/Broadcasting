@@ -1,10 +1,13 @@
-﻿<div class="cyber-telemetry-banner @(string.IsNullOrEmpty(Variant) ? "" : $"cyber-telemetry-banner--{Variant}")"
+﻿<div class="cyber-telemetry-banner @(string.IsNullOrEmpty(Variant) ? "" : $"cyber-telemetry-banner--{Variant}") @Class"
      @attributes="AdditionalAttributes">
     <span class="banner-badge">@Badge</span>
     <span>@ChildContent</span>
 </div>
 
 @code {
+    [Parameter]
+    public string? Class { get; set; }
+
     [Parameter, EditorRequired]
     public string Badge { get; set; } = "";
 

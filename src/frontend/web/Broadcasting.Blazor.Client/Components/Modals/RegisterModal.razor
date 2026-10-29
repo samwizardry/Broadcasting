@@ -9,6 +9,8 @@
 @inject AuthClient AuthClient
 @inject NavigationManager Navigation
 
+@rendermode @(new InteractiveWebAssemblyRenderMode(false))
+
 <div class="cyber-modal-backdrop @(_isOpen ? "is-open" : "")" id="@ModalService.RegisterModalId"
      tabindex="-1"
      @onclick="ModalService.CloseAll"
@@ -26,7 +28,7 @@
         <div class="cyber-modal__body">
             @if (_authError)
             {
-                <TelemetryBanner Badge="@_telemetryBadge" Variant="danger" style="white-space: pre-line;">
+                <TelemetryBanner Class="is-shaking" Badge="@_telemetryBadge" Variant="danger" style="white-space: pre-line;">
                     @_telemetryMessage
                 </TelemetryBanner>
             }
@@ -36,12 +38,13 @@
                     PROVISION NEW BROADCAST OPERATOR // MARATHON SPEC
                 </TelemetryBanner>
             }
-            <EditForm Model="_input" OnValidSubmit="HandleSubmit" id="form-register" autocomplete="off" novalidate>
+            <EditForm Model="_input" OnValidSubmit="HandleSubmit" id="form-register" autocomplete="new-password" novalidate>
                 <DataAnnotationsValidator />
                 <UsernameField Id="register-username"
                                Label="ASSIGN CALLSIGN / OPERATOR ID"
                                LabelCode="[CALLSIGN.ID]"
                                Placeholder="Enter unique operator callsign"
+                               Autocomplete="off"
                                @bind-Value="_input.Username"
                                @ref="_usernameField" />
 
@@ -49,6 +52,7 @@
                                Label="PRIMARY SECRET KEY"
                                LabelCode="[KEY.MIN_6]"
                                Placeholder="Minimum 6 characters"
+                               Autocomplete="new-password"
                                @bind-Value="_input.Password"
                                style="margin-top: 14px;">
                     <Icon><LockIcon /></Icon>
@@ -58,6 +62,7 @@
                                Label="CONFIRM SECRET KEY"
                                LabelCode="[KEY.VERIFY]"
                                Placeholder="Confirm secret key"
+                               Autocomplete="new-password"
                                @bind-Value="_input.ConfirmPassword"
                                style="margin-top: 14px;">
                     <Icon><ShieldIcon /></Icon>
@@ -103,6 +108,12 @@
     protected override string ModalId => ModalService.RegisterModalId;
 
     protected override async ValueTask FocusAsync() => await _usernameField.FocusAsync();
+
+    protected override void Reset()
+    {
+        _input = new();
+        _authError = false;
+    }
 
     private async Task HandleSubmit()
     {
