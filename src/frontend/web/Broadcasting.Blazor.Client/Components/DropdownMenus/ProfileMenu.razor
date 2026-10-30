@@ -1,10 +1,13 @@
-﻿@using Broadcasting.Blazor.Client.HttpClients
-@inherits DropdownMenu
-@inject AuthClient AuthClient
-@inject NavigationManager Navigation
+﻿@inherits DropdownMenu
 @inject ModalService Modal
 
-<div class="cyber-dropdown" @onkeydown="HandleKeyDown">
+<div class="cyber-dropdown"
+     tabindex="-1"
+     style="outline: none;"
+     @onmousedown:preventDefault
+     @onkeydown="HandleKeyDown"
+     @onblur="HandleBlur"
+     @ref="_menu">
     <button class="btn-icon-hud" data-dropdown-toggle title="Broadcaster Profile"
             @onclick="HandleOpen">
         <PersonIcon Width="18" Height="18" />
@@ -38,7 +41,7 @@
                         <span>Operator Sign In</span>
                     </span>
                 </button>
-                <button class="btn-cyber cyber-dropdown__item" data-modal-open="register-modal" @onclick="_ => Modal.Open(ModalService.RegisterModal)">
+                <button class="cyber-dropdown__item" data-modal-open="register-modal" @onclick="_ => Modal.Open(ModalService.RegisterModal)">
                     <span class="item-left">
                         <span class="item-tag" style="color: var(--accent-acid); border-color: rgba(216, 255, 0, 0.3); background: var(--accent-acid-dim);">[REG]</span>
                         <span>Register New Profile</span>

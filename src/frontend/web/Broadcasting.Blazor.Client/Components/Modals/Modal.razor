@@ -7,6 +7,7 @@
     protected bool _isOpen;
 
     [Inject] protected ModalService ModalService { get; set; } = default!;
+
     protected virtual int ModalId => throw new NotImplementedException();
     protected CancellationToken CancellationToken => _cts.Token;
 

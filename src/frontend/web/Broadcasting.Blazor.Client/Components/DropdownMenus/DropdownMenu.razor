@@ -1,11 +1,13 @@
 ﻿@implements IDisposable
 
 @code {
-    [Inject] protected DropdownMenuService MenuService { get; set; } = default!;
-
+    private bool _shouldFocus = false;
     private CancellationTokenSource _cts = new();
 
     protected bool _isOpen;
+    protected ElementReference _menu;
+
+    [Inject] protected DropdownMenuService MenuService { get; set; } = default!;
 
     protected virtual int MenuId => throw new NotImplementedException();
     protected CancellationToken CancellationToken => _cts.Token;
@@ -17,9 +19,31 @@
         MenuService.OnChange -= HandleStateChange;
     }
 
+    protected async ValueTask FocusAsync()
+    {
+        await _menu.FocusAsync();
+    }
+
+    protected void HandleBlur()
+    {
+        if (_isOpen)
+        {
+            MenuService.CloseAll();
+        }
+    }
+
     protected override void OnInitialized()
     {
         MenuService.OnChange += HandleStateChange;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_shouldFocus)
+        {
+            await FocusAsync();
+            _shouldFocus = false;
+        }
     }
 
     protected void HandleStateChange()
@@ -29,6 +53,7 @@
         if (_isOpen != isOpen)
         {
             _isOpen = isOpen;
+            _shouldFocus = _isOpen;
             StateHasChanged();
         }
     }
