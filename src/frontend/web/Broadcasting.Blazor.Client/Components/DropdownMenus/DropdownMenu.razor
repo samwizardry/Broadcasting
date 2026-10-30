@@ -1,0 +1,55 @@
+﻿@implements IDisposable
+
+@code {
+    [Inject] protected DropdownMenuService MenuService { get; set; } = default!;
+
+    private CancellationTokenSource _cts = new();
+
+    protected bool _isOpen;
+
+    protected virtual int MenuId => throw new NotImplementedException();
+    protected CancellationToken CancellationToken => _cts.Token;
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
+        MenuService.OnChange -= HandleStateChange;
+    }
+
+    protected override void OnInitialized()
+    {
+        MenuService.OnChange += HandleStateChange;
+    }
+
+    protected void HandleStateChange()
+    {
+        bool isOpen = MenuService.IsOpen(MenuId);
+
+        if (_isOpen != isOpen)
+        {
+            _isOpen = isOpen;
+            StateHasChanged();
+        }
+    }
+
+    protected void HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (string.Equals(e.Key, "escape", StringComparison.OrdinalIgnoreCase))
+        {
+            MenuService.CloseAll();
+        }
+    }
+
+    protected void HandleOpen()
+    {
+        if (_isOpen)
+        {
+            MenuService.CloseAll();
+        }
+        else
+        {
+            MenuService.Open(MenuId);
+        }
+    }
+}

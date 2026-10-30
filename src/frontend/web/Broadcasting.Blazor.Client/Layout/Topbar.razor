@@ -1,9 +1,9 @@
-﻿@using Broadcasting.Blazor.Client.HttpClients
+﻿@using Broadcasting.Blazor.Client.Components.DropdownMenus
+@using Broadcasting.Blazor.Client.HttpClients
 @implements IDisposable
 
 @inject NavigationManager NavigationManager
 @inject ModalService ModalService
-@inject AuthClient AuthClient
 
 <header class="showcase-header">
     <a href="" class="brand-mark-group" title="Broadcasting">
@@ -25,13 +25,13 @@
             <NotAuthorized>
                 <CyberButton Id="btn-header-login" Variant="ButtonVariant.Ghost" Size="Size.Sm"
                              data-modal-open="login-modal" title="Sign In to Broadcaster System"
-                             OnClick="@(_ => ModalService.OpenModal(ModalService.LoginModalId))">
+                             OnClick="@(_ => ModalService.Open(ModalService.LoginModal))">
                     LOG IN
                 </CyberButton>
 
                 <CyberButton Id="btn-header-register" Variant="ButtonVariant.Primary" Size="Size.Sm"
                              data-modal-open="register-modal" title="Provision New Broadcaster Account"
-                             OnClick="@(_ => ModalService.OpenModal(ModalService.RegisterModalId))">
+                             OnClick="@(_ => ModalService.Open(ModalService.RegisterModal))">
                     REGISTER
                 </CyberButton>
             </NotAuthorized>
@@ -65,18 +65,5 @@
     public void Dispose()
     {
         NavigationManager.LocationChanged -= OnLocationChanged;
-    }
-
-    private async Task HandleLogout()
-    {
-        try
-        {
-            await AuthClient.LogoutAsync();
-            NavigationManager.Refresh(true);
-        }
-        catch (Exception ex)
-        {
-
-        }
     }
 }

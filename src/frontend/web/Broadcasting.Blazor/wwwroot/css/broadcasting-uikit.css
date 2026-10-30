@@ -3156,6 +3156,8 @@ input[type=radio]:focus-visible + .cyber-radio-tile__content {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
+  text-align: left;
   padding: 8px 12px;
   color: var(--text-primary);
   font-size: 12px;

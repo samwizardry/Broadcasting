@@ -1,5 +1,4 @@
 ﻿@implements IDisposable
-@inject ModalService ModalService
 
 @code {
     private bool _shouldFocus;
@@ -7,14 +6,15 @@
 
     protected bool _isOpen;
 
+    [Inject] protected ModalService ModalService { get; set; } = default!;
+    protected virtual int ModalId => throw new NotImplementedException();
     protected CancellationToken CancellationToken => _cts.Token;
-    protected virtual string ModalId => throw new NotImplementedException();
 
     public void Dispose()
     {
         _cts.Cancel();
         _cts.Dispose();
-        ModalService.OnChange -= HandleStateChange;
+        this.ModalService.OnChange -= HandleStateChange;
     }
 
     protected virtual ValueTask FocusAsync()
@@ -26,7 +26,7 @@
 
     protected override void OnInitialized()
     {
-        ModalService.OnChange += HandleStateChange;
+        this.ModalService.OnChange += HandleStateChange;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -41,7 +41,7 @@
 
     protected void HandleStateChange()
     {
-        bool isOpen = ModalService.IsOpen(ModalId);
+        bool isOpen = this.ModalService.IsOpen(ModalId);
         if (isOpen)
         {
             Reset();
@@ -59,7 +59,7 @@
     {
         if (string.Equals(e.Key, "escape", StringComparison.OrdinalIgnoreCase))
         {
-            ModalService.CloseAll();
+            this.ModalService.CloseAll();
         }
     }
 }

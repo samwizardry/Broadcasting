@@ -71,7 +71,7 @@ public class Register : Endpoint<RegisterRequest>
             return;
         }
 
-        _logger.LogTrace("User '{Username}' created a new account with password '{Password}'.", req.Username, req.Password);
+        _logger.LogTrace("User '{Username}' created a new account with password.", req.Username);
 
         await Send.NoContentAsync();
     }

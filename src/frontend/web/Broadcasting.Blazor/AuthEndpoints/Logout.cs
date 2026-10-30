@@ -19,11 +19,12 @@ public class Logout : EndpointWithoutRequest
     {
         Post("/auth/logout");
         AllowAnonymous();
+        EnableAntiforgery();
     }
 
     public override async Task HandleAsync(CancellationToken ct)
     {
         await _signInManager.SignOutAsync();
-        await Send.NoContentAsync();
+        await Send.RedirectAsync("/", allowRemoteRedirects: false);
     }
 }

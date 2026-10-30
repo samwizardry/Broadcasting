@@ -7,6 +7,7 @@ public static class ServiceExtensions
     public static void AddClientServices(this IServiceCollection services, string baseAddress)
     {
         services.AddScoped<ModalService>();
+        services.AddScoped<DropdownMenuService>();
 
         services.AddHttpClient<AuthClient>(httpClient =>
         {

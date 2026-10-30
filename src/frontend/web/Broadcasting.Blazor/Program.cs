@@ -73,6 +73,9 @@ else
 app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseAntiforgery();
 
 app.MapStaticAssets();
@@ -83,12 +86,13 @@ app.MapRazorComponents<App>()
 // Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
 
-app.UseFastEndpoints(options =>
-{
-    options.Errors.UseProblemDetails(cfg =>
+app.UseAntiforgeryFE()
+    .UseFastEndpoints(options =>
     {
-        cfg.AllowDuplicateErrors = true;
+        options.Errors.UseProblemDetails(cfg =>
+        {
+            cfg.AllowDuplicateErrors = true;
+        });
     });
-});
 
 app.Run();

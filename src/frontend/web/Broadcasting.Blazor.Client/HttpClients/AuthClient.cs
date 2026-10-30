@@ -22,7 +22,7 @@ public class AuthClient
         return await _client.PostAsync<RegisterRequest, Unit>("/auth/register", request, ct);
     }
 
-    internal async Task<ApiResponse> LogoutAsync(CancellationToken ct = default)
+    public async Task<ApiResponse> LogoutAsync(CancellationToken ct = default)
     {
         return await _client.PostAsync<Unit>("/auth/logout", ct);
     }
