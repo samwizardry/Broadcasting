@@ -108,12 +108,14 @@
         {
             _authError = false;
             this.ModalService.CloseAll();
-            Toast.AddMessage(new ToastService.ToastMessage()
+
+            await Toast.AddMessageAfterReloadAsync(new ToastService.ToastMessage()
             {
                 Variant = AlertVariant.Success,
                 Message = $"ACCESS GRANTED // OPERATOR: {_input.Username.ToUpper()}"
             });
-            Navigation.Refresh(forceReload: false);
+
+            Navigation.Refresh(forceReload: true);
         }
         else
         {
