@@ -5,6 +5,7 @@
 @inherits Modal
 @inject AuthClient AuthClient
 @inject NavigationManager Navigation
+@inject ToastService Toast
 
 <div class="cyber-modal-backdrop @(_isOpen ? ModalService.IsOpenCssClass : "")" id="@ModalService.RegisterModalCssClass"
      tabindex="-1"
@@ -119,13 +120,24 @@
         {
             _authError = false;
             this.ModalService.CloseAll();
-            // TODO: alert
+            Toast.AddMessage(new ToastService.ToastMessage()
+            {
+                Variant = AlertVariant.Success,
+                Message = $"ACCOUNT [{_input.Username.ToUpper()}] PROVISIONED SUCCESSFULLY"
+            });
+
+            ModalService.Open(ModalService.LoginModal);
         }
         else
         {
             _authError = true;
             _telemetryBadge = "[REG.CRIT_ERR]";
             _telemetryMessage = response.GetErrorMessage('\n');
+            Toast.AddMessage(new ToastService.ToastMessage()
+            {
+                Variant = AlertVariant.Danger,
+                Message = _telemetryMessage
+            });
         }
 
         _isLoading = false;

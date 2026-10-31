@@ -8,6 +8,7 @@ public static class ServiceExtensions
     {
         services.AddScoped<ModalService>();
         services.AddScoped<DropdownMenuService>();
+        services.AddScoped<ToastService>();
 
         services.AddHttpClient<AuthClient>(httpClient =>
         {

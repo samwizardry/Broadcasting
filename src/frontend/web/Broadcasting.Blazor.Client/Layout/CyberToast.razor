@@ -1,0 +1,50 @@
+﻿@implements IDisposable
+@inject ToastService Toast
+
+<div id="cyber-toast-container"
+     style="position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none;">
+    @foreach (var message in messages)
+    {
+        <CyberAlert @key="message.Id"
+                    Variant="@message.Variant"
+                    BadgeCode="@message.BadgeCode"
+                    Title="@message.Title"
+                    TelemetryCode="@message.TelemetryCode"
+                    IsFadingOut="@message.IsFadingOut">
+            @message.Message
+        </CyberAlert>
+    }
+</div>
+
+@code {
+    List<ToastService.ToastMessage> messages = [];
+
+    public void Dispose()
+    {
+        Toast.OnChange -= NewMessage;
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Toast.OnChange += NewMessage;
+    }
+
+    private void NewMessage(ToastService.ToastMessage message)
+    {
+        messages.Add(message);
+        StateHasChanged();
+        _ = MessageTimeout(message);
+    }
+
+    private async Task MessageTimeout(ToastService.ToastMessage message)
+    {
+        await Task.Delay(3200);
+        message.IsFadingOut = true;
+        StateHasChanged();
+
+        await Task.Delay(250);
+        messages.Remove(message);
+        StateHasChanged();
+    }
+}

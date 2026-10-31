@@ -1,4 +1,5 @@
-﻿<div class="cyber-alert cyber-alert--@Variant.ToLowerString()">
+﻿<div class="cyber-alert cyber-alert--@Variant.ToLowerString()" @attributes="AdditionalAttributes"
+     style="min-width: 280px; box-shadow: rgba(0, 0, 0, 0.8) 0px 8px 30px; pointer-events: auto; animation: 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) 0s 1 normal none running cyber-toast-in; @(IsFadingOut ? "opacity: 0; transform: translateY(8px); transition: opacity 0.2s, transform 0.2s;" : "")">
     <span class="cyber-alert__badge">[@(BadgeCode ?? Variant.ToCode())]</span>
     <div class="cyber-alert__content">
         <div class="alert-header">
@@ -13,7 +14,7 @@
         </div>
         @if (ChildContent is not null)
         {
-            <span class="alert-desc">@ChildContent</span>
+            <span class="alert-desc" style="white-space: pre-line;">@ChildContent</span>
         }
     </div>
 </div>
@@ -26,11 +27,17 @@
     public string? BadgeCode { get; set; }
 
     [Parameter]
-    public string? Title { get; set; }
+    public string? Title { get; set; } = "TELEMETRY ALERT";
 
     [Parameter]
     public string? TelemetryCode { get; set; }
 
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public bool IsFadingOut { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
 }

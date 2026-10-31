@@ -5,6 +5,7 @@
 @inherits Modal
 @inject AuthClient AuthClient
 @inject NavigationManager Navigation
+@inject ToastService Toast
 
 <div class="cyber-modal-backdrop @(_isOpen ? ModalService.IsOpenCssClass : "")" id="@ModalService.LoginModal"
      tabindex="-1"
@@ -99,41 +100,6 @@
     {
         _isLoading = true;
 
-        try
-        {
-            var response = await AuthClient.LoginAsync(
-                new LoginRequest(_input.Username, _input.Password, _input.PersistSession),
-                CancellationToken);
-
-            if (response.Succeeded)
-            {
-                _authError = false;
-                this.ModalService.CloseAll();
-                Navigation.Refresh(forceReload: true);
-            }
-            else
-            {
-                _authError = true;
-                _telemetryBadge = "[AUTH.CRIT_ERR]";
-                _telemetryMessage = response.GetErrorMessage('\n');
-            }
-        }
-        catch (Exception ex)
-        {
-            _authError = true;
-            _telemetryBadge = "[AUTH.CON_ERR]";
-            _telemetryMessage = ex.Message;
-        }
-        finally
-        {
-            _isLoading = false;
-        }
-    }
-
-    private async Task HandleSubmit2()
-    {
-        _isLoading = true;
-
         var response = await AuthClient.LoginAsync(
                 new LoginRequest(_input.Username, _input.Password, _input.PersistSession),
                 CancellationToken);
@@ -142,7 +108,12 @@
         {
             _authError = false;
             this.ModalService.CloseAll();
-            Navigation.Refresh(forceReload: true);
+            Toast.AddMessage(new ToastService.ToastMessage()
+            {
+                Variant = AlertVariant.Success,
+                Message = $"ACCESS GRANTED // OPERATOR: {_input.Username.ToUpper()}"
+            });
+            Navigation.Refresh(forceReload: false);
         }
         else
         {
