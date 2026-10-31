@@ -111,36 +111,24 @@
     {
         _isLoading = true;
 
-        try
-        {
-            var response = await AuthClient.RegisterAsync(
+        var response = await AuthClient.RegisterAsync(
                 new RegisterRequest(_input.Username, _input.Password, _input.AcceptTerms),
                 CancellationToken);
 
-            if (response.Succeeded)
-            {
-                _authError = false;
-                this.ModalService.CloseAll();
-
-                // TODO: alert
-            }
-            else
-            {
-                _authError = true;
-                _telemetryBadge = "[REG.CRIT_ERR]";
-                _telemetryMessage = response.GetErrorMessage('\n');
-            }
+        if (response.Succeeded)
+        {
+            _authError = false;
+            this.ModalService.CloseAll();
+            // TODO: alert
         }
-        catch (Exception ex)
+        else
         {
             _authError = true;
-            _telemetryBadge = "[REG.CON_ERR]";
-            _telemetryMessage = ex.Message;
+            _telemetryBadge = "[REG.CRIT_ERR]";
+            _telemetryMessage = response.GetErrorMessage('\n');
         }
-        finally
-        {
-            _isLoading = false;
-        }
+
+        _isLoading = false;
     }
 
     private sealed class InputModel

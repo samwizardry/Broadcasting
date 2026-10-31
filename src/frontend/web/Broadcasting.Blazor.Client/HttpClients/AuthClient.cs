@@ -24,6 +24,6 @@ public class AuthClient
 
     public async Task<ApiResponse> LogoutAsync(CancellationToken ct = default)
     {
-        return await _client.PostAsync<Unit>("/auth/logout", ct);
+        return await _client.PostAsync<Unit, Unit>("/auth/logout", default, ct);
     }
 }

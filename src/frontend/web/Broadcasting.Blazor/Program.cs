@@ -81,8 +81,6 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
 builder.Services.AddIdentityCore<ApplicationUser>(options =>
     {
         options.Stores.SchemaVersion = IdentitySchemaVersions.Version3;
@@ -135,7 +133,8 @@ app.MapRazorComponents<App>()
 // Add additional endpoints required by the Identity /Account Razor components.
 app.MapAdditionalIdentityEndpoints();
 
-app.UseAntiforgeryFE()
+app.UseDefaultExceptionHandler(useProblemDetails: true)
+    .UseAntiforgeryFE()
     .UseFastEndpoints(options =>
     {
         options.Errors.UseProblemDetails(cfg =>

@@ -130,6 +130,30 @@
         }
     }
 
+    private async Task HandleSubmit2()
+    {
+        _isLoading = true;
+
+        var response = await AuthClient.LoginAsync(
+                new LoginRequest(_input.Username, _input.Password, _input.PersistSession),
+                CancellationToken);
+
+        if (response.Succeeded)
+        {
+            _authError = false;
+            this.ModalService.CloseAll();
+            Navigation.Refresh(forceReload: true);
+        }
+        else
+        {
+            _authError = true;
+            _telemetryBadge = "[AUTH.CRIT_ERR]";
+            _telemetryMessage = response.GetErrorMessage('\n');
+        }
+
+        _isLoading = false;
+    }
+
     private sealed class InputModel
     {
         [Required(ErrorMessage = "Callsign / Operator ID is required")]

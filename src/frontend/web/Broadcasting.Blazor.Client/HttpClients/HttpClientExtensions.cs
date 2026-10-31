@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net;
+using System.Net.Http.Json;
 
 using Broadcasting.Contracts.Responses;
 
@@ -8,68 +9,98 @@ public readonly struct Unit;
 
 public static class HttpClientExtensions
 {
-    public static async Task<ApiResponse<TResponse>> GetAsync<TResponse>(
+    public static Task<ApiResponse<TResponse>> GetAsync<TResponse>(
         this HttpClient client,
-        string url,
-        CancellationToken ct = default)
+        string uri,
+        CancellationToken cancellationToken = default)
     {
-        return await SendRequestAsync<TResponse>(() => client.GetAsync(url, ct), ct);
+        return SendRequestAsync<TResponse>(() => client.GetAsync(uri, cancellationToken), cancellationToken);
     }
 
-    public static async Task<ApiResponse<TResponse>> PostAsync<TRequest, TResponse>(
+    public static Task<ApiResponse<TResponse>> PostAsync<TRequest, TResponse>(
         this HttpClient client,
-        string url,
+        string uri,
         TRequest body,
-        CancellationToken ct = default)
+        CancellationToken cancellationToken = default)
     {
-        return await SendRequestAsync<TResponse>(() => client.PostAsJsonAsync(url, body, ct), ct);
+        return SendRequestAsync<TResponse>(() => client.PostAsJsonAsync(uri, body, cancellationToken), cancellationToken);
     }
 
-    public static async Task<ApiResponse<TResponse>> PostAsync<TResponse>(
+    public static Task<ApiResponse<TResponse>> DeleteAsync<TResponse>(
         this HttpClient client,
-        string url,
-        CancellationToken ct = default)
+        string uri,
+        CancellationToken cancellationToken = default)
     {
-        return await SendRequestAsync<TResponse>(() =>
-        {
-            using var request = new HttpRequestMessage(HttpMethod.Post, url);
-            return client.SendAsync(request);
-        }, ct);
+        return SendRequestAsync<TResponse>(() => client.DeleteAsync(uri, cancellationToken), cancellationToken);
+    }
+
+    public static Task<ApiResponse<TResponse>> PutAsync<TRequest, TResponse>(
+        this HttpClient client,
+        string uri,
+        TRequest body,
+        CancellationToken cancellationToken = default)
+    {
+        return SendRequestAsync<TResponse>(() => client.PutAsJsonAsync(uri, body, cancellationToken), cancellationToken);
     }
 
     public static async Task<ApiResponse<TResponse>> SendRequestAsync<TResponse>(
         Func<Task<HttpResponseMessage>> request,
-        CancellationToken ct = default)
+        CancellationToken cancellationToken = default)
     {
-        using var response = await request();
-
-        if (response.IsSuccessStatusCode)
-        {
-            if (typeof(TResponse) == typeof(Unit))
-            {
-                return ApiResponse<TResponse>.Success(response.StatusCode);
-            }
-
-            var result = await response.Content.ReadFromJsonAsync<TResponse>(ct);
-            return ApiResponse<TResponse>.Success(result!, response.StatusCode);
-        }
-
-        ProblemDetails? problem = null;
+        HttpResponseMessage response;
 
         try
         {
-            problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(ct);
+            response = await request();
         }
-        catch
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
-            problem = new ProblemDetails
+            return ApiResponse<TResponse>.Failure(new ProblemDetails()
             {
-                Status = (int)response.StatusCode,
-                Title = response.ReasonPhrase ?? ProblemDetails.DefaultTitleValue,
-                Detail = await response.Content.ReadAsStringAsync(ct)
-            };
+                Title = "Request canceled.",
+                Detail = "The operation was canceled."
+            }, 0);
+        }
+        catch (Exception)
+        {
+            return ApiResponse<TResponse>.Failure(new ProblemDetails()
+            {
+                Status = (int)HttpStatusCode.ServiceUnavailable,
+                Title = "Connection failed.",
+                Detail = "Network Link Severed: Unable to reach server."
+            }, HttpStatusCode.ServiceUnavailable);
         }
 
-        return ApiResponse<TResponse>.Failure(problem, response.StatusCode);
+        using (response)
+        {
+            if (response.IsSuccessStatusCode)
+            {
+                if (typeof(TResponse) == typeof(Unit))
+                {
+                    return ApiResponse<TResponse>.Success(response.StatusCode);
+                }
+
+                var result = await response.Content.ReadFromJsonAsync<TResponse>(cancellationToken);
+                return ApiResponse<TResponse>.Success(result!, response.StatusCode);
+            }
+
+            ProblemDetails? problem = null;
+
+            try
+            {
+                problem = await response.Content.ReadFromJsonAsync<ProblemDetails>(cancellationToken);
+            }
+            catch
+            {
+                problem = new ProblemDetails
+                {
+                    Status = (int)response.StatusCode,
+                    Title = response.ReasonPhrase ?? ProblemDetails.DefaultTitleValue,
+                    Detail = $"Server returned HTTP {(int)response.StatusCode} ({response.ReasonPhrase ?? response.StatusCode.ToString()})."
+                };
+            }
+
+            return ApiResponse<TResponse>.Failure(problem, response.StatusCode);
+        }
     }
 }
