@@ -1,0 +1,119 @@
+﻿<div style="margin-bottom: 16px;">
+    <div class="cyber-search" id="browse-stream-search">
+        <div class="cyber-search__wrapper">
+            <div class="cyber-search__prefix">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <span>[SEARCH]</span>
+            </div>
+            <input type="text" class="cyber-search__input" placeholder="Search live channels, streamers, categories, or tags... [CTRL+K]" autocomplete="off">
+            <div class="cyber-search__actions">
+                <button type="button" class="cyber-search__clear" title="Clear Query">✕</button>
+                <span class="cyber-search__shortcut">CTRL+K</span>
+            </div>
+        </div>
+
+        <!-- Autocomplete Results Dropdown Panel -->
+        <div class="cyber-search__dropdown">
+            <div class="cyber-search__filters">
+                <button type="button" class="search-filter-chip is-active" data-filter="all">ALL</button>
+                <button type="button" class="search-filter-chip" data-filter="channel">CHANNELS</button>
+                <button type="button" class="search-filter-chip" data-filter="category">CATEGORIES</button>
+                <button type="button" class="search-filter-chip" data-filter="tag">TAGS</button>
+            </div>
+
+            <div class="cyber-search__results-header">
+                <span>// REALTIME BROADCAST DISCOVERY INDEX</span>
+                <span class="search-results-count">5 MATCHES</span>
+            </div>
+
+            <div class="cyber-search__list">
+                <!-- Match 1 -->
+                <a class="cyber-search__item" href="watch.html?channel=samwizardry" data-search-type="channel">
+                    <div class="item-meta">
+                        <div class="avatar-hud avatar-hud--live avatar-hud--sm">SAM</div>
+                        <div>
+                            <div class="item-name">SamWizardry</div>
+                            <div class="item-category">Cyberpunk Design Systems &amp; Streaming Architecture</div>
+                        </div>
+                    </div>
+                    <div class="item-right">
+                        <span class="badge-live">LIVE</span>
+                        <span class="cyber-tag cyber-tag--acid">1080P60</span>
+                    </div>
+                </a>
+
+                <!-- Match 2 -->
+                <a class="cyber-search__item" href="watch.html?channel=marathon" data-search-type="channel">
+                    <div class="item-meta">
+                        <div class="avatar-hud avatar-hud--live avatar-hud--sm">MK</div>
+                        <div>
+                            <div class="item-name">MarathonRunner</div>
+                            <div class="item-category">Game Engine Architecture &amp; Vulkan Shaders</div>
+                        </div>
+                    </div>
+                    <div class="item-right">
+                        <span class="badge-live">LIVE</span>
+                        <span class="cyber-tag cyber-tag--acid">1440P60</span>
+                    </div>
+                </a>
+
+                <!-- Match 3 -->
+                <a class="cyber-search__item" href="watch.html?channel=signal" data-search-type="category">
+                    <div class="item-meta">
+                        <div class="avatar-hud avatar-hud--live avatar-hud--sm">AI</div>
+                        <div>
+                            <div class="item-name">Audio DSP Engineering</div>
+                            <div class="item-category">Signal_09 // Synthesizers &amp; Sound Telemetry</div>
+                        </div>
+                    </div>
+                    <div class="item-right">
+                        <span class="badge-live">LIVE</span>
+                        <span class="cyber-tag cyber-tag--cyan">8.8K VIEWERS</span>
+                    </div>
+                </a>
+
+                <!-- Match 4 -->
+                <a class="cyber-search__item" href="watch.html?channel=blazor" data-search-type="tag">
+                    <div class="item-meta">
+                        <div class="avatar-hud avatar-hud--live avatar-hud--sm">BL</div>
+                        <div>
+                            <div class="item-name">Blazor WebAssembly</div>
+                            <div class="item-category">BlazorForge // C# .NET 9 Frontend Architecture</div>
+                        </div>
+                    </div>
+                    <div class="item-right">
+                        <span class="badge-live">LIVE</span>
+                        <span class="cyber-tag">BLAZOR</span>
+                    </div>
+                </a>
+
+                <!-- Match 5 -->
+                <a class="cyber-search__item" href="watch.html?channel=vortex" data-search-type="channel">
+                    <div class="item-meta">
+                        <div class="avatar-hud avatar-hud--live avatar-hud--sm">VX</div>
+                        <div>
+                            <div class="item-name">VortexNet</div>
+                            <div class="item-category">Distributed WebRTC Ingest &amp; Mesh Testing</div>
+                        </div>
+                    </div>
+                    <div class="item-right">
+                        <span class="badge-live">LIVE</span>
+                        <span class="cyber-tag cyber-tag--cyan">WEBRTC</span>
+                    </div>
+                </a>
+            </div>
+
+            <div class="cyber-search__empty" style="display: none;">
+                [SYS.ERR: NO ACTIVE STREAMS MATCH QUERY]
+            </div>
+
+            <div class="cyber-search__footer">
+                <span>PRESS ENTER TO SELECT</span>
+                <span>ESC TO DISMISS</span>
+            </div>
+        </div>
+    </div>
+</div>

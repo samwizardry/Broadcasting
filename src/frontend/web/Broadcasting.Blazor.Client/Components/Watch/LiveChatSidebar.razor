@@ -1,0 +1,86 @@
+﻿<aside class="watch-layout__chat">
+
+    <button class="btn-chat-expand" id="btn-chat-expand" title="Expand Chat">
+        <span>◀ SHOW CHAT</span>
+    </button>
+
+    <div class="cyber-chat">
+        <!-- Chat Header -->
+        <div class="cyber-chat__header">
+            <div class="chat-title-group">
+                <span class="chat-title">// BROADCAST CHAT</span>
+                <span class="chat-status-pill">SLOW: 3S</span>
+            </div>
+            <div class="chat-header-actions">
+                <button class="btn-player-control" id="btn-chat-collapse" title="Collapse Chat">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Pinned Notice -->
+        <div class="cyber-chat__pinned">
+            <span class="pinned-tag">[PINNED]</span>
+            <span class="pinned-text">Broadcasting Live // WebRTC telemetry active.</span>
+        </div>
+
+        <!-- Live Message Stream -->
+        <div class="cyber-chat__messages" id="chat-messages-container">
+            <div class="chat-msg chat-msg--system">
+                [SYS.01: BROADCAST INGEST INITIALIZED // 1080P60 8450KBPS]
+            </div>
+
+            <div class="chat-msg chat-msg--donation">
+                <div class="msg-header">
+                    <span class="msg-time">21:04</span>
+                    <span class="msg-badge msg-badge--vip">VIP</span>
+                    <span class="msg-username text-cyan">NEXUS_VIP</span>
+                    <span class="donation-amount">★ SUPERTIP $50.00</span>
+                </div>
+                <div class="msg-content">This Marathon aesthetic is unmatched. The chamfer cuts and VU meters look gorgeous!</div>
+            </div>
+
+            <div class="chat-msg">
+                <div class="msg-header">
+                    <span class="msg-time">21:05</span>
+                    <span class="msg-badge msg-badge--mod">MOD</span>
+                    <span class="msg-username" style="color: var(--accent-cyan);">CYBER_GUARD</span>
+                </div>
+                <div class="msg-content">WebRTC broadcast stream latency is 0.84 seconds. Rock solid!</div>
+            </div>
+
+            <div class="chat-msg">
+                <div class="msg-header">
+                    <span class="msg-time">21:06</span>
+                    <span class="msg-badge msg-badge--host">HOST</span>
+                    <span class="msg-username text-acid">SAMWIZARDRY</span>
+                </div>
+                <div class="msg-content">BroadcastingUIKit is fully modular and Blazor-ready. Inspect the workbench tab for code snippets!</div>
+            </div>
+        </div>
+
+        <!-- Quick Reaction Bar (No Emojis - Tactical Hype Tags) -->
+        <div class="cyber-chat__reactions">
+            <button class="btn-reaction" title="Hype">[HYPE]</button>
+            <button class="btn-reaction" title="Good Game">[GG]</button>
+            <button class="btn-reaction" title="Win">[W]</button>
+            <button class="btn-reaction" title="Max Bitrate">[100%]</button>
+            <button class="btn-reaction" title="Glitch">[GLITCH]</button>
+        </div>
+
+        <!-- Chat Input Footer -->
+        <div class="cyber-chat__footer">
+            <div class="chat-input-row">
+                <input type="text" id="chat-input-field" class="chat-text-input" placeholder="Transmit message to channel..." maxlength="250">
+                <button id="chat-send-btn" class="btn-cyber btn-cyber-primary btn-cyber-sm">SEND</button>
+            </div>
+            <div class="chat-input-meta">
+                <span>PRESS ENTER TO TRANSMIT</span>
+                <span>0 / 250</span>
+            </div>
+        </div>
+    </div>
+
+</aside>

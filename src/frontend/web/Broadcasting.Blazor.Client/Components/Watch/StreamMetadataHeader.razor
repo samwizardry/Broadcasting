@@ -1,0 +1,53 @@
+﻿<!-- Stream Metadata & Author Section -->
+<div class="stream-info-container">
+    <div class="stream-header-row">
+        <div class="streamer-identity">
+            <div class="avatar-hud avatar-hud--live avatar-hud--lg" id="stream-avatar-display">SAM</div>
+            <div>
+                <h1 class="stream-meta-title" id="stream-title-display">CYBERPUNK BROADCASTING SYSTEM ARCHITECTURE // MARATHON SPEC</h1>
+                <div class="streamer-name-row">
+                    <span class="channel-author" id="stream-author-display">SamWizardry</span>
+                    <span class="cyber-tag cyber-tag--cyan" style="padding: 1px 6px; font-size: 9px; font-weight: 700;">VERIFIED</span>
+                    <span>•</span>
+                    <span id="stream-category-display">Cyberpunk Design Systems & Streaming Engines</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="stream-actions">
+            <button class="btn-cyber btn-cyber-primary">FOLLOW CHANNEL</button>
+            <button class="btn-cyber btn-cyber-secondary" data-modal-open="stream-settings-modal">INGEST KEYS</button>
+            <button class="btn-icon-hud" title="Share Stream">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                    <polyline points="16 6 12 2 8 6"></polyline>
+                    <line x1="12" y1="2" x2="12" y2="15"></line>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Stream Technical Specs Telemetry Bar -->
+    <div class="stream-specs-bar">
+        <div class="spec-item">
+            <span class="spec-label">INGEST PROTOCOL:</span>
+            <span class="spec-value text-acid">WebRTC (Ultra Low-Latency)</span>
+        </div>
+        <div class="spec-item">
+            <span class="spec-label">ENCODER CODEC:</span>
+            <span class="spec-value text-cyan" id="stream-spec-codec">AV1 / OPUS</span>
+        </div>
+        <div class="spec-item">
+            <span class="spec-label">BITRATE:</span>
+            <span class="spec-value" id="stream-spec-bitrate">8,450 KBPS</span>
+        </div>
+        <div class="spec-item">
+            <span class="spec-label">RTT LATENCY:</span>
+            <span class="spec-value text-acid" id="stream-spec-latency">0.84 SEC</span>
+        </div>
+        <div class="spec-item">
+            <span class="spec-label">SECURITY:</span>
+            <span class="spec-value">E2E ENCRYPTED (AES-256)</span>
+        </div>
+    </div>
+</div>

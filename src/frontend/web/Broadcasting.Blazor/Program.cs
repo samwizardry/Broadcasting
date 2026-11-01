@@ -1,6 +1,5 @@
 using Broadcasting.Blazor.Client.Services;
 using Broadcasting.Blazor.Components;
-using Broadcasting.Blazor.Components.Account;
 using Broadcasting.Blazor.Data;
 using Broadcasting.Blazor.Domain.Identity;
 
@@ -18,7 +17,6 @@ builder.Services.AddRazorComponents()
     .AddAuthenticationStateSerialization();
 
 builder.Services.AddCascadingAuthenticationState();
-builder.Services.AddScoped<IdentityRedirectManager>();
 
 builder.Services.AddAuthentication(options =>
     {
@@ -97,8 +95,6 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
     .AddSignInManager()
     .AddDefaultTokenProviders();
 
-builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
-
 builder.Services.AddFastEndpoints();
 
 builder.Services.AddClientServices("https://localhost:7135");
@@ -129,9 +125,6 @@ app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(Broadcasting.Blazor.Client._Imports).Assembly);
-
-// Add additional endpoints required by the Identity /Account Razor components.
-app.MapAdditionalIdentityEndpoints();
 
 app.UseDefaultExceptionHandler(useProblemDetails: true)
     .UseAntiforgeryFE()
