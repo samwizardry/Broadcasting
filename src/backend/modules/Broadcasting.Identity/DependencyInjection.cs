@@ -9,15 +9,13 @@ namespace Broadcasting.Identity;
 
 public static class DependencyInjection
 {
-    public static T AddIdentityModule<T>(T builder)
+    public static T AddIdentityModule<T>(this T builder)
         where T : IHostApplicationBuilder
     {
         var connectionString = builder.Configuration.GetConnectionString("Identity") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
         builder.Services.AddDbContext<IdentityDbContext>(options =>
             options.UseNpgsql(connectionString));
-
-
 
         return builder;
     }
