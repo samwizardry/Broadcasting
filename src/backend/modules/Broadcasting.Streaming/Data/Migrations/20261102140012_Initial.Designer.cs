@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Broadcasting.Streaming.Data.Migrations
 {
     [DbContext(typeof(StreamingDbContext))]
-    [Migration("20261102071515_Initial")]
+    [Migration("20261102140012_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -26,7 +26,7 @@ namespace Broadcasting.Streaming.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Broadcasting.Streaming.Domain.Streamer", b =>
+            modelBuilder.Entity("Broadcasting.Streaming.Domain.StreamChannel", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -35,10 +35,13 @@ namespace Broadcasting.Streaming.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("IsLive")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("StreamSecretKey")
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -47,10 +50,10 @@ namespace Broadcasting.Streaming.Data.Migrations
                     b.HasIndex("ChannelSlug")
                         .IsUnique();
 
-                    b.HasIndex("UserId")
+                    b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("Streamers", "streaming");
+                    b.ToTable("StreamChannels", "streaming");
                 });
 #pragma warning restore 612, 618
         }

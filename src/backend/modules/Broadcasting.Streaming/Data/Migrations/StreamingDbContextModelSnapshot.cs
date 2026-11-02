@@ -23,7 +23,7 @@ namespace Broadcasting.Streaming.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Broadcasting.Streaming.Domain.Streamer", b =>
+            modelBuilder.Entity("Broadcasting.Streaming.Domain.StreamChannel", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -32,10 +32,13 @@ namespace Broadcasting.Streaming.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("IsLive")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("StreamSecretKey")
                         .HasColumnType("text");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -44,10 +47,10 @@ namespace Broadcasting.Streaming.Data.Migrations
                     b.HasIndex("ChannelSlug")
                         .IsUnique();
 
-                    b.HasIndex("UserId")
+                    b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("Streamers", "streaming");
+                    b.ToTable("StreamChannels", "streaming");
                 });
 #pragma warning restore 612, 618
         }

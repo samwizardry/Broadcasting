@@ -1,4 +1,5 @@
 ﻿using Broadcasting.Streaming.Data;
+using Broadcasting.Streaming.Http;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -17,7 +18,11 @@ public static class DependencyInjection
         builder.Services.AddDbContext<StreamingDbContext>(options =>
             options.UseNpgsql(connectionString));
 
-
+        builder.Services.AddHttpClient<MediamtxClient>(options =>
+        {
+            // TODO: cfg
+            options.BaseAddress = new Uri("http://localhost:9997");
+        });
 
         return builder;
     }

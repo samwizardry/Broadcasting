@@ -11,7 +11,7 @@ internal class StreamingDbContext : DbContext
     {
     }
 
-    public DbSet<Streamer> Streamers => Set<Streamer>();
+    public DbSet<StreamChannel> StreamChannels => Set<StreamChannel>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
