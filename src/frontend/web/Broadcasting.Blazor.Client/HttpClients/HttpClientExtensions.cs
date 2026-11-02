@@ -5,11 +5,9 @@ using Broadcasting.Contracts.Responses;
 
 namespace Broadcasting.Blazor.Client.HttpClients;
 
-public readonly struct Unit;
-
 public static class HttpClientExtensions
 {
-    public static Task<ApiResponse<TResponse>> GetAsync<TResponse>(
+    public static Task<ApiResponse<TResponse, ProblemDetails>> GetAsync<TResponse>(
         this HttpClient client,
         string uri,
         CancellationToken cancellationToken = default)
@@ -17,7 +15,7 @@ public static class HttpClientExtensions
         return SendRequestAsync<TResponse>(() => client.GetAsync(uri, cancellationToken), cancellationToken);
     }
 
-    public static Task<ApiResponse<TResponse>> PostAsync<TRequest, TResponse>(
+    public static Task<ApiResponse<TResponse, ProblemDetails>> PostAsync<TRequest, TResponse>(
         this HttpClient client,
         string uri,
         TRequest body,
@@ -26,7 +24,7 @@ public static class HttpClientExtensions
         return SendRequestAsync<TResponse>(() => client.PostAsJsonAsync(uri, body, cancellationToken), cancellationToken);
     }
 
-    public static Task<ApiResponse<TResponse>> DeleteAsync<TResponse>(
+    public static Task<ApiResponse<TResponse, ProblemDetails>> DeleteAsync<TResponse>(
         this HttpClient client,
         string uri,
         CancellationToken cancellationToken = default)
@@ -34,7 +32,7 @@ public static class HttpClientExtensions
         return SendRequestAsync<TResponse>(() => client.DeleteAsync(uri, cancellationToken), cancellationToken);
     }
 
-    public static Task<ApiResponse<TResponse>> PutAsync<TRequest, TResponse>(
+    public static Task<ApiResponse<TResponse, ProblemDetails>> PutAsync<TRequest, TResponse>(
         this HttpClient client,
         string uri,
         TRequest body,
@@ -43,7 +41,7 @@ public static class HttpClientExtensions
         return SendRequestAsync<TResponse>(() => client.PutAsJsonAsync(uri, body, cancellationToken), cancellationToken);
     }
 
-    public static async Task<ApiResponse<TResponse>> SendRequestAsync<TResponse>(
+    public static async Task<ApiResponse<TResponse, ProblemDetails>> SendRequestAsync<TResponse>(
         Func<Task<HttpResponseMessage>> request,
         CancellationToken cancellationToken = default)
     {
@@ -55,7 +53,7 @@ public static class HttpClientExtensions
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
-            return ApiResponse<TResponse>.Failure(new ProblemDetails()
+            return ApiResponse<TResponse, ProblemDetails>.Failure(new ProblemDetails()
             {
                 Title = "Request canceled.",
                 Detail = "The operation was canceled."
@@ -63,7 +61,7 @@ public static class HttpClientExtensions
         }
         catch (Exception)
         {
-            return ApiResponse<TResponse>.Failure(new ProblemDetails()
+            return ApiResponse<TResponse, ProblemDetails>.Failure(new ProblemDetails()
             {
                 Status = (int)HttpStatusCode.ServiceUnavailable,
                 Title = "Connection failed.",
@@ -77,11 +75,11 @@ public static class HttpClientExtensions
             {
                 if (typeof(TResponse) == typeof(Unit))
                 {
-                    return ApiResponse<TResponse>.Success(response.StatusCode);
+                    return ApiResponse<TResponse, ProblemDetails>.Success(response.StatusCode);
                 }
 
                 var result = await response.Content.ReadFromJsonAsync<TResponse>(cancellationToken);
-                return ApiResponse<TResponse>.Success(result!, response.StatusCode);
+                return ApiResponse<TResponse, ProblemDetails>.Success(result!, response.StatusCode);
             }
 
             ProblemDetails? problem = null;
@@ -100,7 +98,7 @@ public static class HttpClientExtensions
                 };
             }
 
-            return ApiResponse<TResponse>.Failure(problem, response.StatusCode);
+            return ApiResponse<TResponse, ProblemDetails>.Failure(problem, response.StatusCode);
         }
     }
 }

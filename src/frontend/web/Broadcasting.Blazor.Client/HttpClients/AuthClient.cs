@@ -12,17 +12,17 @@ public class AuthClient
         _client = client;
     }
 
-    public async Task<ApiResponse> LoginAsync(LoginRequest request, CancellationToken ct = default)
+    public async Task<ApiResponse<ProblemDetails>> LoginAsync(LoginRequest request, CancellationToken ct = default)
     {
         return await _client.PostAsync<LoginRequest, Unit>("/auth/login", request, ct);
     }
 
-    public async Task<ApiResponse> RegisterAsync(RegisterRequest request, CancellationToken ct = default)
+    public async Task<ApiResponse<ProblemDetails>> RegisterAsync(RegisterRequest request, CancellationToken ct = default)
     {
         return await _client.PostAsync<RegisterRequest, Unit>("/auth/register", request, ct);
     }
 
-    public async Task<ApiResponse> LogoutAsync(CancellationToken ct = default)
+    public async Task<ApiResponse<ProblemDetails>> LogoutAsync(CancellationToken ct = default)
     {
         return await _client.PostAsync<Unit, Unit>("/auth/logout", default, ct);
     }

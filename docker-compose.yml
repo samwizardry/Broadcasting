@@ -1,6 +1,6 @@
 services:
   mediamtx:
-    image: bluenviron/mediamtx:1
+    image: bluenviron/mediamtx:latest-ffmpeg
     container_name: broadcasting-mediamtx
     ports:
       - 8554:8554

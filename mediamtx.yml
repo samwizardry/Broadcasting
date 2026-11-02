@@ -816,12 +816,12 @@ pathDefaults:
   # * RTSP_PORT: RTSP server port
   # * G1, G2, ...: regular expression groups, if path name is
   #   a regular expression.
-  runOnAvailable:
+  runOnAvailable: wget -qO- "http://host.docker.internal:5245/api/streaming/run-on-available?path=$MTX_PATH&source_type=$MTX_SOURCE_TYPE&source_id=$MTX_SOURCE_ID"
   # Restart the command if it exits.
   runOnAvailableRestart: false
   # Command to run when the stream is not available anymore.
   # Environment variables are the same as runOnAvailable.
-  runOnUnavailable:
+  runOnUnavailable: wget -qO- "http://host.docker.internal:5245/api/streaming/run-on-unavailable?path=$MTX_PATH&source_type=$MTX_SOURCE_TYPE&source_id=$MTX_SOURCE_ID"
 
   # Command to run when the stream is online, which means
   # that the stream is available and provided by a online source (not an offline segment).
@@ -834,12 +834,12 @@ pathDefaults:
   # * RTSP_PORT: RTSP server port
   # * G1, G2, ...: regular expression groups, if path name is
   #   a regular expression.
-  runOnOnline:
+  runOnOnline: wget -qO- "http://host.docker.internal:5245/api/streaming/run-on-online?path=$MTX_PATH&source_type=$MTX_SOURCE_TYPE&source_id=$MTX_SOURCE_ID"
   # Restart the command if it exits.
   runOnOnlineRestart: false
   # Command to run when the stream is not online anymore.
   # Environment variables are the same as runOnOnline.
-  runOnOffline:
+  runOnOffline: wget -qO- "http://host.docker.internal:5245/api/streaming/run-on-offline?path=$MTX_PATH&source_type=$MTX_SOURCE_TYPE&source_id=$MTX_SOURCE_ID"
 
   # Command to run when a client starts reading.
   # This is terminated with SIGINT when a client stops reading.
