@@ -8,11 +8,23 @@ services:
       - 8888:8888
       - 8889:8889
       - 8892:8892
+      - 9997:9997
       - 8890:8890/udp
       - 8189:8189/udp
       - 8892:8892/udp
       - 8893:8893/udp
-    restart: always
+    volumes:
+      - ./mediamtx.yml:/mediamtx.yml:ro
+    restart: unless-stopped
+
+  mediamtx-swagger:
+    image: swaggerapi/swagger-ui:latest
+    container_name: broadcasting-mediamtx-swagger
+    restart: unless-stopped
+    ports:
+      - "38080:8080"
+    environment:
+      - URL=https://raw.githubusercontent.com/bluenviron/mediamtx/main/api/openapi.yaml
 
   postgres:
     image: postgres:16.15-alpine3.24
@@ -32,7 +44,7 @@ services:
       timeout: 5s
       retries: 3
       start_period: 10s
-    restart: always
+    restart: unless-stopped
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -45,7 +57,7 @@ services:
       - PGADMIN_CONFIG_ALLOW_SPECIAL_EMAIL_DOMAINS=["local"]
     volumes:
       - pgadmin-data:/var/lib/pgadmin
-    restart: always
+    restart: unless-stopped
 
 volumes:
   postgres-data:
