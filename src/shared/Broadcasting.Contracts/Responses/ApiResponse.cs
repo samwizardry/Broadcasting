@@ -2,88 +2,56 @@
 
 namespace Broadcasting.Contracts.Responses;
 
-public class ApiResponse
+public class ApiResponse<TError>
 {
-    internal ApiResponse() { }
+    protected internal  ApiResponse() { }
 
     public bool Succeeded { get; init; }
 
     public HttpStatusCode StatusCode { get; init; }
 
-    public ProblemDetails? Problem { get; init; }
+    public TError? Error { get; init; }
 
-    public static ApiResponse Success(HttpStatusCode status) =>
-        new ApiResponse { Succeeded = true, StatusCode = status };
+    public static ApiResponse<TError> Success(HttpStatusCode status) =>
+        new()
+        {
+            Succeeded = true,
+            StatusCode = status
+        };
 
-    public static ApiResponse Failure(ProblemDetails? problem, HttpStatusCode status) =>
-        new ApiResponse { StatusCode = status, Problem = problem };
+    public static ApiResponse<TError> Failure(TError? error, HttpStatusCode status) =>
+        new()
+        {
+            StatusCode = status,
+            Error = error
+        };
 }
 
-public class ApiResponse<T> : ApiResponse
+public class ApiResponse<TResult, TError> : ApiResponse<TError>
 {
-    internal ApiResponse() { }
+    protected internal ApiResponse() { }
 
-    public T? Result { get; init; }
+    public TResult? Result { get; init; }
 
-    public static new ApiResponse<T> Success(HttpStatusCode status) =>
-        new ApiResponse<T> { Succeeded = true, StatusCode = status };
-
-    public static ApiResponse<T> Success(T result, HttpStatusCode status) =>
-        new ApiResponse<T> { Succeeded = true, StatusCode = status, Result = result };
-
-    public static new ApiResponse<T> Failure(ProblemDetails? problem, HttpStatusCode status) =>
-        new ApiResponse<T> { StatusCode = status, Problem = problem };
-}
-
-public static class ApiResponseExtensions
-{
-    public static IEnumerable<string> GetErrors(this ApiResponse response)
-    {
-        if (response.Problem is null)
+    public static new ApiResponse<TResult, TError> Success(HttpStatusCode status) =>
+        new()
         {
-            yield return response.StatusCode != 0
-                ? $"Server returned HTTP {(int)response.StatusCode} ({response.StatusCode})"
-                : "Unknown error";
-            yield break;
-        }
+            Succeeded = true,
+            StatusCode = status
+        };
 
-        if (response.Problem is not null)
+    public static ApiResponse<TResult, TError> Success(TResult result, HttpStatusCode status) =>
+        new()
         {
-            if (response.Problem.Errors?.Count > 0)
-            {
-                foreach (var error in response.Problem.Errors)
-                {
-                    yield return error.Reason;
-                }
-                yield break;
-            }
+            Succeeded = true,
+            StatusCode = status,
+            Result = result
+        };
 
-            if (!string.IsNullOrWhiteSpace(response.Problem.Detail))
-            {
-                yield return response.Problem.Detail;
-                yield break;
-            }
-
-            if (!string.IsNullOrWhiteSpace(response.Problem.Title))
-            {
-                yield return response.Problem.Title;
-                yield break;
-            }
-        }
-
-        yield return response.StatusCode != 0
-            ? $"Server returned HTTP {(int)response.StatusCode} ({response.StatusCode})"
-            : "Unknown error";
-        yield break;
-    }
-
-    public static string GetErrorMessage(this ApiResponse response, char separator)
-    {
-        return string.Join(separator, response.GetErrors());
-    }
-
-    public static string GetErrorMessage(this ApiResponse response, string separator)
-    {
-        return string.Join(separator, response.GetErrors());
-    }
+    public static new ApiResponse<TResult, TError> Failure(TError? error, HttpStatusCode status) =>
+        new()
+        {
+            StatusCode = status,
+            Error = error
+        };
 }
