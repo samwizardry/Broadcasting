@@ -7,13 +7,17 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Broadcasting.Blazor.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.EnsureSchema(
+                name: "blazorwebapp");
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
+                schema: "blazorwebapp",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
@@ -28,6 +32,7 @@ namespace Broadcasting.Blazor.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUsers",
+                schema: "blazorwebapp",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
@@ -53,6 +58,7 @@ namespace Broadcasting.Blazor.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
+                schema: "blazorwebapp",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -67,6 +73,7 @@ namespace Broadcasting.Blazor.Data.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
+                        principalSchema: "blazorwebapp",
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -74,6 +81,7 @@ namespace Broadcasting.Blazor.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
+                schema: "blazorwebapp",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -88,6 +96,7 @@ namespace Broadcasting.Blazor.Data.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserClaims_AspNetUsers_UserId",
                         column: x => x.UserId,
+                        principalSchema: "blazorwebapp",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -95,6 +104,7 @@ namespace Broadcasting.Blazor.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserLogins",
+                schema: "blazorwebapp",
                 columns: table => new
                 {
                     LoginProvider = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
@@ -108,6 +118,7 @@ namespace Broadcasting.Blazor.Data.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserLogins_AspNetUsers_UserId",
                         column: x => x.UserId,
+                        principalSchema: "blazorwebapp",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -115,6 +126,7 @@ namespace Broadcasting.Blazor.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserPasskeys",
+                schema: "blazorwebapp",
                 columns: table => new
                 {
                     CredentialId = table.Column<byte[]>(type: "bytea", maxLength: 1024, nullable: false),
@@ -127,6 +139,7 @@ namespace Broadcasting.Blazor.Data.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserPasskeys_AspNetUsers_UserId",
                         column: x => x.UserId,
+                        principalSchema: "blazorwebapp",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -134,6 +147,7 @@ namespace Broadcasting.Blazor.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserRoles",
+                schema: "blazorwebapp",
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "text", nullable: false),
@@ -145,12 +159,14 @@ namespace Broadcasting.Blazor.Data.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
                         column: x => x.RoleId,
+                        principalSchema: "blazorwebapp",
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
+                        principalSchema: "blazorwebapp",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -158,6 +174,7 @@ namespace Broadcasting.Blazor.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserTokens",
+                schema: "blazorwebapp",
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "text", nullable: false),
@@ -171,6 +188,7 @@ namespace Broadcasting.Blazor.Data.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
+                        principalSchema: "blazorwebapp",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -178,42 +196,50 @@ namespace Broadcasting.Blazor.Data.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
+                schema: "blazorwebapp",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
+                schema: "blazorwebapp",
                 table: "AspNetRoles",
                 column: "NormalizedName",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
+                schema: "blazorwebapp",
                 table: "AspNetUserClaims",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserLogins_UserId",
+                schema: "blazorwebapp",
                 table: "AspNetUserLogins",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserPasskeys_UserId",
+                schema: "blazorwebapp",
                 table: "AspNetUserPasskeys",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserRoles_RoleId",
+                schema: "blazorwebapp",
                 table: "AspNetUserRoles",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
+                schema: "blazorwebapp",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
+                schema: "blazorwebapp",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
@@ -223,28 +249,36 @@ namespace Broadcasting.Blazor.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AspNetRoleClaims");
+                name: "AspNetRoleClaims",
+                schema: "blazorwebapp");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserClaims");
+                name: "AspNetUserClaims",
+                schema: "blazorwebapp");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserLogins");
+                name: "AspNetUserLogins",
+                schema: "blazorwebapp");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserPasskeys");
+                name: "AspNetUserPasskeys",
+                schema: "blazorwebapp");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserRoles");
+                name: "AspNetUserRoles",
+                schema: "blazorwebapp");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserTokens");
+                name: "AspNetUserTokens",
+                schema: "blazorwebapp");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
+                name: "AspNetRoles",
+                schema: "blazorwebapp");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "AspNetUsers",
+                schema: "blazorwebapp");
         }
     }
 }

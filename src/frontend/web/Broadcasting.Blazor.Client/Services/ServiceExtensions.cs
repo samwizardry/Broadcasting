@@ -14,5 +14,10 @@ public static class ServiceExtensions
         {
             httpClient.BaseAddress = new Uri(baseAddress);
         });
+
+        services.AddHttpClient<StreamingClient>(httpClient =>
+        {
+            httpClient.BaseAddress = new Uri(baseAddress);
+        });
     }
 }

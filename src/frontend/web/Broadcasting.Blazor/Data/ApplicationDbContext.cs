@@ -10,7 +10,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 {
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        //builder.HasDefaultSchema("blazorwebapp");
+        builder.HasDefaultSchema("blazorwebapp");
         base.OnModelCreating(builder);
     }
 }

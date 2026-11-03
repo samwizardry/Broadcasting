@@ -1,5 +1,7 @@
-﻿using Broadcasting.Blazor.Domain.Identity;
+﻿using Broadcasting.Blazor.Client.HttpClients;
+using Broadcasting.Blazor.Domain.Identity;
 using Broadcasting.Contracts.Blazor.Auth;
+using Broadcasting.Contracts.Streaming;
 
 using FastEndpoints;
 
@@ -33,16 +35,16 @@ public class RegisterRequestValidator : Validator<RegisterRequest>
 
 public class Register : Endpoint<RegisterRequest>
 {
-    private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly StreamingClient _streamingClient;
     private readonly ILogger<Register> _logger;
 
-    public Register(SignInManager<ApplicationUser> signInManager,
-        UserManager<ApplicationUser> userManager,
+    public Register(UserManager<ApplicationUser> userManager,
+        StreamingClient streamingClient,
         ILogger<Register> logger)
     {
-        _signInManager = signInManager;
         _userManager = userManager;
+        _streamingClient = streamingClient;
         _logger = logger;
     }
 
@@ -72,6 +74,16 @@ public class Register : Endpoint<RegisterRequest>
         }
 
         _logger.LogTrace("User '{Username}' created a new account with password.", req.Username);
+
+        var response = await _streamingClient.CreateChannelAsync(new CreateChannelRequest(req.Username));
+        if (response.Succeeded)
+        {
+            _logger.LogInformation("Created new channel '{ChannelUrl}'.", response.Result!.RtspUrl);
+        }
+        else
+        {
+            _logger.LogWarning("Failed to create channel for user.");
+        }
 
         await Send.NoContentAsync();
     }
