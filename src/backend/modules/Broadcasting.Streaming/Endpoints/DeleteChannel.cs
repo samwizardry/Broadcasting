@@ -23,6 +23,7 @@ internal class DeleteChannel : EndpointWithoutRequest
         _client = client;
     }
 
+    // TODO: authz, do not allow for users
     public override void Configure()
     {
         Delete("channels/{username}");

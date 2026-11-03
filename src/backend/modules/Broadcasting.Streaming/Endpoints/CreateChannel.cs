@@ -30,6 +30,7 @@ internal class CreateChannel : Endpoint<CreateChannelRequest, StreamChannelRespo
         _client = client;
     }
 
+    // TODO: authz, do not allow for users
     public override void Configure()
     {
         Post("channels");

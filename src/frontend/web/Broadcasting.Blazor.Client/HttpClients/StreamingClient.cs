@@ -31,4 +31,9 @@ public class StreamingClient
     {
         return _client.DeleteAsync<Unit>($"/api/streaming/channels/{username}", ct);
     }
+
+    public Task<ApiResponse<StreamSettingsResponse, ProblemDetails>> GetStreamSettingsAsync(string username, CancellationToken ct)
+    {
+        return _client.GetAsync<StreamSettingsResponse>($"/api/streaming/channels/{username}/settings", ct);
+    }
 }
