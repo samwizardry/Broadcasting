@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Broadcasting.Streaming.Data.Migrations
 {
     [DbContext(typeof(StreamingDbContext))]
-    [Migration("20261102140012_Initial")]
-    partial class Initial
+    [Migration("20261103124624_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

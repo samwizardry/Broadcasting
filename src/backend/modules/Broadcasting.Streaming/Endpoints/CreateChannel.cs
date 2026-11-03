@@ -59,7 +59,7 @@ internal class CreateChannel : Endpoint<CreateChannelRequest, StreamChannelRespo
             return;
         }
 
-        var response = await _client.AddPathAsync(new($"rtsp://127.0.0.1:8554/{channel.StreamSecretKey}"), slug);
+        var response = await _client.AddPathAsync(new($"rtsp://127.0.0.1:8554/live/{channel.StreamSecretKey}"), slug);
         if (response.Succeeded)
         {
             _logger.LogInformation("Added channel path");

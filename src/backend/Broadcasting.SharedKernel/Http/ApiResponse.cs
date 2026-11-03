@@ -8,7 +8,7 @@ public class ApiResponse<TError>
     protected internal ApiResponse() { }
 
     [MemberNotNullWhen(false, nameof(Error))]
-    public bool Succeeded { get; init; }
+    public virtual bool Succeeded { get; init; }
 
     public HttpStatusCode StatusCode { get; init; }
 
@@ -34,7 +34,7 @@ public class ApiResponse<TResult, TError> : ApiResponse<TError>
     protected internal ApiResponse() { }
 
     [MemberNotNullWhen(true, nameof(Result))]
-    public new bool Succeeded { get; init; }
+    public override bool Succeeded => base.Succeeded;
 
     public TResult? Result { get; init; }
 

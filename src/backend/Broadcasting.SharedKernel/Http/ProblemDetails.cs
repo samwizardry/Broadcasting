@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Net.Http.Json;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Broadcasting.SharedKernel.Http;
@@ -24,6 +25,9 @@ public sealed class ProblemDetails : IError<ProblemDetails>
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Detail { get; set; }
+
+    [JsonExtensionData]
+    public IDictionary<string, JsonElement>? Extensions { get; set; }
 
     public IReadOnlyCollection<Error> Errors { get; set; } = [];
 

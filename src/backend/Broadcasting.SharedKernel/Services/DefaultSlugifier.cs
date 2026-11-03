@@ -20,12 +20,11 @@ public class DefaultSlugifier : ISlugifier
         foreach (var c in text)
         {
             char currentChar = char.ToLowerInvariant(c);
-            if (currentChar > 'a' && currentChar < 'z')
+            if (currentChar >= 'a' && currentChar <= 'z')
             {
-                slug[len] = currentChar;
+                slug[len++] = currentChar;
             }
 
-            ++len;
         }
 
         return slug.Slice(0, len).ToString();
