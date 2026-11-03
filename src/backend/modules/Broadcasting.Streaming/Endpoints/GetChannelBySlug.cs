@@ -33,6 +33,7 @@ internal class GetChannelBySlug : EndpointWithoutRequest<StreamChannelResponse>
             .Select(x => new StreamChannelResponse()
             {
                 Username = x.Username,
+                ChannelSlug = x.ChannelSlug,
                 RtspUrl = $"rtsp://127.0.0.1:8554/{x.ChannelSlug}",
                 IsLive = x.IsLive
             })

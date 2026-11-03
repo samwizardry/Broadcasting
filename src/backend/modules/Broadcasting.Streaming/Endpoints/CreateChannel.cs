@@ -78,6 +78,7 @@ internal class CreateChannel : Endpoint<CreateChannelRequest, StreamChannelRespo
             responseBody: new StreamChannelResponse
             {
                 Username = req.Username,
+                ChannelSlug = channel.ChannelSlug,
                 RtspUrl = $"rtsp://127.0.0.1:8554/{slug}"
             });
     }

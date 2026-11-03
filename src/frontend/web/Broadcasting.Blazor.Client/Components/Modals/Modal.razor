@@ -1,7 +1,7 @@
 ﻿@implements IDisposable
 
 @code {
-    private bool _shouldFocus;
+    private bool _shouldOpen;
     private CancellationTokenSource _cts = new();
 
     protected bool _isOpen;
@@ -18,9 +18,14 @@
         this.ModalService.OnChange -= HandleStateChange;
     }
 
-    protected virtual ValueTask FocusAsync()
+    protected virtual ValueTask OnFocusAsync()
     {
         return ValueTask.CompletedTask;
+    }
+
+    protected virtual Task OnOpenAsync()
+    {
+        return Task.CompletedTask;
     }
 
     protected virtual void Reset() { }
@@ -32,11 +37,12 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (_shouldFocus)
+        if (_shouldOpen)
         {
+            _shouldOpen = false;
+            await OnOpenAsync();
             await Task.Delay(80);
-            await FocusAsync();
-            _shouldFocus = false;
+            await OnFocusAsync();
         }
     }
 
@@ -51,7 +57,7 @@
         if (_isOpen != isOpen)
         {
             _isOpen = isOpen;
-            _shouldFocus = isOpen;
+            _shouldOpen = isOpen;
             StateHasChanged();
         }
     }

@@ -1,5 +1,33 @@
-﻿<h3>StreamCard</h3>
+﻿@using Broadcasting.Contracts.Streaming
+<article class="stream-card" data-open-stream="@StreamChannel.ChannelSlug">
+    <div class="stream-thumbnail-wrapper">
+        <div class="stream-thumbnail-placeholder">
+            <span class="preview-callsign">SYS.HUD // 01</span>
+        </div>
+        <span class="badge-live">LIVE</span>
+        <span class="badge-viewers">24,850 VIEWERS</span>
+        <span class="badge-resolution cyber-tag cyber-tag--acid">1080P60</span>
+        <div class="stream-thumbnail__scanlines"></div>
+    </div>
+    <div class="stream-card-body">
+        <div class="avatar-hud avatar-hud--live">SAM</div>
+        <div class="stream-card-meta">
+            <h3 class="stream-title">CYBERPUNK BROADCASTING SYSTEM ARCHITECTURE</h3>
+            <div class="stream-author-row">
+                <span class="author-name">SamWizardry</span>
+                <span class="cyber-tag cyber-tag--cyan" style="font-size: 9px; padding: 0 4px;">HOST</span>
+            </div>
+            <div class="stream-category">Cyberpunk Design Systems</div>
+            <div class="tag-list">
+                <span class="cyber-tag cyber-tag--acid">AV1</span>
+                <span class="cyber-tag">Marathon Spec</span>
+                <span class="cyber-tag">SCSS</span>
+            </div>
+        </div>
+    </div>
+</article>
 
 @code {
-
+    [Parameter, EditorRequired]
+    public StreamChannelResponse StreamChannel { get; set; }
 }

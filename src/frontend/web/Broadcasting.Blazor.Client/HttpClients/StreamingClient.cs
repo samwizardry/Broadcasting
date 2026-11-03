@@ -17,7 +17,7 @@ public class StreamingClient
         return _client.PostAsync<CreateChannelRequest, StreamChannelResponse>("/api/streaming/channels", req, ct);
     }
 
-    public Task<ApiResponse<List<StreamChannelResponse>, ProblemDetails>> GetLiveChannelsAsync(CreateChannelRequest req, CancellationToken ct = default)
+    public Task<ApiResponse<List<StreamChannelResponse>, ProblemDetails>> GetLiveChannelsAsync(CancellationToken ct = default)
     {
         return _client.GetAsync<List<StreamChannelResponse>>("/api/streaming/channels", ct);
     }

@@ -100,7 +100,7 @@
 
     protected override int ModalId => ModalService.RegisterModal;
 
-    protected override async ValueTask FocusAsync() => await _usernameField.FocusAsync();
+    protected override ValueTask OnFocusAsync() => _usernameField.FocusAsync();
 
     protected override void Reset()
     {

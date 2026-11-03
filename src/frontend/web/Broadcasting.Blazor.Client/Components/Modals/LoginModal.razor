@@ -7,7 +7,7 @@
 @inject NavigationManager Navigation
 @inject ToastService Toast
 
-<div class="cyber-modal-backdrop @(_isOpen ? ModalService.IsOpenCssClass : "")" id="@ModalService.LoginModal"
+<div class="cyber-modal-backdrop @(_isOpen ? ModalService.IsOpenCssClass : "")" id="@ModalService.LoginModalCssClass"
      tabindex="-1"
      @onclick="this.ModalService.CloseAll"
      @onkeydown="HandleKeyDown">
@@ -85,10 +85,7 @@
 
     protected override int ModalId => ModalService.LoginModal;
 
-    protected override async ValueTask FocusAsync()
-    {
-        await _usernameField.FocusAsync();
-    }
+    protected override ValueTask OnFocusAsync() => _usernameField.FocusAsync();
 
     protected override void Reset()
     {
