@@ -1,3 +1,4 @@
+using Broadcasting.ServiceDefaults;
 using Broadcasting.SharedKernel.Abstractions;
 using Broadcasting.SharedKernel.Services;
 using Broadcasting.Streaming;
@@ -6,6 +7,8 @@ using FastEndpoints;
 using FastEndpoints.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
 
 builder.Services.AddHttpClient();
 
@@ -20,8 +23,7 @@ builder.AddStreamingModule();
 
 var app = builder.Build();
 
-//app.UseAuthentication();
-//app.UseAuthorization();
+app.MapDefaultEndpoints();
 
 app.UseFastEndpoints(options =>
     {

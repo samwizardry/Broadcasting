@@ -2,6 +2,7 @@ using Broadcasting.Blazor.Client.Services;
 using Broadcasting.Blazor.Components;
 using Broadcasting.Blazor.Data;
 using Broadcasting.Blazor.Domain.Identity;
+using Broadcasting.ServiceDefaults;
 
 using FastEndpoints;
 
@@ -10,6 +11,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -104,6 +107,8 @@ builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

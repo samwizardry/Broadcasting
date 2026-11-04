@@ -1,27 +1,24 @@
 <Solution>
-  <Folder Name="/src/" />
+  <Folder Name="/src/">
+    <File Path="src/Directory.Build.props" />
+    <File Path="src/Directory.Packages.props" />
+  </Folder>
   <Folder Name="/src/backend/">
-    <File Path="src/backend/Directory.Build.props" />
-    <File Path="src/backend/Directory.Packages.props" />
-    <Project Path="src/backend/Broadcasting.ServiceDefaults/Broadcasting.ServiceDefaults.csproj" />
     <Project Path="src/backend/Broadcasting.SharedKernel/Broadcasting.SharedKernel.csproj" />
     <Project Path="src/backend/Broadcasting.Web/Broadcasting.Web.csproj" />
   </Folder>
   <Folder Name="/src/backend/modules/">
     <Project Path="src/backend/modules/Broadcasting.Chat/Broadcasting.Chat.csproj" />
-    <Project Path="src/backend/modules/Broadcasting.Identity/Broadcasting.Identity.csproj" />
     <Project Path="src/backend/modules/Broadcasting.Streaming/Broadcasting.Streaming.csproj" />
   </Folder>
-  <Folder Name="/src/frontend/">
-    <File Path="src/frontend/Directory.Build.props" />
-    <File Path="src/frontend/Directory.Packages.props" />
-  </Folder>
+  <Folder Name="/src/frontend/" />
   <Folder Name="/src/frontend/web/">
-      <Project Path="src/frontend/web/Broadcasting.Blazor/Broadcasting.Blazor.csproj" Id="0e8c8b41-6d30-499d-89a9-6d5421f12a2a" />
-      <Project Path="src/frontend/web/Broadcasting.Blazor.Client/Broadcasting.Blazor.Client.csproj" Id="2487c3d7-b3a8-4eac-8873-6e396907def2" />
-    </Folder>
+    <Project Path="src/frontend/web/Broadcasting.Blazor.Client/Broadcasting.Blazor.Client.csproj" Id="2487c3d7-b3a8-4eac-8873-6e396907def2" />
+    <Project Path="src/frontend/web/Broadcasting.Blazor/Broadcasting.Blazor.csproj" Id="0e8c8b41-6d30-499d-89a9-6d5421f12a2a" />
+  </Folder>
   <Folder Name="/src/shared/">
     <Project Path="src/shared/Broadcasting.Contracts/Broadcasting.Contracts.csproj" />
+    <Project Path="src/shared/Broadcasting.ServiceDefaults/Broadcasting.ServiceDefaults.csproj" />
   </Folder>
   
 </Solution>

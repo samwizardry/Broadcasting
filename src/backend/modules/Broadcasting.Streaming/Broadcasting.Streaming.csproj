@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\shared\Broadcasting.Contracts\Broadcasting.Contracts.csproj" />
-    <ProjectReference Include="..\..\Broadcasting.ServiceDefaults\Broadcasting.ServiceDefaults.csproj" />
     <ProjectReference Include="..\..\Broadcasting.SharedKernel\Broadcasting.SharedKernel.csproj" />
   </ItemGroup>
 
