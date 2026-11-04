@@ -1,4 +1,10 @@
-﻿@page "/watch"
+﻿@page "/watch/{slug}"
+
+@using Broadcasting.Blazor.Client.HttpClients
+@using Broadcasting.Contracts.Streaming
+@implements IDisposable
+@inject StreamingClient Streaming
+@inject PersistentComponentState State
 
 <div class="watch-layout" id="watch-layout-main">
 
@@ -12,11 +18,14 @@
             </a>
             <div class="badge-telemetry">
                 <span class="telemetry-indicator telemetry-indicator--green"></span>
-                <span id="stream-viewers-display">24,850 VIEWERS</span>
+                <span id="stream-viewers-display">0 VIEWERS</span>
             </div>
         </div>
 
-        <StreamPlayer></StreamPlayer>
+        @if (_channel is not null)
+        {
+            <StreamPlayer Channel="_channel"></StreamPlayer>
+        }
         @* <StreamMetadataHeader></StreamMetadataHeader> *@
         @* <StreamTelemetryWidget></StreamTelemetryWidget> *@
 
@@ -25,3 +34,39 @@
     @* <LiveChatSidebar></LiveChatSidebar> *@
 
 </div>
+
+@code {
+    private StreamChannelResponse? _channel;
+    private PersistingComponentStateSubscription _subscription;
+
+    [Parameter]
+    public string Slug { get; set; } = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        _subscription = State.RegisterOnPersisting(PersistData);
+
+        if (!State.TryTakeFromJson(nameof(_channel), out _channel))
+        {
+            var response = await Streaming.GetChannelBySlugAsync(Slug);
+
+            if (response.Succeeded)
+            {
+                _channel = response.Result!;
+            }
+        }
+
+        await base.OnInitializedAsync();
+    }
+
+    private Task PersistData()
+    {
+        State.PersistAsJson(nameof(_channel), _channel);
+        return Task.CompletedTask;
+    }
+
+    public void Dispose()
+    {
+        _subscription.Dispose();
+    }
+}

@@ -1,5 +1,4 @@
 ﻿using Broadcasting.Streaming.Data;
-using Broadcasting.Streaming.Http;
 
 using FastEndpoints;
 
@@ -12,15 +11,12 @@ internal class DeleteChannel : EndpointWithoutRequest
 {
     private readonly ILogger<DeleteChannel> _logger;
     private readonly StreamingDbContext _context;
-    private readonly MediamtxClient _client;
 
     public DeleteChannel(ILogger<DeleteChannel> logger,
-        StreamingDbContext context,
-        MediamtxClient client)
+        StreamingDbContext context)
     {
         _logger = logger;
         _context = context;
-        _client = client;
     }
 
     // TODO: authz, do not allow for users
@@ -47,18 +43,6 @@ internal class DeleteChannel : EndpointWithoutRequest
         await _context.SaveChangesAsync();
 
         _logger.LogInformation("Channel '{ChannelSlug}' deleted.", channel.ChannelSlug);
-
-        var response = await _client.DeletePathAsync(channel.ChannelSlug);
-        if (response.Succeeded)
-        {
-            _logger.LogInformation("Channel path '{Path}' deleted.", channel.ChannelSlug);
-        }
-        else
-        {
-            _logger.LogError("Failed to delete channel path. {Error}", response.Error.Error);
-            await Send.ErrorsAsync();
-            return;
-        }
 
         await Send.NoContentAsync(cancellation: ct);
     }

@@ -78,7 +78,7 @@ public class Register : Endpoint<RegisterRequest>
         var response = await _streamingClient.CreateChannelAsync(new CreateChannelRequest(req.Username));
         if (response.Succeeded)
         {
-            _logger.LogInformation("Created new channel '{ChannelUrl}'.", response.Result!.RtspUrl);
+            _logger.LogInformation("Created new channel '{ChannelUrl}'.", response.Result!.HlsAddress);
         }
         else
         {

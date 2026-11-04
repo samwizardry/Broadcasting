@@ -32,7 +32,7 @@ internal class GetLiveChannels : EndpointWithoutRequest<List<StreamChannelRespon
             {
                 Username = x.Username,
                 ChannelSlug = x.ChannelSlug,
-                RtspUrl = $"rtsp://127.0.0.1:8554/{x.ChannelSlug}",
+                HlsAddress = $"http://127.0.0.1:8888/live/{x.ChannelSlug}",
                 IsLive = x.IsLive
             })
             .ToListAsync(ct);

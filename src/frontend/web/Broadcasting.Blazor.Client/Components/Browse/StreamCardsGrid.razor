@@ -5,18 +5,35 @@
 @inject StreamingClient Streaming
 @inject ToastService Toast
 
+@{
+    int channelCount = _channels?.Count ?? 0;
+}
+
 <div>
     <div class="row-between" style="margin-bottom: 16px;">
         <h2 style="font-size: 14px; letter-spacing: 2px; color: var(--accent-acid);">
             // LIVE BROADCAST CHANNELS WITH REALTIME PREVIEW
         </h2>
-        <span class="cyber-tag cyber-tag--cyan">5 CHANNELS ACTIVE</span>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="cyber-tag cyber-tag--cyan">
+                @channelCount @(channelCount == 1 ? "CHANNEL" : "CHANNELS") ACTIVE
+            </span>
+            <CyberButton Id="btn-refresh-channels"
+                         Variant="ButtonVariant.Ghost"
+                         Size="Size.Sm"
+                         Loading="_isLoading"
+                         OnClick="LoadChannelsAsync"
+                         title="Rescan Active Broadcasts">
+                REFRESH
+            </CyberButton>
+        </div>
+        @* <span class="cyber-tag cyber-tag--cyan">@channelCount @(channelCount == 1 ? "CHANNEL" : "CHANNELS") ACTIVE</span> *@
     </div>
     <div class="cyber-grid cyber-grid--3col">
 
-        @foreach (var channel in _channels ?? [])
+        @foreach (var channel in (_channels ?? []).Index())
         {
-            <StreamCard></StreamCard>
+            <StreamCard StreamChannel="channel.Item" Index="channel.Index + 1"></StreamCard>
         }
     </div>
 </div>
@@ -24,28 +41,40 @@
 @code {
     private List<StreamChannelResponse>? _channels;
     private PersistingComponentStateSubscription _subscription;
+    private bool _isLoading;
 
     protected override async Task OnInitializedAsync()
     {
-        await base.OnInitializedAsync();
         _subscription = State.RegisterOnPersisting(PersistData);
+
         if (!State.TryTakeFromJson<List<StreamChannelResponse>>(nameof(_channels), out _channels))
         {
-            var response = await Streaming.GetLiveChannelsAsync();
-            if (response.Succeeded)
-            {
-                _channels = response.Result!;
-            }
-            else
-            {
-                _channels = [];
-                Toast.AddMessage(new ToastService.ToastMessage
-                {
-                    Variant = AlertVariant.Danger,
-                    Message = response.GetErrorMessage('\n')
-                });
-            }
+            await LoadChannelsAsync();
         }
+
+        await base.OnInitializedAsync();
+    }
+
+    private async Task LoadChannelsAsync()
+    {
+        _isLoading = true;
+
+        var response = await Streaming.GetLiveChannelsAsync();
+        if (response.Succeeded)
+        {
+            _channels = response.Result!;
+        }
+        else
+        {
+            _channels = [];
+            Toast.AddMessage(new ToastService.ToastMessage
+            {
+                Variant = AlertVariant.Danger,
+                Message = response.GetErrorMessage('\n')
+            });
+        }
+
+        _isLoading = false;
     }
 
     private Task PersistData()

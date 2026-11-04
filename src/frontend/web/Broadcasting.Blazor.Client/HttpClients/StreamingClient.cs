@@ -17,19 +17,19 @@ public class StreamingClient
         return _client.PostAsync<CreateChannelRequest, StreamChannelResponse>("/api/streaming/channels", req, ct);
     }
 
+    public Task<ApiResponse<Unit, ProblemDetails>> DeleteChannelAsync(string username, CancellationToken ct = default)
+    {
+        return _client.DeleteAsync<Unit>($"/api/streaming/channels/{username}", ct);
+    }
+
     public Task<ApiResponse<List<StreamChannelResponse>, ProblemDetails>> GetLiveChannelsAsync(CancellationToken ct = default)
     {
         return _client.GetAsync<List<StreamChannelResponse>>("/api/streaming/channels", ct);
     }
 
-    public Task<ApiResponse<StreamChannelResponse, ProblemDetails>> GetChannelsAsync(string channelSlug, CancellationToken ct = default)
+    public Task<ApiResponse<StreamChannelResponse, ProblemDetails>> GetChannelBySlugAsync(string channelSlug, CancellationToken ct = default)
     {
         return _client.GetAsync<StreamChannelResponse>($"/api/streaming/channels/{channelSlug}", ct);
-    }
-
-    public Task<ApiResponse<Unit, ProblemDetails>> DeleteChannelAsync(string username, CancellationToken ct = default)
-    {
-        return _client.DeleteAsync<Unit>($"/api/streaming/channels/{username}", ct);
     }
 
     public Task<ApiResponse<StreamSettingsResponse, ProblemDetails>> GetStreamSettingsAsync(string username, CancellationToken ct)

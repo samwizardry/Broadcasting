@@ -1,4 +1,5 @@
 ﻿using Broadcasting.Streaming.Data;
+using Broadcasting.Streaming.Http;
 
 using FastEndpoints;
 
@@ -11,12 +12,15 @@ internal class RunOnOnline : EndpointWithoutRequest
 {
     private readonly ILogger<RunOnOnline> _logger;
     private readonly StreamingDbContext _context;
+    private readonly MediamtxClient _client;
 
     public RunOnOnline(ILogger<RunOnOnline> logger,
-        StreamingDbContext context)
+        StreamingDbContext context,
+        MediamtxClient client)
     {
         _logger = logger;
         _context = context;
+        _client = client;
     }
 
     public override void Configure()
@@ -43,6 +47,16 @@ internal class RunOnOnline : EndpointWithoutRequest
             _logger.LogInformation("Stream channel with path '{Path}' not found.", path);
             await Send.NotFoundAsync(ct);
             return;
+        }
+
+        var response = await _client.ReplacePathAsync(new(Source: $"rtsp://127.0.0.1:8554/live/{channel.StreamSecretKey}"), $"live/{channel.ChannelSlug}");
+        if (response.Succeeded)
+        {
+            _logger.LogInformation("Added channel path '{Path}'.", $"live/{channel.ChannelSlug}");
+        }
+        else
+        {
+            _logger.LogError("Failed to add channel path. {Error}", response.Error.Error);
         }
 
         channel.SetLiveStatus(true);

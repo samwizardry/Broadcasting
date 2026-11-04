@@ -16,6 +16,11 @@ internal class MediamtxClient
         return _client.PostAsync<AddPathRequest, Unit, MediamtxError>($"/v3/config/paths/add/{path}", req, ct);
     }
 
+    public Task<ApiResponse<Unit, MediamtxError>> ReplacePathAsync(AddPathRequest req, string path, CancellationToken ct = default)
+    {
+        return _client.PostAsync<AddPathRequest, Unit, MediamtxError>($"/v3/config/paths/replace/{path}", req, ct);
+    }
+
     public Task<ApiResponse<Unit, MediamtxError>> DeletePathAsync(string path, CancellationToken ct = default)
     {
         return _client.DeleteAsync<Unit, MediamtxError>($"/v3/config/paths/delete/{path}", ct);

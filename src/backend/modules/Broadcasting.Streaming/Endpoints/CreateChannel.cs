@@ -1,10 +1,7 @@
-﻿using System.Net.Http.Json;
-
-using Broadcasting.Contracts.Streaming;
+﻿using Broadcasting.Contracts.Streaming;
 using Broadcasting.SharedKernel.Abstractions;
 using Broadcasting.Streaming.Data;
 using Broadcasting.Streaming.Domain;
-using Broadcasting.Streaming.Http;
 
 using FastEndpoints;
 
@@ -17,17 +14,14 @@ internal class CreateChannel : Endpoint<CreateChannelRequest, StreamChannelRespo
     private readonly ILogger<CreateChannel> _logger;
     private readonly StreamingDbContext _context;
     private readonly ISlugifier _slugifier;
-    private readonly MediamtxClient _client;
 
     public CreateChannel(ILogger<CreateChannel> logger,
         StreamingDbContext context,
-        ISlugifier slugifier,
-        MediamtxClient client)
+        ISlugifier slugifier)
     {
         _logger = logger;
         _context = context;
         _slugifier = slugifier;
-        _client = client;
     }
 
     // TODO: authz, do not allow for users
@@ -60,26 +54,13 @@ internal class CreateChannel : Endpoint<CreateChannelRequest, StreamChannelRespo
             return;
         }
 
-        var response = await _client.AddPathAsync(new($"rtsp://127.0.0.1:8554/live/{channel.StreamSecretKey}"), slug);
-        if (response.Succeeded)
-        {
-            _logger.LogInformation("Added channel path");
-        }
-        else
-        {
-            _logger.LogError("Failed to add channel path. {Error}", response.Error.Error);
-
-            await Send.ErrorsAsync();
-            return;
-        }
-
         await Send.CreatedAtAsync<GetChannelBySlug>(
             routeValues: new { slug },
             responseBody: new StreamChannelResponse
             {
                 Username = req.Username,
                 ChannelSlug = channel.ChannelSlug,
-                RtspUrl = $"rtsp://127.0.0.1:8554/{slug}"
+                HlsAddress = $"http://127.0.0.1:8888/live/{slug}"
             });
     }
 }
