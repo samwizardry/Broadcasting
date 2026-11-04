@@ -1,4 +1,5 @@
-﻿using Broadcasting.Streaming.Data;
+﻿using Broadcasting.ServiceDefaults;
+using Broadcasting.Streaming.Data;
 using Broadcasting.Streaming.Http;
 
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,7 @@ public static class DependencyInjection
         builder.Services.AddHttpClient<MediamtxClient>(options =>
         {
             // TODO: cfg
-            options.BaseAddress = new Uri("http://localhost:9997");
+            options.BaseAddress = new Uri($"http://{KnownServices.MediaMTX}");
         });
 
         return builder;

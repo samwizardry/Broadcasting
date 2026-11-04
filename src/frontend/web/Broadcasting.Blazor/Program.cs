@@ -100,11 +100,12 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
     .AddSignInManager()
     .AddDefaultTokenProviders();
 
-builder.Services.AddClientServices("https://localhost:7135");
+builder.Services.AddClientServices($"https://{KnownServices.Frontend}");
 
 builder.Services.AddFastEndpoints();
 builder.Services.AddReverseProxy()
-    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"))
+    .AddServiceDiscoveryDestinationResolver();
 
 var app = builder.Build();
 

@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
@@ -11,8 +14,11 @@ public static class Extensions
     private const string HealthEndpointPath = "/health";
     private const string AlivenessEndpointPath = "/alive";
 
-    public static TBuilder AddServiceDefaults<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
+    public static TBuilder AddServiceDefaults<TBuilder>(this TBuilder builder)
+        where TBuilder : IHostApplicationBuilder
     {
+        builder.AddKnownServices();
+
         //builder.ConfigureOpenTelemetry();
 
         builder.AddDefaultHealthChecks();
@@ -33,6 +39,28 @@ public static class Extensions
         // {
         //     options.AllowedSchemes = ["https"];
         // });
+
+        return builder;
+    }
+
+    public static TBuilder AddKnownServices<TBuilder>(this TBuilder builder)
+        where TBuilder : IHostApplicationBuilder
+    {
+        if (builder.Environment.IsDevelopment())
+        {
+            Dictionary<string, string?> config = [];
+
+            foreach (var service in KnownServices.DefaultEndpoints.AsEnumerable())
+            {
+                foreach (var endpoint in service.Value)
+                {
+                    var uri = new Uri(endpoint);
+                    config.Add($"Services:{service.Key}:{uri.Scheme}:0", endpoint);
+                }
+            }
+
+            builder.Configuration.AddInMemoryCollection(config);
+        }
 
         return builder;
     }
@@ -90,7 +118,8 @@ public static class Extensions
     //    return builder;
     //}
 
-    public static TBuilder AddDefaultHealthChecks<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
+    public static TBuilder AddDefaultHealthChecks<TBuilder>(this TBuilder builder)
+        where TBuilder : IHostApplicationBuilder
     {
         builder.Services.AddHealthChecks()
             // Add a default liveness check to ensure app is responsive
