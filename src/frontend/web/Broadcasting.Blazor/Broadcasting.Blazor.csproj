@@ -3,6 +3,7 @@
   <PropertyGroup>
     <UserSecretsId>aspnet-Broadcasting_Blazor-3c21637d-67a2-495e-88ab-880ca3cd3937</UserSecretsId>
     <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
+    <RequiresAspNetWebAssets>true</RequiresAspNetWebAssets>
   </PropertyGroup>
 
   <ItemGroup>

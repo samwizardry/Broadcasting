@@ -55,7 +55,6 @@ runOnDisconnect:
 # * Internal database: credentials are stored in the configuration file
 # * External HTTP server: an external HTTP URL is contacted for each authentication request
 # * External JWT provider: credentials are signed tokens released by an external identity server
-# authMethod: internal
 authMethod: http
 
 # Internal authentication.
@@ -86,8 +85,7 @@ authInternalUsers:
     # if the IP is localhost.
   - user: any
     pass:
-    # ips: ["127.0.0.1", "::1"]
-    ips: []
+    ips: ["127.0.0.1", "::1"]
     permissions:
       - action: api
       - action: metrics
@@ -99,8 +97,7 @@ authInternalUsers:
 # and a payload described in the documentation.
 # If the response code is 20x, the action is allowed, otherwise
 # it is forbidden.
-# authHTTPAddress:
-authHTTPAddress: http://host.docker.internal:5245/api/streaming/auth
+authHTTPAddress:
 # If the HTTP authentication URL has a self-signed or invalid certificate,
 # you can provide the fingerprint of the certificate in order to
 # validate it anyway. It can be obtained by running:
@@ -109,9 +106,9 @@ authHTTPAddress: http://host.docker.internal:5245/api/streaming/auth
 authHTTPFingerprint:
 # Actions to exclude from HTTP-based authentication.
 # Format is the same as the one of user permissions.
-# authHTTPExclude: []
 authHTTPExclude:
   - action: api
+  - action: read
 
 # JWT-based authentication.
 # Users have to log in through an external identity server and obtain a JWT.
@@ -149,7 +146,6 @@ authJWTAudience:
 # Global settings -> Control API
 
 # Enable the control API server, which allows to control the server.
-# api: false
 api: true
 # Address of the TCP/HTTP listener.
 apiAddress: :9997
@@ -164,8 +160,7 @@ apiServerKey: server.key
 apiServerCert: server.crt
 # Allowed CORS origins.
 # Supports wildcards: ['http://*.example.com']
-# apiAllowOrigins: []
-apiAllowOrigins: ["*"]
+apiAllowOrigins: []
 # IPs or CIDRs of proxies placed before the HTTP server.
 # These proxies can use the X-Forwarded-For header to set the real IP of clients,
 # and the X-Forwarded-Proto header to set the original protocol.
@@ -585,7 +580,7 @@ pathDefaults:
   # Extension is added automatically.
   # Available variables are %path (path name), %Y %m %d (year, month, day),
   # %H %M %S (hours, minutes, seconds), %f (microseconds), %z (time zone), %s (unix epoch).
-  recordPath: ./recordings/%path/%Y-%m-%d_%H-%M-%S-%f
+  recordPath: ./recordings/%path/%Y-%m-%d_%H-%M-%S-%f_%z
   # Format of recorded segments.
   # Available formats are "fmp4" (fragmented MP4) and "mpegts" (MPEG-TS).
   recordFormat: fmp4
@@ -816,12 +811,12 @@ pathDefaults:
   # * RTSP_PORT: RTSP server port
   # * G1, G2, ...: regular expression groups, if path name is
   #   a regular expression.
-  runOnAvailable: wget -qO- "http://host.docker.internal:5245/api/streaming/run-on-available?path=$MTX_PATH&source_type=$MTX_SOURCE_TYPE&source_id=$MTX_SOURCE_ID"
+  runOnAvailable:
   # Restart the command if it exits.
   runOnAvailableRestart: false
   # Command to run when the stream is not available anymore.
   # Environment variables are the same as runOnAvailable.
-  runOnUnavailable: wget -qO- "http://host.docker.internal:5245/api/streaming/run-on-unavailable?path=$MTX_PATH&source_type=$MTX_SOURCE_TYPE&source_id=$MTX_SOURCE_ID"
+  runOnUnavailable:
 
   # Command to run when the stream is online, which means
   # that the stream is available and provided by a online source (not an offline segment).
@@ -834,12 +829,12 @@ pathDefaults:
   # * RTSP_PORT: RTSP server port
   # * G1, G2, ...: regular expression groups, if path name is
   #   a regular expression.
-  runOnOnline: wget -qO- "http://host.docker.internal:5245/api/streaming/run-on-online?path=$MTX_PATH&source_type=$MTX_SOURCE_TYPE&source_id=$MTX_SOURCE_ID"
+  runOnOnline:
   # Restart the command if it exits.
   runOnOnlineRestart: false
   # Command to run when the stream is not online anymore.
   # Environment variables are the same as runOnOnline.
-  runOnOffline: wget -qO- "http://host.docker.internal:5245/api/streaming/run-on-offline?path=$MTX_PATH&source_type=$MTX_SOURCE_TYPE&source_id=$MTX_SOURCE_ID"
+  runOnOffline:
 
   # Command to run when a client starts reading.
   # This is terminated with SIGINT when a client stops reading.

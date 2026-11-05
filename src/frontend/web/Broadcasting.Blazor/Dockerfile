@@ -16,11 +16,11 @@ RUN dotnet restore "src/frontend/web/Broadcasting.Blazor/Broadcasting.Blazor.csp
 COPY ["src/shared/", "src/shared/"]
 COPY ["src/frontend/web/", "src/frontend/web/"]
 
-RUN apt-get update && apt-get install -y tree
-RUN echo "/source" && tree /source
+# RUN apt-get update && apt-get install -y tree
+# RUN tree /source
 
 WORKDIR /source/src/frontend/web/Broadcasting.Blazor
-RUN dotnet publish -c release -o /app/publish --no-restore /p:UseAppHost=false
+RUN dotnet publish -c Release -o /app/publish --no-restore /p:UseAppHost=false
 
 # final stage/image
 FROM mcr.microsoft.com/dotnet/aspnet:10.0

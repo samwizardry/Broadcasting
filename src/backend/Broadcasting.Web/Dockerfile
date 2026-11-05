@@ -18,11 +18,11 @@ RUN dotnet restore "src/backend/Broadcasting.Web/Broadcasting.Web.csproj"
 COPY ["src/shared/", "src/shared/"]
 COPY ["src/backend/", "src/backend/"]
 
-RUN apt-get update && apt-get install -y tree
-RUN tree /source
+# RUN apt-get update && apt-get install -y tree
+# RUN tree /source
 
 WORKDIR /source/src/backend/Broadcasting.Web
-RUN dotnet publish -c release -o /app/publish --no-restore /p:UseAppHost=false
+RUN dotnet publish -c Release -o /app/publish --no-restore /p:UseAppHost=false
 
 # final stage/image
 FROM mcr.microsoft.com/dotnet/aspnet:10.0
