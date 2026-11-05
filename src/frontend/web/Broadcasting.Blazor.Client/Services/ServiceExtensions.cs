@@ -4,7 +4,7 @@ namespace Broadcasting.Blazor.Client.Services;
 
 public static class ServiceExtensions
 {
-    public static void AddClientServices(this IServiceCollection services, string baseAddress)
+    public static void AddClientServices(this IServiceCollection services, string frontendAddress, string backendAddress)
     {
         services.AddScoped<ModalService>();
         services.AddScoped<DropdownMenuService>();
@@ -12,12 +12,12 @@ public static class ServiceExtensions
 
         services.AddHttpClient<AuthClient>(httpClient =>
         {
-            httpClient.BaseAddress = new Uri(baseAddress);
+            httpClient.BaseAddress = new Uri(frontendAddress);
         });
 
         services.AddHttpClient<StreamingClient>(httpClient =>
         {
-            httpClient.BaseAddress = new Uri(baseAddress);
+            httpClient.BaseAddress = new Uri(backendAddress);
         });
     }
 }

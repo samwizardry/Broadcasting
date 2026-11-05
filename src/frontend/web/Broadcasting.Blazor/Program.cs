@@ -31,9 +31,9 @@ builder.Services.AddAuthorization();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.Cookie.Name = "__Host-Broadcasting.Auth";
+    options.Cookie.Name = "Broadcasting.Auth";
     options.Cookie.HttpOnly = true;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
     options.Cookie.SameSite = SameSiteMode.Lax;
 
     options.ExpireTimeSpan = TimeSpan.FromDays(200);
@@ -71,9 +71,9 @@ builder.Services.Configure<SecurityStampValidatorOptions>(options =>
 
 builder.Services.Configure<AntiforgeryOptions>(options =>
 {
-    options.Cookie.Name = "__Host-Broadcasting.Antiforgery";
+    options.Cookie.Name = "Broadcasting.Antiforgery";
     options.Cookie.HttpOnly = true;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
     options.Cookie.SameSite = SameSiteMode.Strict;
 });
 
@@ -100,7 +100,7 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
     .AddSignInManager()
     .AddDefaultTokenProviders();
 
-builder.Services.AddClientServices($"https://{KnownServices.Frontend}");
+builder.Services.AddClientServices($"http://{KnownServices.Frontend}", $"http://{KnownServices.Backend}");
 
 builder.Services.AddFastEndpoints();
 builder.Services.AddReverseProxy()
@@ -108,6 +108,12 @@ builder.Services.AddReverseProxy()
     .AddServiceDiscoveryDestinationResolver();
 
 var app = builder.Build();
+
+{
+    await using var scope = app.Services.CreateAsyncScope();
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await context.Database.MigrateAsync();
+}
 
 app.MapDefaultEndpoints();
 
@@ -121,11 +127,11 @@ else
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    //app.UseHsts();
 }
 
 app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();

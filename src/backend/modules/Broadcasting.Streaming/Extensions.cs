@@ -3,6 +3,8 @@ using Broadcasting.Streaming.Data;
 using Broadcasting.Streaming.Mediamtx;
 using Broadcasting.Streaming.Options;
 
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,5 +33,13 @@ public static class Extensions
             .ValidateOnStart();
 
         return builder;
+    }
+
+    public static async Task<WebApplication> MigrateStreamingAsync(this WebApplication app)
+    {
+        await using var scope = app.Services.CreateAsyncScope();
+        var context = scope.ServiceProvider.GetRequiredService<StreamingDbContext>();
+        await context.Database.MigrateAsync();
+        return app;
     }
 }

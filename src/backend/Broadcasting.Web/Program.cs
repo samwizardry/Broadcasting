@@ -23,6 +23,9 @@ builder.AddStreamingModule();
 
 var app = builder.Build();
 
+// Migrate module databases
+await app.MigrateStreamingAsync();
+
 app.MapDefaultEndpoints();
 
 app.UseFastEndpoints(options =>

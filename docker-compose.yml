@@ -1,20 +1,69 @@
 services:
+  gateway:
+    image: nginx:alpine
+    container_name: broadcasting-gateway
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
+      - backend
+      - mediamtx
+    restart: unless-stopped
+
+  backend:
+    build:
+      dockerfile: src/backend/Broadcasting.Web/Dockerfile
+      context: .
+    container_name: broadcasting-backend
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ConnectionStrings__Streaming=Server=postgres;Port=5432;Database=broadcastingdb;User Id=postgres;Password=postgres
+      # Service Discovery: куда MediamtxClient шлёт запросы к Control API
+      - Services__mediamtx__http__0=http://mediamtx:9997
+      # Настройки модуля Streaming:
+      # RtspAddress — внутренний для самого MediaMTX
+      - Modules__Streaming__RtspAddress=rtsp://127.0.0.1:8554
+      # HlsAddress — относительный путь через наш Nginx Gateway!
+      - Modules__Streaming__HlsAddress=/hls
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      dockerfile: src/frontend/web/Broadcasting.Blazor/Dockerfile
+      context: .
+    container_name: broadcasting-frontend
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ConnectionStrings__DefaultConnection=Server=postgres;Port=5432;Database=broadcastingdb;User Id=postgres;Password=postgres
+      # Service Discovery: куда Blazor (и YARP) стучится в бэкенд внутри Docker-сети
+      - Services__backend__http__0=http://backend:8080
+      - Services__frontend__http__0=http://frontend:8080
+    depends_on:
+      backend:
+        condition: service_started
+    restart: unless-stopped
+
   mediamtx:
     image: bluenviron/mediamtx:latest-ffmpeg
     container_name: broadcasting-mediamtx
     ports:
-      - 8554:8554
-      - 1935:1935
-      - 8888:8888
-      - 8889:8889
-      - 8892:8892
-      - 9997:9997
-      - 8890:8890/udp
-      - 8189:8189/udp
-      - 8892:8892/udp
-      - 8893:8893/udp
+      - 1935:1935 # RTMP Ingest для OBS Studio (внешний доступ)
+      - 8189:8189/udp # WebRTC ICE UDP (на будущее)
     volumes:
-      - ./mediamtx.yml:/mediamtx.yml:ro
+      - ./mediamtx/mediamtx.yml:/mediamtx.yml:ro
+    environment:
+      - MTX_AUTHHTTPADDRESS=http://backend:8080/api/streaming/auth
+      - MTX_PATHDEFAULTS_RUNONAVAILABLE=wget -qO- "http://backend:8080/api/streaming/run-on-available?path=$$MTX_PATH&source_type=$$MTX_SOURCE_TYPE&source_id=$$MTX_SOURCE_ID"
+      - MTX_PATHDEFAULTS_RUNONUNAVAILABLE=wget -qO- "http://backend:8080/api/streaming/run-on-unavailable?path=$$MTX_PATH&source_type=$$MTX_SOURCE_TYPE&source_id=$$MTX_SOURCE_ID"
+      - MTX_PATHDEFAULTS_RUNONONLINE=wget -qO- "http://backend:8080/api/streaming/run-on-online?path=$$MTX_PATH&source_type=$$MTX_SOURCE_TYPE&source_id=$$MTX_SOURCE_ID"
+      - MTX_PATHDEFAULTS_RUNONOFFLINE=wget -qO- "http://backend:8080/api/streaming/run-on-offline?path=$$MTX_PATH&source_type=$$MTX_SOURCE_TYPE&source_id=$$MTX_SOURCE_ID"
     restart: unless-stopped
 
   mediamtx-swagger:
@@ -40,9 +89,9 @@ services:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "sh -c 'pg_isready -U postgres -d postgres'" ]
-      interval: 15s
+      interval: 10s
       timeout: 5s
-      retries: 3
+      retries: 5
       start_period: 10s
     restart: unless-stopped
 

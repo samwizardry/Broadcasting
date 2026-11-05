@@ -9,6 +9,6 @@ public class StreamingOptions
     [Required]
     public string RtspAddress { get; set; } = default!;
 
-    [Required, Url]
+    [Required]
     public string HlsAddress { get; set; } = default!;
 }

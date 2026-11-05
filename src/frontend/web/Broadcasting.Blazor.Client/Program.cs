@@ -8,6 +8,6 @@ builder.Services.AddAuthorizationCore();
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddAuthenticationStateDeserialization();
 
-builder.Services.AddClientServices(builder.HostEnvironment.BaseAddress);
+builder.Services.AddClientServices(builder.HostEnvironment.BaseAddress, builder.HostEnvironment.BaseAddress);
 
 await builder.Build().RunAsync();
