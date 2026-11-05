@@ -1,0 +1,57 @@
+services:
+  gateway:
+    profiles:
+      - disabled
+  backend:
+    profiles:
+      - disabled
+  frontend:
+    profiles:
+      - disabled
+
+  postgres:
+    ports:
+      - 35432:5432
+
+  mediamtx:
+    ports:
+      - 8554:8554 # RTSP
+      - 1935:1935 # RTMP Ingest (OBS)
+      - 8888:8888 # HLS
+      - 8889:8889 # WebRTC HTTP
+      - 8189:8189/udp # WebRTC ICE UDP
+      - 8890:8890/udp # SRT
+      - 9997:9997 # API
+    volumes:
+      - ./mediamtx/mediamtx.yml:/mediamtx.yml:ro
+    environment:
+      - MTX_AUTHHTTPADDRESS=http://host.docker.internal:5245/api/streaming/auth
+      - MTX_PATHDEFAULTS_RUNONAVAILABLE=wget -qO- "http://host.docker.internal:5245/api/streaming/run-on-available?path=$$MTX_PATH&source_type=$$MTX_SOURCE_TYPE&source_id=$$MTX_SOURCE_ID"
+      - MTX_PATHDEFAULTS_RUNONUNAVAILABLE=wget -qO- "http://host.docker.internal:5245/api/streaming/run-on-unavailable?path=$$MTX_PATH&source_type=$$MTX_SOURCE_TYPE&source_id=$$MTX_SOURCE_ID"
+      - MTX_PATHDEFAULTS_RUNONONLINE=wget -qO- "http://host.docker.internal:5245/api/streaming/run-on-online?path=$$MTX_PATH&source_type=$$MTX_SOURCE_TYPE&source_id=$$MTX_SOURCE_ID"
+      - MTX_PATHDEFAULTS_RUNONOFFLINE=wget -qO- "http://host.docker.internal:5245/api/streaming/run-on-offline?path=$$MTX_PATH&source_type=$$MTX_SOURCE_TYPE&source_id=$$MTX_SOURCE_ID"
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: broadcasting-pgadmin
+    ports:
+      - 30080:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=pgadmin@dev.local
+      - PGADMIN_DEFAULT_PASSWORD=pgadmin
+      - PGADMIN_CONFIG_ALLOW_SPECIAL_EMAIL_DOMAINS=["local"]
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    restart: unless-stopped
+
+  mediamtx-swagger:
+    image: swaggerapi/swagger-ui:latest
+    container_name: broadcasting-mediamtx-swagger
+    ports:
+      - 38080:8080
+    environment:
+      - URL=https://raw.githubusercontent.com/bluenviron/mediamtx/main/api/openapi.yaml
+    restart: unless-stopped
+
+volumes:
+  pgadmin-data:

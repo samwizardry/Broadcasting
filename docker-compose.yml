@@ -65,20 +65,9 @@ services:
       - MTX_PATHDEFAULTS_RUNONOFFLINE=wget -qO- "http://backend:8080/api/streaming/run-on-offline?path=$$MTX_PATH&source_type=$$MTX_SOURCE_TYPE&source_id=$$MTX_SOURCE_ID"
     restart: unless-stopped
 
-  mediamtx-swagger:
-    image: swaggerapi/swagger-ui:latest
-    container_name: broadcasting-mediamtx-swagger
-    restart: unless-stopped
-    ports:
-      - "38080:8080"
-    environment:
-      - URL=https://raw.githubusercontent.com/bluenviron/mediamtx/main/api/openapi.yaml
-
   postgres:
     image: postgres:16.15-alpine3.24
     container_name: broadcasting-postgres
-    ports:
-      - 35432:5432
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -94,19 +83,5 @@ services:
       start_period: 10s
     restart: unless-stopped
 
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    container_name: broadcasting-pgadmin
-    ports:
-      - 30080:80
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=pgadmin@dev.local
-      - PGADMIN_DEFAULT_PASSWORD=pgadmin
-      - PGADMIN_CONFIG_ALLOW_SPECIAL_EMAIL_DOMAINS=["local"]
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
-    restart: unless-stopped
-
 volumes:
   postgres-data:
-  pgadmin-data:
