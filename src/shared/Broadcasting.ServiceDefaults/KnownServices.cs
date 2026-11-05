@@ -10,7 +10,7 @@ public static class KnownServices
 
     public static readonly ReadOnlyDictionary<string, string[]> DefaultEndpoints = new Dictionary<string, string[]>()
     {
-        { Backend, ["https://localhost:7167", "http://localhost:5245"] },
+        { Backend, ["https://localhost:7167", "http://localhost:5246"] },
         { Frontend, ["https://localhost:7135", "http://localhost:5170"] },
         { MediaMTX, ["http://localhost:9997"] }
     }.AsReadOnly();

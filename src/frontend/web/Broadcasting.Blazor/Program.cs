@@ -1,4 +1,4 @@
-using Broadcasting.Blazor.Client.Services;
+using Broadcasting.Blazor.Client;
 using Broadcasting.Blazor.Components;
 using Broadcasting.Blazor.Data;
 using Broadcasting.Blazor.Domain.Identity;
@@ -101,6 +101,7 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
     .AddDefaultTokenProviders();
 
 builder.Services.AddClientServices($"http://{KnownServices.Frontend}", $"http://{KnownServices.Backend}");
+builder.Services.AddServerServices();
 
 builder.Services.AddFastEndpoints();
 builder.Services.AddReverseProxy()

@@ -1,4 +1,4 @@
-using Broadcasting.Blazor.Client.Services;
+using Broadcasting.Blazor.Client;
 
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 

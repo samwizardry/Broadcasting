@@ -18,14 +18,13 @@ services:
     container_name: broadcasting-backend
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_HTTP_PORTS=8080
+      - Kestrel__Endpoints__Http1__Url=http://+:8080
+      - Kestrel__Endpoints__Http1__Protocols=Http1
+      - Kestrel__Endpoints__Http2__Url=http://+:8081
+      - Kestrel__Endpoints__Http2__Protocols=Http2
       - ConnectionStrings__Streaming=Server=postgres;Port=5432;Database=broadcastingdb;User Id=postgres;Password=postgres
-      # Service Discovery: куда MediamtxClient шлёт запросы к Control API
       - Services__mediamtx__http__0=http://mediamtx:9997
-      # Настройки модуля Streaming:
-      # RtspAddress — внутренний для самого MediaMTX
       - Modules__Streaming__RtspAddress=rtsp://127.0.0.1:8554
-      # HlsAddress — относительный путь через наш Nginx Gateway!
       - Modules__Streaming__HlsAddress=/hls
     depends_on:
       postgres:
@@ -41,8 +40,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_HTTP_PORTS=8080
       - ConnectionStrings__DefaultConnection=Server=postgres;Port=5432;Database=broadcastingdb;User Id=postgres;Password=postgres
-      # Service Discovery: куда Blazor (и YARP) стучится в бэкенд внутри Docker-сети
-      - Services__backend__http__0=http://backend:8080
+      - Services__backend__http__0=http://backend:8081
       - Services__frontend__http__0=http://frontend:8080
     depends_on:
       backend:
