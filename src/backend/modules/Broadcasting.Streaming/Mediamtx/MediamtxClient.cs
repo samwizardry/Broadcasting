@@ -1,6 +1,6 @@
 ﻿using Broadcasting.SharedKernel.Http;
 
-namespace Broadcasting.Streaming.Http;
+namespace Broadcasting.Streaming.Mediamtx;
 
 internal class MediamtxClient
 {

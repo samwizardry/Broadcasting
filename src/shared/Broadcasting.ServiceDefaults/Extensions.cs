@@ -55,7 +55,12 @@ public static class Extensions
                 foreach (var endpoint in service.Value)
                 {
                     var uri = new Uri(endpoint);
-                    config.Add($"Services:{service.Key}:{uri.Scheme}:0", endpoint);
+                    var key = $"Services:{service.Key}:{uri.Scheme}:0";
+
+                    if (string.IsNullOrEmpty(builder.Configuration[key]))
+                    {
+                        config[key] = endpoint;
+                    }
                 }
             }
 

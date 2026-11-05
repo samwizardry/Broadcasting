@@ -1,19 +1,24 @@
 ﻿using Broadcasting.Contracts.Streaming;
 using Broadcasting.Streaming.Data;
+using Broadcasting.Streaming.Options;
 
 using FastEndpoints;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Broadcasting.Streaming.Endpoints;
 
 internal class GetChannelBySlug : EndpointWithoutRequest<StreamChannelResponse>
 {
     private readonly StreamingDbContext _context;
+    private readonly StreamingOptions _options;
 
-    public GetChannelBySlug(StreamingDbContext context)
+    public GetChannelBySlug(StreamingDbContext context,
+        IOptions<StreamingOptions> options)
     {
         _context = context;
+        _options = options.Value;
     }
 
     public override void Configure()
@@ -23,7 +28,6 @@ internal class GetChannelBySlug : EndpointWithoutRequest<StreamChannelResponse>
         AllowAnonymous();
     }
 
-    // TODO: cfg
     public override async Task HandleAsync(CancellationToken ct)
     {
         string slug = Route<string>("slug", true)!;
@@ -34,7 +38,7 @@ internal class GetChannelBySlug : EndpointWithoutRequest<StreamChannelResponse>
             {
                 Username = x.Username,
                 ChannelSlug = x.ChannelSlug,
-                HlsAddress = $"http://127.0.0.1:8888/live/{x.ChannelSlug}",
+                HlsAddress = $"{_options.HlsAddress}/live/{x.ChannelSlug}",
                 IsLive = x.IsLive
             })
             .FirstOrDefaultAsync(ct);

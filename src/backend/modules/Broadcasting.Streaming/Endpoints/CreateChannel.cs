@@ -2,10 +2,12 @@
 using Broadcasting.SharedKernel.Abstractions;
 using Broadcasting.Streaming.Data;
 using Broadcasting.Streaming.Domain;
+using Broadcasting.Streaming.Options;
 
 using FastEndpoints;
 
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Broadcasting.Streaming.Endpoints;
 
@@ -14,14 +16,17 @@ internal class CreateChannel : Endpoint<CreateChannelRequest, StreamChannelRespo
     private readonly ILogger<CreateChannel> _logger;
     private readonly StreamingDbContext _context;
     private readonly ISlugifier _slugifier;
+    private readonly StreamingOptions _options;
 
     public CreateChannel(ILogger<CreateChannel> logger,
         StreamingDbContext context,
-        ISlugifier slugifier)
+        ISlugifier slugifier,
+        IOptions<StreamingOptions> options)
     {
         _logger = logger;
         _context = context;
         _slugifier = slugifier;
+        _options = options.Value;
     }
 
     // TODO: authz, do not allow for users
@@ -32,7 +37,6 @@ internal class CreateChannel : Endpoint<CreateChannelRequest, StreamChannelRespo
         AllowAnonymous();
     }
 
-    // TODO: cfg
     public override async Task HandleAsync(CreateChannelRequest req, CancellationToken ct)
     {
         // Don't cancel request
@@ -60,7 +64,7 @@ internal class CreateChannel : Endpoint<CreateChannelRequest, StreamChannelRespo
             {
                 Username = req.Username,
                 ChannelSlug = channel.ChannelSlug,
-                HlsAddress = $"http://127.0.0.1:8888/live/{slug}"
+                HlsAddress = $"{_options.HlsAddress}/live/{slug}"
             });
     }
 }

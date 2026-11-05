@@ -1,4 +1,4 @@
-﻿namespace Broadcasting.Streaming.Http;
+﻿namespace Broadcasting.Streaming.Mediamtx;
 
 internal record AddPathRequest(string Source,
     bool SourceOnDemand = true,

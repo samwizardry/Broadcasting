@@ -1,10 +1,12 @@
 ﻿using Broadcasting.Streaming.Data;
-using Broadcasting.Streaming.Http;
+using Broadcasting.Streaming.Mediamtx;
+using Broadcasting.Streaming.Options;
 
 using FastEndpoints;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Broadcasting.Streaming.Endpoints.Hooks;
 
@@ -13,14 +15,17 @@ internal class RunOnOnline : EndpointWithoutRequest
     private readonly ILogger<RunOnOnline> _logger;
     private readonly StreamingDbContext _context;
     private readonly MediamtxClient _client;
+    private readonly StreamingOptions _options;
 
     public RunOnOnline(ILogger<RunOnOnline> logger,
         StreamingDbContext context,
-        MediamtxClient client)
+        MediamtxClient client,
+        IOptions<StreamingOptions> options)
     {
         _logger = logger;
         _context = context;
         _client = client;
+        _options = options.Value;
     }
 
     public override void Configure()
@@ -49,7 +54,7 @@ internal class RunOnOnline : EndpointWithoutRequest
             return;
         }
 
-        var response = await _client.ReplacePathAsync(new(Source: $"rtsp://127.0.0.1:8554/live/{channel.StreamSecretKey}"), $"live/{channel.ChannelSlug}");
+        var response = await _client.ReplacePathAsync(new(Source: $"{_options.RtspAddress}/live/{channel.StreamSecretKey}"), $"live/{channel.ChannelSlug}");
         if (response.Succeeded)
         {
             _logger.LogInformation("Added channel path '{Path}'.", $"live/{channel.ChannelSlug}");

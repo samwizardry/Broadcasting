@@ -1,5 +1,5 @@
 ﻿using Broadcasting.Streaming.Data;
-using Broadcasting.Streaming.Http;
+using Broadcasting.Streaming.Mediamtx;
 
 using FastEndpoints;
 
